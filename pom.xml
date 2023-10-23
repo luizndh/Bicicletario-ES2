@@ -63,10 +63,7 @@
 		        <version>3.0.3</version>
 		        <configuration>
 		            <appName>app-echo</appName>
-		            <processTypes>
-		                <!-- Tell Heroku how to launch your application -->
-		                <web>web: java $JAVA_OPTS -cp target/classes:target/dependency/* EchoApplication</web>
-		            </processTypes>
+		            <executable>true</executable>
 		        </configuration>
     		</plugin> 
 		</plugins>
