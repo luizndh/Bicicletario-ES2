@@ -56,16 +56,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!-- Plugin para implantação no Heroku-->
-			<plugin>
-		        <groupId>com.heroku.sdk</groupId>
-		        <artifactId>heroku-maven-plugin</artifactId>
-		        <version>3.0.3</version>
-		        <configuration>
-		            <appName>app-echo</appName>
-		            <executable>true</executable>
-		        </configuration>
-    		</plugin> 
 		</plugins>
 	</build>
 
