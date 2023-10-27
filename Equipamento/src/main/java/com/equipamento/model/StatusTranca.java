@@ -1,6 +1,5 @@
 package com.equipamento.model;
 
-
 public enum StatusTranca {
     LIVRE,
     OCUPADA,

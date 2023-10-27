@@ -44,4 +44,11 @@ public class TrancaController {
     public ResponseEntity<Tranca> alteraTranca(@PathVariable int idTranca, @RequestBody TrancaDTO dadosAlteracaoTranca) {
         return ResponseEntity.ok().body(this.service.alteraTranca(idTranca, dadosAlteracaoTranca));
     }
+
+    @DeleteMapping("/{idTranca")
+    @ApiOperation(value="Exclui uma tranca do sistema")
+    public ResponseEntity<?> excluiTranca(@PathVariable int idTranca) {
+        this.service.excluiTranca(idTranca);
+        return ResponseEntity.ok().build();
+    }
 }

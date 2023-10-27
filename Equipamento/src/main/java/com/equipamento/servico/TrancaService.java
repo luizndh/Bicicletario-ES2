@@ -42,4 +42,15 @@ public class TrancaService {
         throw new IllegalArgumentException("A tranca com id " + idTranca + " não existe");
     }
 
+    //TODO: validar os dados
+    public void excluiTranca(int idTranca) {
+        for(Tranca t: Tranca.trancas) {
+            if(t.getId() == idTranca) {
+                Tranca.trancas.remove(t);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("A tranca com id " + idTranca + " não existe");
+    }
+
 }
