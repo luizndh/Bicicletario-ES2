@@ -22,7 +22,6 @@ public class TrancaController {
     @GetMapping("/{idTranca}")
     @ApiOperation(value="Retorna uma tranca com o id passado")
     public ResponseEntity<Tranca> recuperaTrancaPorId(@PathVariable int idTranca) {
-        System.out.println("CHEGUEI NO CONTROLLER DE TRANCA");
         Tranca t = this.service.recuperaTrancaPorId(idTranca);
         return ResponseEntity.ok().body(t);
     }
@@ -39,13 +38,13 @@ public class TrancaController {
         return ResponseEntity.ok().body(this.service.cadastraTranca(dadosCadastroTranca));
     }
 
-    @PutMapping("/{idTranca")
+    @PutMapping("/{idTranca}")
     @ApiOperation(value="Altera os dados de uma tranca existente")
     public ResponseEntity<Tranca> alteraTranca(@PathVariable int idTranca, @RequestBody TrancaDTO dadosAlteracaoTranca) {
         return ResponseEntity.ok().body(this.service.alteraTranca(idTranca, dadosAlteracaoTranca));
     }
 
-    @DeleteMapping("/{idTranca")
+    @DeleteMapping("/{idTranca}")
     @ApiOperation(value="Exclui uma tranca do sistema")
     public ResponseEntity<?> excluiTranca(@PathVariable int idTranca) {
         this.service.excluiTranca(idTranca);

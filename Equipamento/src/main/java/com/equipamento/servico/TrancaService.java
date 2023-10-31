@@ -1,9 +1,9 @@
 package com.equipamento.servico;
 
+import static com.equipamento.model.Tranca.trancas;
+
 import com.equipamento.DTO.TrancaDTO;
-import com.equipamento.model.StatusTranca;
 import com.equipamento.model.Tranca;
-import jdk.jshell.Snippet;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,31 +12,35 @@ import java.util.List;
 public class TrancaService {
 
     public Tranca recuperaTrancaPorId(int idTranca) {
-        for(Tranca t: Tranca.trancas) {
-            if(t.getId() == idTranca) {
-                return t;
+        if(!trancas.isEmpty()) {
+            for (Tranca t : trancas) {
+                if (t.getId() == idTranca) {
+                    return t;
+                }
             }
         }
         throw new IllegalArgumentException("A tranca com id " + idTranca + " não existe");
     }
 
     public List<Tranca> recuperaTrancas() {
-        return Tranca.trancas;
+        return trancas;
     }
 
     //TODO: validar os dados
-    public Tranca cadastraTranca(TrancaDTO dadosTranca) {
-        Tranca t = new Tranca(dadosTranca);
-        Tranca.trancas.add(t);
+    public Tranca cadastraTranca(TrancaDTO dadosCadastroTranca) {
+        Tranca t = new Tranca(dadosCadastroTranca);
+        trancas.add(t);
         return t;
     }
 
     //TODO: validar os dados
     public Tranca alteraTranca(int idTranca, TrancaDTO dadosAlteracaoTranca) {
-        for(Tranca t: Tranca.trancas) {
-            if(t.getId() == idTranca) {
-                t.atualizaTranca(dadosAlteracaoTranca);
-                return t;
+        if(!trancas.isEmpty()) {
+            for (Tranca t : trancas) {
+                if (t.getId() == idTranca) {
+                    t.atualizaTranca(dadosAlteracaoTranca);
+                    return t;
+                }
             }
         }
         throw new IllegalArgumentException("A tranca com id " + idTranca + " não existe");
@@ -44,13 +48,14 @@ public class TrancaService {
 
     //TODO: validar os dados
     public void excluiTranca(int idTranca) {
-        for(Tranca t: Tranca.trancas) {
-            if(t.getId() == idTranca) {
-                Tranca.trancas.remove(t);
-                return;
+        if(!trancas.isEmpty()) {
+            for (Tranca t : trancas) {
+                if (t.getId() == idTranca) {
+                    trancas.remove(t);
+                    return;
+                }
             }
         }
         throw new IllegalArgumentException("A tranca com id " + idTranca + " não existe");
     }
-
 }

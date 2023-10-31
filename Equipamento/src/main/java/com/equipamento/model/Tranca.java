@@ -13,29 +13,7 @@ public class Tranca {
     private String anoDeFabricacao;
     private String modelo;
     private StatusTranca status;
-
-    public void atualizaTranca(TrancaDTO dadosAlteracaoTranca) {
-        this.anoDeFabricacao = dadosAlteracaoTranca.anoDeFabricacao();
-        this.modelo = dadosAlteracaoTranca.modelo();
-        this.status = StatusTranca.valueOf(dadosAlteracaoTranca.status());
-        this.localizacao = dadosAlteracaoTranca.localizacao();
-        this.numero = dadosAlteracaoTranca.numero();
-    }
-
-    public static void setTrancas(List<Tranca> trancas) {
-        Tranca.trancas = trancas;
-    }
-
     public static List<Tranca> trancas = new ArrayList<>();
-
-    public int getId() {
-        return this.id;
-    }
-
-    public Tranca() {}
-    public Tranca(int id) {
-        this.id = id;
-    }
 
     public Tranca(TrancaDTO dadosTranca) {
         this.id = trancas.size() + 1;
@@ -46,4 +24,19 @@ public class Tranca {
         this.modelo = dadosTranca.modelo();
         this.status = StatusTranca.valueOf(dadosTranca.status());
     }
+
+    public void atualizaTranca(TrancaDTO dadosAlteracaoTranca) {
+        this.anoDeFabricacao = dadosAlteracaoTranca.anoDeFabricacao();
+        this.modelo = dadosAlteracaoTranca.modelo();
+        this.status = StatusTranca.valueOf(dadosAlteracaoTranca.status());
+        this.localizacao = dadosAlteracaoTranca.localizacao();
+        this.numero = dadosAlteracaoTranca.numero();
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+
+
 }
