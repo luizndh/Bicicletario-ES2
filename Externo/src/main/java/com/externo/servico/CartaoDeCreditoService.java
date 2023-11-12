@@ -2,6 +2,7 @@ package com.externo.servico;
 
 import com.externo.DTO.CartaoDeCreditoDTO;
 import com.externo.model.CartaoDeCredito;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import static com.externo.model.CartaoDeCredito.cartoesDeCredito;
 
+@Service
 public class CartaoDeCreditoService {
     /*
     public CartaoDeCredito recuperaCartaoDeCreditoPorId(int idCartao) {

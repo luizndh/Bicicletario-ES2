@@ -8,7 +8,7 @@ import java.util.List;
 public class Cobranca {
 
     private int id;
-    private String status;
+    private StatusCobranca status;
     private String horaSolicitacao;
     private String horaFinalizacao;
     private float valor;
@@ -18,7 +18,7 @@ public class Cobranca {
 
     public Cobranca(CobrancaDTO dadosCadastroCobranca) {
         this.id = cobrancas.size() + 1;
-        this.status = dadosCadastroCobranca.status();
+        this.status = StatusCobranca.valueOf(dadosCadastroCobranca.status());
         this.horaSolicitacao = dadosCadastroCobranca.horaSolicitacao();
         this.horaFinalizacao = dadosCadastroCobranca.horaFinalizacao();
         this.valor = dadosCadastroCobranca.valor();
@@ -26,11 +26,19 @@ public class Cobranca {
     }
 
     public void atualizaCobranca(CobrancaDTO dadosCadastroCobranca) {
-        this.status = dadosCadastroCobranca.status();
+        this.status = StatusCobranca.valueOf(dadosCadastroCobranca.status());
         this.horaSolicitacao = dadosCadastroCobranca.horaSolicitacao();
         this.horaFinalizacao = dadosCadastroCobranca.horaFinalizacao();
         this.valor = dadosCadastroCobranca.valor();
         this.ciclista = dadosCadastroCobranca.ciclista();
+    }
+
+    public enum StatusCobranca {
+        PENDENTE,
+        PAGA,
+        FALHA,
+        CANCELADA,
+        OCUPADA
     }
 
     public int getId() {

@@ -3,11 +3,13 @@ package com.externo.servico;
 import com.externo.DTO.CobrancaDTO;
 import com.externo.DTO.EmailDTO;
 import com.externo.model.Cobranca;
+import org.springframework.stereotype.Service;
 
 import static com.externo.model.Cobranca.cobrancas;
 
 import java.util.List;
 
+@Service
 public class CobrancaService {
 
     /*
@@ -76,7 +78,9 @@ public class CobrancaService {
 
     public boolean processaCobrancasEmFila() {
         for (Cobranca c : cobrancas) {
+
             cobrancas.remove(c);
+            //TODO chamar realizaCobranca ? e ver docs
         }
 
         return true;
@@ -84,7 +88,7 @@ public class CobrancaService {
 
     public boolean incluiFilaCobranca(CobrancaDTO dadosCobranca) {
         cobrancas.add(new Cobranca(dadosCobranca));
-        //TODO?
+        //TODO só trocar o status pra pendente
         return true;
     }
 
