@@ -1,6 +1,6 @@
 package com.equipamento.model;
 
-import com.equipamento.DTO.TotemDTO;
+import com.equipamento.DTO.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,6 @@ public class Totem {
     private String localizacao;
     private String descricao;
     private List<Tranca> trancas;
-    private List<Bicicleta> bicicletas;
 
     public static List<Totem> totens = new ArrayList<>();
 
@@ -20,7 +19,6 @@ public class Totem {
         this.descricao = dadosCadastroTotem.descricao();
         this.localizacao = dadosCadastroTotem.localizacao();
         this.trancas = new ArrayList<>();
-        this.bicicletas = new ArrayList<>();
     }
 
     public void atualizaTotem(TotemDTO dadosAlteracaoTotem) {
@@ -32,12 +30,7 @@ public class Totem {
         return this.id;
     }
 
-    public List<Bicicleta> getBicicletas() {
-        return this.bicicletas;
-    }
-
     public List<Tranca> getTrancas() {
         return this.trancas;
     }
-
 }
