@@ -23,8 +23,8 @@ public class SwaggerConfig {
     public Docket productApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.echo")) //pacote base onde estão todas as classes java
-                .paths(regex("/echo.*")) //caminhos para acesso aos endpoints
+                .apis(RequestHandlerSelectors.basePackage("com.externo")) //pacote base onde estão todas as classes java
+                .paths(regex("/.*")) //caminhos para acesso aos endpoints
                 .build()
                 .apiInfo(metaInfo());
     }
@@ -34,7 +34,7 @@ public class SwaggerConfig {
 	 */	
     private ApiInfo metaInfo() {
         return new ApiInfoBuilder()
-        	    .title("Spring Boot REST API Echo")
+        	    .title("Spring Boot REST API")
         	    .description("Exemplo de aplicação REST API com Spring Boot ")
         	    .version("1.0")
         	    .build();     	           
