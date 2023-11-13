@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 //import java.util.List;
 
 @RestController
-@RequestMapping("/validaCartaoDeCredito")//TODO
+@RequestMapping("/validaCartaoDeCredito")
 @Api(value="API para validar o cartao de credito")
 public class CartaoDeCreditoController {
 

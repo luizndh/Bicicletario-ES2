@@ -12,54 +12,9 @@ import static com.externo.model.CartaoDeCredito.cartoesDeCredito;
 
 @Service
 public class CartaoDeCreditoService {
-    /*
-    public CartaoDeCredito recuperaCartaoDeCreditoPorId(int idCartao) {
-        if(!cartoesDeCredito.isEmpty()) {
-            for (CartaoDeCredito b : cartoesDeCredito) {
-                if (b.getId() == idCartao) {
-                    return b;
-                }
-            }
-        }
-        throw new IllegalArgumentException("O cartão com id " + idCartao + " não existe");
-    }
 
-    public List<CartaoDeCredito> recuperaCartoesDeCredito() { return cartoesDeCredito; }
-
-    public CartaoDeCredito cadastraCartaoDeCredito(CartaoDeCreditoDTO dadosCadastroCartao) {
-        CartaoDeCredito b = new CartaoDeCredito(dadosCadastroCartao);
-        cartoesDeCredito.add(b);
-        return b;
-    }
-
-    public CartaoDeCredito alteraCartaoDeCredito(int idCartao, CartaoDeCreditoDTO dadosCadastroCartao) {
-        if(!cartoesDeCredito.isEmpty()) {
-            for (CartaoDeCredito b : cartoesDeCredito) {
-                if (b.getId() == idCartao) {
-                    b.atualizaCartaoDeCredito(dadosCadastroCartao);
-                    return b;
-                }
-            }
-        }
-        throw new IllegalArgumentException("O cartao com id " + idCartao + " não existe");
-    }
-
-    public void excluiCartaoDeCredito(int idCartao) {
-        if(!cartoesDeCredito.isEmpty()) {
-            for (CartaoDeCredito b : cartoesDeCredito) {
-                if (b.getId() == idCartao) {
-                    cartoesDeCredito.remove(b);
-                    return;
-                }
-            }
-        }
-        throw new IllegalArgumentException("O cartao com id " + idCartao + " não existe");
-    }
-    */
-
-    //true=valido, false=invalido
+    //valida o cartao de credito, retornando true se for valido e false se for invalido
     public boolean validaCartaoDeCredito(CartaoDeCreditoDTO dadosCadastroCartao){
-        //valida o cartao de credito, retornando true se for valido e false se for invalido
         if (dadosCadastroCartao.numero().length() != 16 || dadosCadastroCartao.cvv().length() != 3) {
             return false;
         }
