@@ -1,12 +1,10 @@
 package com.externo.servico;
 
 import com.externo.DTO.CartaoDeCreditoDTO;
-import com.externo.model.CartaoDeCredito;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 import static com.externo.model.CartaoDeCredito.cartoesDeCredito;
 
@@ -28,7 +26,6 @@ public class CartaoDeCreditoService {
     private boolean validaData(String dateStr, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         sdf.setLenient(false);
-
         try {
             sdf.parse(dateStr);
             return true;
