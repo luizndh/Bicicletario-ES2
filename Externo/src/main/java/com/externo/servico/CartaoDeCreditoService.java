@@ -18,8 +18,7 @@ public class CartaoDeCreditoService {
         }
         if(!validaData(dadosCadastroCartao.validade(), "MM/yy")){
             return false;
-        } //TODO api?
-
+        }
         return true;
     }
 
