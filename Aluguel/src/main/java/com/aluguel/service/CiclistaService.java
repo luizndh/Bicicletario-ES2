@@ -11,13 +11,17 @@ import static com.aluguel.model.Aluguel.alugueis;
 import static com.aluguel.model.Ciclista.ciclistas;
 
 public class CiclistaService {
+
+    final String CICLISTA_EXCEPTION_1 = "O ciclista com id ";
+    final String CICLISTA_EXCEPTION_2 = " não existe";
+
     public Ciclista recuperaCiclistaPorId(int idCiclista) {
         for (Ciclista ciclista : ciclistas) {
             if (ciclista.getId() == idCiclista) {
                 return ciclista;
             }
         }
-        throw new IllegalArgumentException("O ciclista com id " + idCiclista + " não existe");
+        throw new IllegalArgumentException(CICLISTA_EXCEPTION_1 + idCiclista + CICLISTA_EXCEPTION_2);
     }
 
     public List<Ciclista> recuperaCiclistas() { return ciclistas; }
@@ -75,14 +79,14 @@ public class CiclistaService {
             return ciclista;
         }
 
-        throw new IllegalArgumentException("O ciclista com id " + idCiclista + " já está ativo");
+        throw new IllegalArgumentException(CICLISTA_EXCEPTION_1 + idCiclista + CICLISTA_EXCEPTION_2);
     }
 
     public boolean verificaSeCiclistaPodeAlugar(int idCiclista) {
         Ciclista ciclista = recuperaCiclistaPorId(idCiclista);
 
         if (!ciclista.isAtivo()) {
-            throw new IllegalArgumentException("O ciclista com id " + idCiclista + " não está ativo");
+            throw new IllegalArgumentException(CICLISTA_EXCEPTION_1 + idCiclista + " não está ativo");
         } else if (recuperaCiclistaPorIdEmAluguel(idCiclista) != null) {
             // TODO: envia email para o ciclista com os dados do aluguel em andamento
             // /enviarEmail (ciclista.getEmail() , "Aluguel em andamento" ,
@@ -111,7 +115,7 @@ public class CiclistaService {
                 }
             }
         }
-        throw new IllegalArgumentException("O ciclista com id " + idCiclista + " não está em aluguel");
+        throw new IllegalArgumentException(CICLISTA_EXCEPTION_1 + idCiclista + " não está em aluguel");
     }
 
     public Ciclista alteraCiclista(int idCiclista, CiclistaDTO dadosAlteracaoCiclista) {

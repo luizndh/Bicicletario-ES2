@@ -17,11 +17,9 @@ public class Tranca {
     private List<InclusaoTrancaDTO> historicoInclusao;
     private List<RetiradaTrancaDTO> historicoRetirada;
 
-    public static final List<Tranca> trancas = new ArrayList<>();
+    public static List<Tranca> trancas = new ArrayList<>();
 
-    public String getModelo() {
-        return this.modelo;
-    }
+
 
     public enum StatusTranca {
         LIVRE,
@@ -61,6 +59,14 @@ public class Tranca {
 
     public void setBicicleta(int idBicicleta) {
         this.bicicleta = idBicicleta;
+    }
+
+    public String getModelo() {
+        return this.modelo;
+    }
+
+    public StatusTranca getStatus() {
+        return this.status;
     }
 
     public int getBicicleta() { return this.bicicleta; }

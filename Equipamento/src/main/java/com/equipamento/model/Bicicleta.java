@@ -18,7 +18,7 @@ public class Bicicleta {
     private List<InclusaoBicicletaDTO> historicoInclusao;
     private List<RetiradaBicicletaDTO> historicoRetirada;
 
-    public static final List<Bicicleta> bicicletas = new ArrayList<>();
+    public static List<Bicicleta> bicicletas = new ArrayList<>();
 
 
 

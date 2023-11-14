@@ -1,6 +1,8 @@
 package com.equipamento.model;
 
 import com.equipamento.dto.TrancaDTO;
+import com.equipamento.model.Tranca.StatusTranca;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +21,11 @@ public class TrancaTest {
     @Test
     void testGetId() {
         assertEquals(Tranca.trancas.size()+1, tranca.getId());
+    }
+
+    @Test
+    void testGetStatus() {
+        assertEquals(tranca.getStatus(), StatusTranca.NOVA);
     }
 
     @Test
