@@ -22,19 +22,20 @@ public class TotemController {
     @Autowired
     private TotemService service;
 
-    @GetMapping("/")
+    /*
+    @GetMapping("")
     @ApiOperation(value="Retorna todos os totems cadastrados no sistema")
     public ResponseEntity<List<Totem>> recuperaTotens() {
         return ResponseEntity.ok().body(this.service.recuperaTotens());
     }
 
-    @PostMapping("/")
+    @PostMapping(value = "", consumes = "application/json")
     @ApiOperation(value="Cadastra um novo totem no sistema")
     public ResponseEntity<Totem> cadastraTotem(@RequestBody TotemDTO dadosCadastroTotem) {
         return ResponseEntity.ok().body(this.service.cadastraTotem(dadosCadastroTotem));
     }
 
-    @PutMapping("/{idTotem}")
+    @PutMapping(value = "/{idTotem}", consumes = "application/json")
     @ApiOperation(value="Altera os dados de um totem existente")
     public ResponseEntity<Totem> alteraTotem(@PathVariable int idTotem, @RequestBody TotemDTO dadosAlteracaoTotem) {
         return ResponseEntity.ok().body(this.service.alteraTotem(idTotem, dadosAlteracaoTotem));
@@ -58,4 +59,5 @@ public class TotemController {
     public ResponseEntity<List<Bicicleta>> recuperaBicicletasDoTotem(@PathVariable int idTotem) {
         return ResponseEntity.ok().body(this.service.recuperaBicicletasDoTotem(idTotem));
     }
+     */
 }

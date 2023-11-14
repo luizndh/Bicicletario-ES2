@@ -1,7 +1,10 @@
 package com.equipamento.controller;
 
 import com.equipamento.DTO.BicicletaDTO;
+import com.equipamento.DTO.InclusaoBicicletaDTO;
+import com.equipamento.DTO.RetiradaBicicletaDTO;
 import com.equipamento.model.Bicicleta;
+import com.equipamento.model.Bicicleta.StatusBicicleta;
 import com.equipamento.servico.BicicletaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,19 +29,20 @@ public class BicicletaController {
         return ResponseEntity.ok().body(t);
     }
 
-    @GetMapping("/")
+    /*
+    @GetMapping("")
     @ApiOperation(value="Retorna todas as bicicletas cadastradas no sistema")
     public ResponseEntity<List<Bicicleta>> recuperaBicicletas() {
         return ResponseEntity.ok().body(this.service.recuperaBicicletas());
     }
 
-    @PostMapping("/")
+    @PostMapping(value = "", consumes = "application/json")
     @ApiOperation(value="Cadastra uma nova bicicleta no sistema")
     public ResponseEntity<Bicicleta> cadastraBicicleta(@RequestBody BicicletaDTO dadosCadastroBicicleta) {
         return ResponseEntity.ok().body(this.service.cadastraBicicleta(dadosCadastroBicicleta));
     }
 
-    @PutMapping("/{idBicicleta}")
+    @PutMapping(value = "/{idBicicleta}", consumes = "application/json")
     @ApiOperation(value="Altera os dados de uma bicicleta existente")
     public ResponseEntity<Bicicleta> alteraBicicleta(@PathVariable int idBicicleta, @RequestBody BicicletaDTO dadosAlteracaoBicicleta) {
         return ResponseEntity.ok().body(this.service.alteraBicicleta(idBicicleta, dadosAlteracaoBicicleta));
@@ -50,4 +54,29 @@ public class BicicletaController {
         this.service.excluiBicicleta(idBicicleta);
         return ResponseEntity.ok().build();
     }
+
+     */
+
+    @PostMapping("/{idBicicleta}/status/{acao}")
+    @ApiOperation(value="Altera o status de uma bicicleta")
+    public ResponseEntity<Bicicleta> alteraStatusBicicleta(@PathVariable int idBicicleta, @PathVariable StatusBicicleta acao) {
+        return ResponseEntity.ok().body(this.service.alteraStatusBicicleta(idBicicleta, acao));
+    }
+
+    @PostMapping(value = "/integrarNaRede", consumes = "application/json")
+    @ApiOperation(value="Coloca uma bicicleta nova ou retornando de reparo de volta na rede de totens")
+    public ResponseEntity integraNaRede(@RequestBody InclusaoBicicletaDTO dadosInclusao) {
+        this.service.integrarNaRede(dadosInclusao);
+        return ResponseEntity.status(200).build();
+    }
+
+    /*
+    @PostMapping(value = "/retirarDaRede", consumes = "application/json")
+    @ApiOperation(value="Retira uma bicicleta para reparo ou aposentadoria")
+    public ResponseEntity retiraDaRede(@RequestBody RetiradaBicicletaDTO dadosRetirada) {
+        this.service.retirarDaRede(dadosRetirada);
+        return ResponseEntity.ok().build();
+    }
+
+     */
 }
