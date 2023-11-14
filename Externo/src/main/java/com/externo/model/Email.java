@@ -30,4 +30,31 @@ public class Email {
         return this.id;
     }
 
+    public String getEmail() {
+        return this.email;
+    }
+
+    public String getAssunto() {
+        return this.assunto;
+    }
+
+    public String getMensagem() {
+        return this.mensagem;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAssunto(String assunto) {
+        this.assunto = assunto;
+    }
+
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
 }
