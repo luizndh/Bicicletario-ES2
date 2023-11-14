@@ -22,6 +22,7 @@ public class TotemController {
     @Autowired
     private TotemService service;
 
+    /*
     @GetMapping("")
     @ApiOperation(value="Retorna todos os totems cadastrados no sistema")
     public ResponseEntity<List<Totem>> recuperaTotens() {
@@ -58,4 +59,5 @@ public class TotemController {
     public ResponseEntity<List<Bicicleta>> recuperaBicicletasDoTotem(@PathVariable int idTotem) {
         return ResponseEntity.ok().body(this.service.recuperaBicicletasDoTotem(idTotem));
     }
+     */
 }

@@ -31,6 +31,7 @@ public class TrancaController {
         return ResponseEntity.ok().body(t);
     }
 
+    /*
     @GetMapping("")
     @ApiOperation(value="Retorna todas as trancas cadastradas no sistema")
     public ResponseEntity<List<Tranca>> recuperaTrancas() {
@@ -56,11 +57,14 @@ public class TrancaController {
         return ResponseEntity.ok().build();
     }
 
+     */
+
     @PostMapping("/{idTranca}/status/{acao}")
     @ApiOperation(value="Altera o status de uma tranca")
     public ResponseEntity<Tranca> alteraStatusTranca(@PathVariable int idTranca, @PathVariable StatusTranca acao) {
         return ResponseEntity.ok().body(this.service.alteraStatusTranca(idTranca, acao));
     }
+
 
     @PostMapping(value = "/{idTranca}/trancar", consumes = "application/json")
     @ApiOperation(value="Realiza o trancamento da tranca alterando o status da mesma de acordo. " +
@@ -76,6 +80,7 @@ public class TrancaController {
         return ResponseEntity.ok().body(this.service.realizarDestrancamento(idTranca, idBicicleta));
     }
 
+    /*
     @PostMapping(value = "/integrarNaRede", consumes = "application/json")
     @ApiOperation(value="Colocar uma tranca nova ou retornando de reparo de volta na rede de totens")
     public ResponseEntity integrarNaRede(@RequestBody InclusaoTrancaDTO dadosInclusao) {
@@ -89,6 +94,8 @@ public class TrancaController {
         this.service.retirarDaRede(dadosRetirada);
         return ResponseEntity.ok().build();
     }
+
+     */
 
     @GetMapping("/{idTranca}/bicicleta")
     @ApiOperation(value="Obter bicicleta na tranca")

@@ -18,6 +18,7 @@ import static com.equipamento.model.Totem.totens;
 @Service
 public class TotemService {
 
+
     @Autowired
     private BicicletaService bicicletaService;
 
@@ -34,6 +35,8 @@ public class TotemService {
         }
         throw new NoSuchElementException("O totem com id " + idTotem + " não existe");
     }
+
+    /*
 
     public void excluiTotem(int idTotem) {
         Totem t = recuperaTotemPorId(idTotem);
@@ -72,6 +75,8 @@ public class TotemService {
 
         return bicicletas;
     }
+
+     */
 
 
 }

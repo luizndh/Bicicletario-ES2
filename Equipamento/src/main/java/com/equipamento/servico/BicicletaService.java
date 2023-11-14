@@ -21,7 +21,7 @@ public class BicicletaService {
 
     public Bicicleta recuperaBicicletaPorId(int idBicicleta) {
         if(idBicicleta < 0) {
-            throw new IllegalArgumentException("Id da tranca invalido");
+            throw new IllegalArgumentException("Id da bicicleta invalido");
         }
         System.out.println("PROCURANDO PELAS BICICLETAS...");
         for (Bicicleta b : bicicletas) {
@@ -33,6 +33,7 @@ public class BicicletaService {
         throw new NoSuchElementException("A bicicleta com id " + idBicicleta + " nao existe");
     }
 
+    /*
     public List<Bicicleta> recuperaBicicletas() {
         return bicicletas;
     }
@@ -54,6 +55,8 @@ public class BicicletaService {
         bicicletas.remove(b);
     }
 
+
+     */
     public Bicicleta alteraStatusBicicleta(int idBicicleta, StatusBicicleta acao) {
         Bicicleta b = recuperaBicicletaPorId(idBicicleta);
         b.setStatus(acao);
@@ -79,6 +82,7 @@ public class BicicletaService {
                         "Id do funcionário: " + dadosInclusao.idFuncionario());
     }
 
+    /*
     public void retirarDaRede(RetiradaBicicletaDTO dadosRetirada) {
         Bicicleta b = recuperaBicicletaPorId(dadosRetirada.idBicicleta());
         if(StatusBicicleta.valueOf(dadosRetirada.statusAcaoReparador()) == StatusBicicleta.EM_REPARO) {
@@ -101,7 +105,7 @@ public class BicicletaService {
                         "Novo status da bicicleta: " + dadosRetirada.statusAcaoReparador());
 
     }
-
+     */
     private void enviaEmailFake(String email, String assunto, String corpo) {
         return;
     }

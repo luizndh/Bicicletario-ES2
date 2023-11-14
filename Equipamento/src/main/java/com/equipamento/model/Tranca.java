@@ -19,6 +19,10 @@ public class Tranca {
 
     public static List<Tranca> trancas = new ArrayList<>();
 
+    public String getModelo() {
+        return this.modelo;
+    }
+
     public enum StatusTranca {
         LIVRE,
         OCUPADA,

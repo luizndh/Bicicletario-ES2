@@ -20,9 +20,7 @@ public class Bicicleta {
 
     public static List<Bicicleta> bicicletas = new ArrayList<>();
 
-    public StatusBicicleta getStatus() {
-        return this.status;
-    }
+
 
     public enum StatusBicicleta {
         DISPONIVEL,
@@ -59,6 +57,10 @@ public class Bicicleta {
 
     public void setStatus(StatusBicicleta acao) {
         this.status = acao;
+    }
+
+    public StatusBicicleta getStatus() {
+        return this.status;
     }
 
     public void adicionaRegistroNoHistoricoDeInclusao(InclusaoBicicletaDTO dadosInclusao) {
