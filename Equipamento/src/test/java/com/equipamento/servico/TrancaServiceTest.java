@@ -1,24 +1,33 @@
 package com.equipamento.servico;
 
+import com.equipamento.model.Bicicleta;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.NoSuchElementException;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class TrancaServiceTest {
 
-    /*
     @InjectMocks
-    TrancaService trancaService;
+    BicicletaService bicicletaService;
 
-    @Mock
-    Tranca tranca;
 
-    @Spy
-    List<Tranca> trancas;
+    @Test
+    void testRecuperaBicicletaPorIdInvalido() {
+        assertThrows(IllegalArgumentException.class, () -> bicicletaService.recuperaBicicletaPorId(-1));
+    }
 
+    @Test
+    void testRecuperaBicicletaPorIdQueNaoExiste() {
+        assertThrows(NoSuchElementException.class, () -> bicicletaService.recuperaBicicletaPorId(2));
+    }
+
+    /*
     @BeforeEach
     public void setUp() {
         // Arrange
