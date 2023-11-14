@@ -9,11 +9,9 @@ import static com.aluguel.model.Funcionario.funcionarios;;
 
 public class FuncionarioService {
     public Funcionario recuperaFuncionarioPorMatricula(String matriculaFuncionario) {
-        if(!funcionarios.isEmpty()) {
-            for (Funcionario funcionario : funcionarios) {
-                if (funcionario.getMatricula() == matriculaFuncionario) {
-                    return funcionario;
-                }
+        for (Funcionario funcionario : funcionarios) {
+            if (funcionario.getMatricula().equals(matriculaFuncionario)) {
+                return funcionario;
             }
         }
         throw new IllegalArgumentException("O funcionario com matricula " + matriculaFuncionario + " não existe");
@@ -28,27 +26,15 @@ public class FuncionarioService {
     }
 
     public Funcionario alteraFuncionario(String matriculaFuncionario, FuncionarioDTO dadosAlteracaoFuncionario) {
-        if(!funcionarios.isEmpty()) {
-            for (Funcionario funcionario : funcionarios) {
-                if (funcionario.getMatricula() == matriculaFuncionario) {
-                    funcionario.atualizaFuncionario(dadosAlteracaoFuncionario);
-                    return funcionario;
-                }
-            }
-        }
-        throw new IllegalArgumentException("O funcionario com matricula " + matriculaFuncionario + " não existe");
+        Funcionario funcionario = recuperaFuncionarioPorMatricula(matriculaFuncionario);
+        funcionario.atualizaFuncionario(dadosAlteracaoFuncionario);
+        return funcionario;
     }
 
     public void excluiFuncionario(String matriculaFuncionario) {
-        if(!funcionarios.isEmpty()) {
-            for (Funcionario funcionario : funcionarios) {
-                if (funcionario.getMatricula() == matriculaFuncionario) {
-                    funcionarios.remove(funcionario);
-                    return;
-                }
-            }
-        }
-        throw new IllegalArgumentException("O funcionario com matricula " + matriculaFuncionario + " não existe");
+        Funcionario funcionario = recuperaFuncionarioPorMatricula(matriculaFuncionario);
+        funcionarios.remove(funcionario);
+        return;
     }
 }
 

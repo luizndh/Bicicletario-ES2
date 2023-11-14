@@ -28,7 +28,7 @@ public class AluguelService {
         ciclistaService.verificaSeCiclistaPodeAlugar(Integer.parseInt(ciclista));
             
             
-        if (bicicleta.status() == "Indicada para reparo") {
+        if (bicicleta.status().equals("Indicada para reparo")) {
             throw new RuntimeException("Bicicleta indicada para reparo");
         }
 
@@ -60,11 +60,9 @@ public class AluguelService {
     }
 
     public Aluguel recuperaAluguelPorIdBicicleta(int idBicicleta) {
-        if (!alugueis.isEmpty()) {
-            for (Aluguel aluguel : alugueis) {
-                if (aluguel.getBicicleta() == idBicicleta) {
-                    return aluguel;
-                }
+        for (Aluguel aluguel : alugueis) {
+            if (aluguel.getBicicleta() == idBicicleta) {
+                return aluguel;
             }
         }
         throw new IllegalArgumentException("A bicicleta com id " + idBicicleta + " não está em aluguel");

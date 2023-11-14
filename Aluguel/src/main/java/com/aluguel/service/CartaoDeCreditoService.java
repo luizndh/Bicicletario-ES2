@@ -9,11 +9,9 @@ import static com.aluguel.model.CartaoDeCredito.cartoesDeCreditos;
 
 public class CartaoDeCreditoService {
     public CartaoDeCredito recuperaCartaoDeCreditoPorId(int idCiclista) {
-        if(!cartoesDeCreditos.isEmpty()) {
-            for (CartaoDeCredito cartaoDeCredito : cartoesDeCreditos) {
-                if (cartaoDeCredito.getId() == idCiclista) {
-                    return cartaoDeCredito;
-                }
+        for (CartaoDeCredito cartaoDeCredito : cartoesDeCreditos) {
+            if (cartaoDeCredito.getId() == idCiclista) {
+                return cartaoDeCredito;
             }
         }
         throw new IllegalArgumentException("O cartao de crédito com id " + idCiclista + " não existe");

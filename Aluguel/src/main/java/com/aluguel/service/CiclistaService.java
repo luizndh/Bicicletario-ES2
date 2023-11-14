@@ -12,11 +12,9 @@ import static com.aluguel.model.Ciclista.ciclistas;
 
 public class CiclistaService {
     public Ciclista recuperaCiclistaPorId(int idCiclista) {
-        if(!ciclistas.isEmpty()) {
-            for (Ciclista ciclista : ciclistas) {
-                if (ciclista.getId() == idCiclista) {
-                    return ciclista;
-                }
+        for (Ciclista ciclista : ciclistas) {
+            if (ciclista.getId() == idCiclista) {
+                return ciclista;
             }
         }
         throw new IllegalArgumentException("O ciclista com id " + idCiclista + " não existe");
@@ -45,7 +43,7 @@ public class CiclistaService {
 
     // TODO verificar senhas iguais
     public Ciclista cadastraCiclista(CiclistaDTO dadosCadastroCiclista) {
-        if (dadosCadastroCiclista.cpf().isEmpty() && dadosCadastroCiclista.nacionalidade() == "brasileiro") {
+        if (dadosCadastroCiclista.cpf().isEmpty() && dadosCadastroCiclista.nacionalidade().equals("brasileiro")) {
             throw new IllegalArgumentException("O CPF é obrigatório para brasileiros");
         } else if (dadosCadastroCiclista.passaporte().getNumero().isEmpty() && dadosCadastroCiclista.nacionalidade() == "estrangeiro") {
             throw new IllegalArgumentException("O passaporte é obrigatório para estrangeiros");
@@ -119,10 +117,10 @@ public class CiclistaService {
     public Ciclista alteraCiclista(int idCiclista, CiclistaDTO dadosAlteracaoCiclista) {
         Ciclista ciclista = recuperaCiclistaPorId(idCiclista);
 
-        if (ciclista.getCpf().isEmpty() && ciclista.getNacionalidade() == "brasileiro") {
+        if (ciclista.getCpf().isEmpty() && ciclista.getNacionalidade().equals("brasileiro")) {
             throw new IllegalArgumentException("O CPF é obrigatório para brasileiros");
         } 
-        if (ciclista.getPassaporte().getNumero().isEmpty() && ciclista.getNacionalidade() == "estrangeiro") {
+        if (ciclista.getPassaporte().getNumero().isEmpty() && ciclista.getNacionalidade().equals("estrangeiro")) {
             throw new IllegalArgumentException("O passaporte é obrigatório para estrangeiros");
         }
 

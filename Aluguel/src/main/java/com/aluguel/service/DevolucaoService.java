@@ -21,7 +21,7 @@ public class DevolucaoService {
         // TODO: get /tranca/{idTranca}/bicicleta
         BicicletaDTO bicicleta = new BicicletaDTO(Integer.parseInt(idBicicleta), "Caloi", "BMX", "1990", 7, "Disponível");
 
-        if (bicicleta.status() == "nova" || bicicleta.status() == "em reparo") {
+        if (bicicleta.status().equals("nova") || bicicleta.status().equals("em reparo")) {
             // TODO: get /bicicleta/integrarNaRede
             throw new RuntimeException("Bicicleta não integrada na rede");
         }
