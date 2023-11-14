@@ -63,6 +63,7 @@ public class BicicletaController {
     @PostMapping(value = "/integrarNaRede", consumes = "application/json")
     @ApiOperation(value="Coloca uma bicicleta nova ou retornando de reparo de volta na rede de totens")
     public ResponseEntity integraNaRede(@RequestBody InclusaoBicicletaDTO dadosInclusao) {
+        //teste
         this.service.integrarNaRede(dadosInclusao);
         return ResponseEntity.status(200).build();
     }
