@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import static com.externo.model.CartaoDeCredito.cartoesDeCredito;
-
 @Service
 public class CartaoDeCreditoService {
 
