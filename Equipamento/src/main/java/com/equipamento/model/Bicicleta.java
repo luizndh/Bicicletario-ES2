@@ -1,8 +1,8 @@
 package com.equipamento.model;
 
-import com.equipamento.DTO.BicicletaDTO;
-import com.equipamento.DTO.InclusaoBicicletaDTO;
-import com.equipamento.DTO.RetiradaBicicletaDTO;
+import com.equipamento.dto.BicicletaDTO;
+import com.equipamento.dto.InclusaoBicicletaDTO;
+import com.equipamento.dto.RetiradaBicicletaDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class Bicicleta {
     private List<InclusaoBicicletaDTO> historicoInclusao;
     private List<RetiradaBicicletaDTO> historicoRetirada;
 
-    public static List<Bicicleta> bicicletas = new ArrayList<>();
+    public static final List<Bicicleta> bicicletas = new ArrayList<>();
 
 
 

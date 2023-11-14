@@ -1,10 +1,6 @@
 package com.externo.servico;
 
-import static com.externo.model.Email.emails;
-
-import com.externo.DTO.CartaoDeCreditoDTO;
-import com.externo.DTO.EmailDTO;
-import com.externo.model.Email;
+import com.externo.dto.EmailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

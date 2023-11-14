@@ -1,6 +1,6 @@
 package com.externo.model;
 
-import com.externo.DTO.EmailDTO;
+import com.externo.dto.EmailDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ public class Email {
     private String assunto;
     private String mensagem;
 
-    public static List<Email> emails = new ArrayList<>();
+    public static final List<Email> emails = new ArrayList<>();
 
     public Email(EmailDTO dadosEmail) {
         this.id = emails.size() + 1;

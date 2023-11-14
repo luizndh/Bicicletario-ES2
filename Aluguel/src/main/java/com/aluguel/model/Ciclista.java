@@ -1,6 +1,6 @@
 package com.aluguel.model;
 
-import com.aluguel.DTO.CiclistaDTO;
+import com.aluguel.dto.CiclistaDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class Ciclista {
     private String email;
     private String urlFotoDocumento;
     
-    public static List<Ciclista> ciclistas = new ArrayList<>();
+    public static final List<Ciclista> ciclistas = new ArrayList<>();
 
     public Ciclista(CiclistaDTO dadosCadastroCiclista) {
         this.id = ciclistas.size() + 1;

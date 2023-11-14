@@ -6,9 +6,9 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.aluguel.DTO.AluguelDTO;
-import com.aluguel.DTO.BicicletaDTO;
-import com.aluguel.DTO.DevolucaoDTO;
+import com.aluguel.dto.AluguelDTO;
+import com.aluguel.dto.BicicletaDTO;
+import com.aluguel.dto.DevolucaoDTO;
 import com.aluguel.model.Aluguel;
 import com.aluguel.model.Devolucao;
 

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aluguel.DTO.BicicletaDTO;
-import com.aluguel.DTO.CiclistaDTO;
+import com.aluguel.dto.BicicletaDTO;
+import com.aluguel.dto.CiclistaDTO;
 import com.aluguel.model.Ciclista;
 import com.aluguel.service.CiclistaService;
 

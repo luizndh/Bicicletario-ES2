@@ -1,6 +1,6 @@
 package com.externo.servico;
 
-import com.externo.DTO.CartaoDeCreditoDTO;
+import com.externo.dto.CartaoDeCreditoDTO;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;

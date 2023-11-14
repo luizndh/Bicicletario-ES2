@@ -1,8 +1,6 @@
 package com.equipamento.controller;
 
-import com.equipamento.DTO.BicicletaDTO;
-import com.equipamento.DTO.InclusaoBicicletaDTO;
-import com.equipamento.DTO.RetiradaBicicletaDTO;
+import com.equipamento.dto.InclusaoBicicletaDTO;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Bicicleta.StatusBicicleta;
 import com.equipamento.servico.BicicletaService;
@@ -11,8 +9,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/bicicleta")

@@ -1,6 +1,6 @@
 package com.externo.servico;
 
-import com.externo.DTO.CobrancaDTO;
+import com.externo.dto.CobrancaDTO;
 import com.externo.model.Cobranca;
 import org.springframework.stereotype.Service;
 import java.lang.Math;

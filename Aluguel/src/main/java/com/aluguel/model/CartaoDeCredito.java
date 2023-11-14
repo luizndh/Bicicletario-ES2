@@ -1,6 +1,6 @@
 package com.aluguel.model;
 
-import com.aluguel.DTO.CartaoDeCreditoDTO;
+import com.aluguel.dto.CartaoDeCreditoDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class CartaoDeCredito {
     private String validade;
     private String cvv;
     
-    public static List<CartaoDeCredito> cartoesDeCreditos = new ArrayList<>();
+    public static final List<CartaoDeCredito> cartoesDeCreditos = new ArrayList<>();
 
     public CartaoDeCredito(CartaoDeCreditoDTO dadosCadastroCartaoDeCredito) {
         this.id = cartoesDeCreditos.size() + 1;

@@ -1,6 +1,6 @@
 package com.equipamento.model;
 
-import com.equipamento.DTO.*;
+import com.equipamento.dto.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class Tranca {
     private List<InclusaoTrancaDTO> historicoInclusao;
     private List<RetiradaTrancaDTO> historicoRetirada;
 
-    public static List<Tranca> trancas = new ArrayList<>();
+    public static final List<Tranca> trancas = new ArrayList<>();
 
     public String getModelo() {
         return this.modelo;

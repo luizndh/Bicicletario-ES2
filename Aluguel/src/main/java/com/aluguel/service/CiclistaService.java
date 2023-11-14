@@ -1,7 +1,7 @@
 package com.aluguel.service;
 
-import com.aluguel.DTO.BicicletaDTO;
-import com.aluguel.DTO.CiclistaDTO;
+import com.aluguel.dto.BicicletaDTO;
+import com.aluguel.dto.CiclistaDTO;
 import com.aluguel.model.Aluguel;
 import com.aluguel.model.Ciclista;
 

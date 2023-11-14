@@ -1,20 +1,14 @@
 package com.equipamento.controller;
 
-import com.equipamento.DTO.InclusaoTrancaDTO;
-import com.equipamento.DTO.RetiradaTrancaDTO;
-import com.equipamento.DTO.TrancaDTO;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Tranca;
 import com.equipamento.model.Tranca.StatusTranca;
 import com.equipamento.servico.TrancaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/tranca")

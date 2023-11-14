@@ -1,6 +1,6 @@
 package com.aluguel.service;
 
-import com.aluguel.DTO.CartaoDeCreditoDTO;
+import com.aluguel.dto.CartaoDeCreditoDTO;
 import com.aluguel.model.CartaoDeCredito;
 
 import java.util.List;

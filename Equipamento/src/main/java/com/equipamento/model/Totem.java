@@ -1,6 +1,6 @@
 package com.equipamento.model;
 
-import com.equipamento.DTO.*;
+import com.equipamento.dto.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public class Totem {
     private String descricao;
     private List<Tranca> trancas;
 
-    public static List<Totem> totens = new ArrayList<>();
+    public static final List<Totem> totens = new ArrayList<>();
 
     public Totem(TotemDTO dadosCadastroTotem) {
         this.id = totens.size() + 1;

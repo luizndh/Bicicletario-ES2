@@ -1,6 +1,6 @@
 package com.externo.controller;
 
-import com.externo.DTO.EmailDTO;
+import com.externo.dto.EmailDTO;
 import com.externo.servico.EmailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

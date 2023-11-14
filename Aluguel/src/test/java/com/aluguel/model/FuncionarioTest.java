@@ -1,6 +1,6 @@
 package com.aluguel.model;
 
-import com.aluguel.DTO.FuncionarioDTO;
+import com.aluguel.dto.FuncionarioDTO;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,18 +12,18 @@ public class FuncionarioTest {
     private Funcionario funcionario;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         FuncionarioDTO dadosCadastroFuncionario = new FuncionarioDTO("batoEmIdosas123", "batoEmIdosas123", "raphito@arroz.com", "raphito", 30, "Gerente", "777.777.777-77");
         funcionario = new Funcionario(dadosCadastroFuncionario);
     }
 
     @Test
-    public void testGetMatricula() {
+    void testGetMatricula() {
         assertEquals(String.valueOf(Funcionario.funcionarios.size()+1), funcionario.getMatricula());
     }
 
     @Test
-    public void testAtualizaFuncionario() {
+    void testAtualizaFuncionario() {
         FuncionarioDTO dadosAlteracaoFuncionario = new FuncionarioDTO("vouMeMatar123", "vouMeMatar123", "raphito@feijao.com", "otihpar", 3, "escravo", "000.000.000-00");
 
         funcionario.atualizaFuncionario(dadosAlteracaoFuncionario);

@@ -3,7 +3,7 @@ package com.aluguel.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aluguel.DTO.DevolucaoDTO;
+import com.aluguel.dto.DevolucaoDTO;
 
 public class Devolucao {
     private int bicicleta;
@@ -13,7 +13,7 @@ public class Devolucao {
     private int cobranca;
     private int ciclista;
 
-    public static List<Devolucao> devolucoes = new ArrayList<>();
+    public static final List<Devolucao> devolucoes = new ArrayList<>();
 
     public Devolucao(DevolucaoDTO dadosCadastroDevolucao) {
         this.bicicleta = dadosCadastroDevolucao.bicicleta();

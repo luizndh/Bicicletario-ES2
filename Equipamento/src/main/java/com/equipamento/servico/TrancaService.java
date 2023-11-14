@@ -2,16 +2,12 @@ package com.equipamento.servico;
 
 import static com.equipamento.model.Tranca.trancas;
 
-import com.equipamento.DTO.InclusaoTrancaDTO;
-import com.equipamento.DTO.RetiradaTrancaDTO;
-import com.equipamento.DTO.TrancaDTO;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Tranca.StatusTranca;
 import com.equipamento.model.Tranca;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service

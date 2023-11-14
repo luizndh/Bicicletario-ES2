@@ -1,6 +1,6 @@
 package com.aluguel.service;
 
-import com.aluguel.DTO.FuncionarioDTO;
+import com.aluguel.dto.FuncionarioDTO;
 import com.aluguel.model.Funcionario;
 
 import java.util.List;

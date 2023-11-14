@@ -3,7 +3,7 @@ package com.aluguel.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aluguel.DTO.AluguelDTO;
+import com.aluguel.dto.AluguelDTO;
 
 public class Aluguel {
 
@@ -15,7 +15,7 @@ public class Aluguel {
     private int ciclista;
     private int trancaInicio;
 
-    public static List<Aluguel> alugueis = new ArrayList<>();
+    public static final List<Aluguel> alugueis = new ArrayList<>();
 
     public Aluguel(AluguelDTO dadosCadastroAluguel) {
         this.bicicleta = dadosCadastroAluguel.bicicleta();

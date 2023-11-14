@@ -1,8 +1,8 @@
 package com.aluguel.service;
 
-import com.aluguel.DTO.AluguelDTO;
-import com.aluguel.DTO.BicicletaDTO;
-import com.aluguel.DTO.TrancaDTO;
+import com.aluguel.dto.AluguelDTO;
+import com.aluguel.dto.BicicletaDTO;
+import com.aluguel.dto.TrancaDTO;
 import com.aluguel.model.Aluguel;
 
 import java.text.SimpleDateFormat;

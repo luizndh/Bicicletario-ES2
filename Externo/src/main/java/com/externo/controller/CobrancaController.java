@@ -1,6 +1,6 @@
 package com.externo.controller;
 
-import com.externo.DTO.CobrancaDTO;
+import com.externo.dto.CobrancaDTO;
 import com.externo.model.Cobranca;
 import com.externo.servico.CobrancaService;
 import io.swagger.annotations.Api;

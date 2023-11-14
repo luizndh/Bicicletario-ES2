@@ -1,6 +1,6 @@
     package com.externo.model;
     
-    import com.externo.DTO.CobrancaDTO;
+    import com.externo.dto.CobrancaDTO;
     
     import java.util.ArrayList;
     import java.util.List;
@@ -14,7 +14,7 @@
         private float valor;
         private int ciclista;
     
-        public static List<Cobranca> cobrancas = new ArrayList<>();
+        public static final List<Cobranca> cobrancas = new ArrayList<>();
     
         public Cobranca(CobrancaDTO dadosCadastroCobranca) {
             this.id = cobrancas.size() + 1;

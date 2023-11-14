@@ -1,6 +1,6 @@
 package com.aluguel.service;
 
-import com.aluguel.DTO.FuncionarioDTO;
+import com.aluguel.dto.FuncionarioDTO;
 import com.aluguel.model.Funcionario;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +30,7 @@ public class FuncionarioServiceTest {
     private List<Funcionario> funcionarios;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Arrange
 
         FuncionarioDTO funcionarioDTO1 = new FuncionarioDTO("123", "123", "kleber@kalango.com", "kleber", 5, "muito jovem aprendiz", "333.222.111-00");
@@ -44,7 +44,7 @@ public class FuncionarioServiceTest {
     }
 
     @Test
-    public void testRecuperaFuncionarioPorMatricula() {
+    void testRecuperaFuncionarioPorMatricula() {
         // Arrange
         if (Funcionario.funcionarios.isEmpty()) {
             return;
@@ -64,7 +64,7 @@ public class FuncionarioServiceTest {
     }
 
     @Test
-    public void testRecuperaFuncionarios() {
+    void testRecuperaFuncionarios() {
         // Arrange
         when(funcionarioService.recuperaFuncionarios()).thenReturn(funcionarios);
 
@@ -77,7 +77,7 @@ public class FuncionarioServiceTest {
     }
 
     @Test
-    public void testCadastraFuncionario() {
+    void testCadastraFuncionario() {
         // Arrange
         FuncionarioDTO dadosCadastroFuncionario = new FuncionarioDTO("fogoNoMendingo", "fogoNoMendingo", "euFumoVerde@brisa.com", "joãozin", 14, "fumante", "###.###.###-##");
         when(funcionarioService.cadastraFuncionario(dadosCadastroFuncionario)).then(invocation -> {
@@ -97,7 +97,7 @@ public class FuncionarioServiceTest {
     }
 
     @Test
-    public void testAlteraFuncionario() {
+    void testAlteraFuncionario() {
         // Arrange
         FuncionarioDTO dadosAlteracaoFuncionario = new FuncionarioDTO("omg123", "omg123", "mikaGuei@nemLimpei.com", "Mika Guei", 19, "cagante", "823.794.383-12");
         when(funcionarioService.alteraFuncionario("1", dadosAlteracaoFuncionario)).then(invocation -> {
@@ -122,7 +122,7 @@ public class FuncionarioServiceTest {
     }
 
     @Test
-    public void testExcluiFuncionario() {
+    void testExcluiFuncionario() {
         // Arrange
         if (Funcionario.funcionarios.isEmpty()) {
             return;

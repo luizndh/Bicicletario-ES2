@@ -1,6 +1,6 @@
 package com.aluguel.model;
 
-import com.aluguel.DTO.FuncionarioDTO;
+import com.aluguel.dto.FuncionarioDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class Funcionario {
     private String funcao;
     private String cpf;
 
-    public static List<Funcionario> funcionarios = new ArrayList<>();
+    public static final List<Funcionario> funcionarios = new ArrayList<>();
 
     public Funcionario(FuncionarioDTO dadosCadastroFuncionario) {
         this.matricula = String.valueOf(funcionarios.size() + 1);

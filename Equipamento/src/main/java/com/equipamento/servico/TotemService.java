@@ -1,16 +1,9 @@
 package com.equipamento.servico;
 
-import com.equipamento.DTO.InclusaoBicicletaDTO;
-import com.equipamento.DTO.RetiradaBicicletaDTO;
-import com.equipamento.DTO.TotemDTO;
-import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Totem;
-import com.equipamento.model.Tranca;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static com.equipamento.model.Totem.totens;

@@ -1,6 +1,6 @@
 package com.aluguel.service;
 
-import com.aluguel.DTO.CartaoDeCreditoDTO;
+import com.aluguel.dto.CartaoDeCreditoDTO;
 import com.aluguel.model.CartaoDeCredito;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +26,7 @@ public class CartaoDeCreditoServiceTest {
     private List<CartaoDeCredito> cartoesDeCreditos;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Arrange
         CartaoDeCreditoDTO cartaoDeCreditoDTO1 = new CartaoDeCreditoDTO("Joao Silva", "5342663286475435", "01/22","411");
         CartaoDeCreditoDTO cartaoDeCreditoDTO2 = new CartaoDeCreditoDTO("Lucas Sacul", "1234567890123456", "12/23", "123");
@@ -39,7 +39,7 @@ public class CartaoDeCreditoServiceTest {
     }
 
     @Test
-    public void testRecuperaCartaoDeCreditoPorId() {
+    void testRecuperaCartaoDeCreditoPorId() {
         // Arrange
         int idCiclista = 1;
         when(cartaoDeCreditoService.recuperaCartaoDeCreditoPorId(idCiclista)).then(invocation -> {
@@ -60,7 +60,7 @@ public class CartaoDeCreditoServiceTest {
     }
 
     @Test
-    public void testRecuperaCartoesDeCreditos() {
+    void testRecuperaCartoesDeCreditos() {
         // Act
         List<CartaoDeCredito> cartoesDeCredito = cartaoDeCreditoService.recuperaCartoesDeCreditos();
 
@@ -70,7 +70,7 @@ public class CartaoDeCreditoServiceTest {
     }
 
     @Test
-    public void testAlteraCartaoDeCredito() {
+    void testAlteraCartaoDeCredito() {
         // Arrange
         int idCiclista = 1;
         CartaoDeCreditoDTO dadosAlteracaoCartaoDeCredito = new CartaoDeCreditoDTO("Lucas Sacul", "1234567890123456", "12/23", "123");

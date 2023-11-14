@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aluguel.DTO.FuncionarioDTO;
+import com.aluguel.dto.FuncionarioDTO;
 import com.aluguel.model.Funcionario;
 import com.aluguel.service.FuncionarioService;
 
@@ -55,7 +55,7 @@ public class FuncionarioController {
 
     @DeleteMapping("/{matriculaFuncionario}")
     @ApiOperation(value="Exclui um funcionario do sistema")
-    public ResponseEntity<?> excluiBicicleta(@PathVariable String matriculaFuncionario) {
+    public ResponseEntity excluiBicicleta(@PathVariable String matriculaFuncionario) {
         this.service.excluiFuncionario(matriculaFuncionario);
         return ResponseEntity.ok().build();
     }

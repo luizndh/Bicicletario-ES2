@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.aluguel.DTO.AluguelDTO;
+import com.aluguel.dto.AluguelDTO;
 
 public class AluguelTest {
 
@@ -17,42 +17,42 @@ public class AluguelTest {
     }
 
     @Test
-    public void testGetBicicleta() {
+    void testGetBicicleta() {
         assertEquals(1, aluguel.getBicicleta());
     }
 
     @Test
-    public void testGetHoraInicio() {
+    void testGetHoraInicio() {
         assertEquals("10:00", aluguel.getHoraInicio());
     }
 
     @Test
-    public void testGetTrancaFim() {
+    void testGetTrancaFim() {
         assertEquals(2, aluguel.getTrancaFim());
     }
 
     @Test
-    public void testGetHoraFim() {
+    void testGetHoraFim() {
         assertEquals("11:00", aluguel.getHoraFim());
     }
 
     @Test
-    public void testGetCobranca() {
+    void testGetCobranca() {
         assertEquals(10, aluguel.getCobranca());
     }
 
     @Test
-    public void testGetCiclista() {
+    void testGetCiclista() {
         assertEquals(3, aluguel.getCiclista());
     }
 
     @Test
-    public void testGetTrancaInicio() {
+    void testGetTrancaInicio() {
         assertEquals(4, aluguel.getTrancaInicio());
     }
 
     @Test
-    public void testAtualizaAluguel() {
+    void testAtualizaAluguel() {
         AluguelDTO dadosAlteracaoAluguel = new AluguelDTO(1, "10:00", 2, "12:00", 20, 3, 4);
         aluguel.atualizaAluguel(dadosAlteracaoAluguel);
         assertEquals("12:00", aluguel.getHoraFim());
@@ -60,7 +60,7 @@ public class AluguelTest {
     }
 
     @Test
-    public void testAlugueis() {
+    void testAlugueis() {
         List<Aluguel> alugueis = Aluguel.alugueis;
         assertEquals(1, alugueis.size());
         assertEquals(aluguel, alugueis.get(0));

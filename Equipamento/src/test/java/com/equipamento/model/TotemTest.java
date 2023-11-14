@@ -1,7 +1,7 @@
 package com.equipamento.model;
 
-import com.equipamento.DTO.TotemDTO;
-import com.equipamento.DTO.TrancaDTO;
+import com.equipamento.dto.TotemDTO;
+import com.equipamento.dto.TrancaDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,18 +13,18 @@ public class TotemTest {
     private Totem totem;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         TotemDTO dadosCadastroTotem = new TotemDTO("localizacao teste", "descricao teste");
         totem = new Totem(dadosCadastroTotem);
     }
 
     @Test
-    public void testGetId() {
+    void testGetId() {
         assertEquals(Totem.totens.size()+1, totem.getId());
     }
 
     @Test
-    public void testGetTrancas() {
+    void testGetTrancas() {
         assertEquals(0, totem.getTrancas().size());
 
         totem.getTrancas().add(new Tranca(new TrancaDTO(1, "localizacao teste", "2021", "modelo teste", "NOVA")));

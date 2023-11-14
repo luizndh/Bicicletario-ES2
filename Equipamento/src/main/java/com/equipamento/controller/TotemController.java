@@ -1,18 +1,9 @@
 package com.equipamento.controller;
 
-import com.equipamento.DTO.TotemDTO;
-import com.equipamento.DTO.TrancaDTO;
-import com.equipamento.model.Bicicleta;
-import com.equipamento.model.Totem;
-import com.equipamento.model.Tranca;
 import com.equipamento.servico.TotemService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/totem")

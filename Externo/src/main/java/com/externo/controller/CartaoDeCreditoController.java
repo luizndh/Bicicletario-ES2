@@ -1,6 +1,6 @@
 package com.externo.controller;
 
-import com.externo.DTO.CartaoDeCreditoDTO;
+import com.externo.dto.CartaoDeCreditoDTO;
 import com.externo.servico.CartaoDeCreditoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
