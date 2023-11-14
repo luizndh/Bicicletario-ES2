@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+**/jacoco-aggregate/**
+!**/jacoco-aggregate/index.html
+!**/jacoco-aggregate/jacoco.xml
