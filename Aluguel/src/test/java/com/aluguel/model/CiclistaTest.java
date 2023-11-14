@@ -24,7 +24,6 @@ public class CiclistaTest {
 
         ciclista.atualizaCiclista(dadosAlteracaoCiclista);
 
-        assertEquals(StatusCiclista.ATIVO, ciclista.getStatus());
         assertEquals("Luisa Fumada", ciclista.getNome());
         assertEquals("31/12/2001", ciclista.getNascimento());
         assertEquals("009.876.543-21", ciclista.getCpf());

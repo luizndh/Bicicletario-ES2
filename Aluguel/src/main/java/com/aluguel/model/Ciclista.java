@@ -55,6 +55,14 @@ public class Ciclista {
         return status;
     }
 
+    public boolean isAtivo() {
+        return this.status == StatusCiclista.ATIVO;
+    }
+
+    public void ativaCiclista() {
+        this.status = StatusCiclista.ATIVO;
+    }
+
     public String getNome() {
         return nome;
     }

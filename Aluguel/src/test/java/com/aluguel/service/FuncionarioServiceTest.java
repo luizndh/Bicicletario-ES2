@@ -13,8 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doAnswer;
 
 @ExtendWith(MockitoExtension.class)
 public class FuncionarioServiceTest {
@@ -119,25 +121,25 @@ public class FuncionarioServiceTest {
         assertEquals(3, funcionarios.size());
     }
 
-    // @Test
-    // public void testExcluiFuncionario() {
-    //     // Arrange
-    //     if (Funcionario.funcionarios.isEmpty()) {
-    //         return;
-    //     }
-    //     String matricula = Funcionario.funcionarios.get(funcionarios.size()-1).getMatricula();
-    //     when(funcionarioService.recuperaFuncionarioPorMatricula(matricula)).thenReturn(funcionarios.get((Integer.parseInt(matricula) - 1)));
-    //     when(funcionarioService.excluiFuncionario(matricula)).then(invocation -> {
-    //         Funcionario funcionario = funcionarios.get(funcionarios.size()-1);
-    //         funcionarios.remove(funcionario);
-    //         return funcionario;
-    //     });
-        
-    //     // Act
-    //     funcionarioService.excluiFuncionario(matricula);
-    //     Funcionario funcionario = funcionarioService.recuperaFuncionarioPorMatricula(matricula);
+    @Test
+    public void testExcluiFuncionario() {
+        // Arrange
+        if (Funcionario.funcionarios.isEmpty()) {
+            return;
+        }
+        String matricula = Funcionario.funcionarios.get(funcionarios.size()-1).getMatricula();
+        when(funcionarioService.recuperaFuncionarioPorMatricula(matricula)).thenReturn(funcionarios.get((Integer.parseInt(matricula) - 1)));
+        doAnswer(invocation -> {
+            Funcionario funcionario = funcionarios.get(funcionarios.size()-1);
+            funcionarios.remove(funcionario);
+            return null;
+        }).when(funcionarioService).excluiFuncionario(matricula);
+     
+        // Act
+        funcionarioService.excluiFuncionario(matricula);
+        Funcionario funcionario = funcionarioService.recuperaFuncionarioPorMatricula(matricula);
 
-    //     // Assert
-    //     assertNull(funcionario);
-    // }
+        // Assert
+        assertNull(funcionario);
+    }
 }

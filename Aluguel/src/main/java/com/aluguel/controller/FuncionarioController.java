@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aluguel.DTO.CiclistaDTO;
 import com.aluguel.DTO.FuncionarioDTO;
-import com.aluguel.model.Ciclista;
 import com.aluguel.model.Funcionario;
 import com.aluguel.service.FuncionarioService;
 
