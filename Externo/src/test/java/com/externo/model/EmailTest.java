@@ -1,7 +1,6 @@
 package com.externo.model;
 
-import com.externo.DTO.EmailDTO;
-import com.externo.model.Email;
+import com.externo.dto.EmailDTO;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,16 +35,16 @@ public class EmailTest {
 
     @Test
     public void testGetEmail() {
-        assertEquals("joaodasneves2023@gmail.com", email.getEmail());
+        assertEquals("joaodasneves@gmail.com", email.getEmail());
     }
 
     @Test
     public void testGetAssunto() {
-        assertEquals("Boa tarde", email.getAssunto());
+        assertEquals("Bom dia", email.getAssunto());
     }
 
     @Test
     public void testGetMensagem() {
-        assertEquals("Boa tarde meu querido, como vai?", email.getMensagem());
+        assertEquals("Bom dia meu querido, como vai?", email.getMensagem());
     }
 }

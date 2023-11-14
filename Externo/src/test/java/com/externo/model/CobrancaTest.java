@@ -1,7 +1,6 @@
 package com.externo.model;
 
-import com.externo.DTO.CobrancaDTO;
-import com.externo.model.Cobranca;
+import com.externo.dto.CobrancaDTO;
 import com.externo.model.Cobranca.StatusCobranca;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +19,8 @@ public class CobrancaTest {
 
     @Test
     public void testAtualizaCobranca() {
-        CobrancaDTO cobrancaDTO = new CobrancaDTO(StatusCobranca.PENDENTE, "02/01/2023 12:00", "02/01/2023 13:40", 15.00f, 3);
-        cobranca.atualizaCobranca(cobrancaDTO);
+        CobrancaDTO cobrancaDTO2 = new CobrancaDTO(StatusCobranca.PENDENTE, "02/01/2023 12:00", "02/01/2023 13:40", 15.00f, 3);
+        cobranca.atualizaCobranca(cobrancaDTO2);
 
         assertEquals(StatusCobranca.PENDENTE, cobranca.getStatus());
         assertEquals("02/01/2023 12:00", cobranca.getHoraSolicitacao());
@@ -43,21 +42,21 @@ public class CobrancaTest {
 
     @Test
     public void testGetHoraSolicitacao() {
-        assertEquals("02/01/2023 12:00", cobranca.getHoraSolicitacao());
+        assertEquals("01/01/2023 12:00", cobranca.getHoraSolicitacao());
     }
 
     @Test
     public void testGetHoraFinalizacao() {
-        assertEquals("02/01/2023 13:40", cobranca.getHoraFinalizacao());
+        assertEquals("01/01/2023 13:00", cobranca.getHoraFinalizacao());
     }
 
     @Test
     public void testGetValor() {
-        assertEquals(15.00f, cobranca.getValor());
+        assertEquals(10.00f, cobranca.getValor());
     }
 
     @Test
     public void testGetCiclista() {
-        assertEquals(3, cobranca.getCiclista());
+        assertEquals(2, cobranca.getCiclista());
     }
 }

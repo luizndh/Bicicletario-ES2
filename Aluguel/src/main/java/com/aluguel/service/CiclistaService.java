@@ -49,7 +49,7 @@ public class CiclistaService {
     public Ciclista cadastraCiclista(CiclistaDTO dadosCadastroCiclista) {
         if (dadosCadastroCiclista.cpf().isEmpty() && dadosCadastroCiclista.nacionalidade().equals("brasileiro")) {
             throw new IllegalArgumentException("O CPF é obrigatório para brasileiros");
-        } else if (dadosCadastroCiclista.passaporte().getNumero().isEmpty() && dadosCadastroCiclista.nacionalidade() == "estrangeiro") {
+        } else if (dadosCadastroCiclista.passaporte().getNumero().isEmpty() && dadosCadastroCiclista.nacionalidade().equals("estrangeiro")) {
             throw new IllegalArgumentException("O passaporte é obrigatório para estrangeiros");
         } else {
             //if (false) { // TODO validar cartão junto a administradora CC

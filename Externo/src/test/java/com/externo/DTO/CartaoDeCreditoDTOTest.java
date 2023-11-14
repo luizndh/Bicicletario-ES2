@@ -1,6 +1,9 @@
 package com.externo.DTO;
 
 import org.junit.jupiter.api.Test;
+
+import com.externo.dto.CartaoDeCreditoDTO;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CartaoDeCreditoDTOTest {

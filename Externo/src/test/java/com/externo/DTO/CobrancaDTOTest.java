@@ -1,7 +1,7 @@
 package com.externo.DTO;
 
 import com.externo.model.Cobranca;
-import com.externo.DTO.CobrancaDTO;
+import com.externo.dto.CobrancaDTO;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
