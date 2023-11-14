@@ -1,6 +1,8 @@
 package com.equipamento.model;
 
 import com.equipamento.DTO.BicicletaDTO;
+import com.equipamento.DTO.InclusaoBicicletaDTO;
+import com.equipamento.DTO.RetiradaBicicletaDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,24 @@ public class Bicicleta {
     private String ano;
     private int numero;
     private StatusBicicleta status;
+    private List<InclusaoBicicletaDTO> historicoInclusao;
+    private List<RetiradaBicicletaDTO> historicoRetirada;
+
     public static List<Bicicleta> bicicletas = new ArrayList<>();
+
+    public StatusBicicleta getStatus() {
+        return this.status;
+    }
+
+    public enum StatusBicicleta {
+        DISPONIVEL,
+        EM_USO,
+        NOVA,
+        APOSENTADA,
+        REPARO_SOLICITADO,
+        EM_REPARO
+    }
+
 
     public Bicicleta(BicicletaDTO dadosCadastroBicicleta) {
         this.id = bicicletas.size() + 1;
@@ -22,6 +41,8 @@ public class Bicicleta {
         this.modelo = dadosCadastroBicicleta.modelo();
         this.status = StatusBicicleta.valueOf(dadosCadastroBicicleta.status());
         this.numero = dadosCadastroBicicleta.numero();
+        this.historicoInclusao = new ArrayList<>();
+        this.historicoRetirada = new ArrayList<>();
     }
 
     public void atualizaBicicleta(BicicletaDTO dadosAlteracaoBicicleta) {
@@ -34,5 +55,16 @@ public class Bicicleta {
 
     public int getId() {
         return this.id;
+    }
+
+    public void setStatus(StatusBicicleta acao) {
+        this.status = acao;
+    }
+
+    public void adicionaRegistroNoHistoricoDeInclusao(InclusaoBicicletaDTO dadosInclusao) {
+        this.historicoInclusao.add(dadosInclusao);
+    }
+    public void adicionaRegistroNoHistoricoDeRetirada(RetiradaBicicletaDTO dadosRetirada) {
+        this.historicoRetirada.add(dadosRetirada);
     }
 }

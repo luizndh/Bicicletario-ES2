@@ -11,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.NoSuchElementException;
+
 @ExtendWith(MockitoExtension.class)
 public class TrancaServiceTest {
     static Tranca t1 = new Tranca(new TrancaDTO(1, "", "", "", "LIVRE"));;
@@ -27,7 +29,7 @@ public class TrancaServiceTest {
 
     @Test
     public void naoEncontraTranca() {
-        assertThrows(IllegalArgumentException.class, () ->  trancaService.recuperaTrancaPorId(2));
+        assertThrows(NoSuchElementException.class, () ->  trancaService.recuperaTrancaPorId(2));
     }
 
     @Test
