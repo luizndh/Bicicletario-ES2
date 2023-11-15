@@ -11,7 +11,9 @@ import com.aluguel.dto.BicicletaDTO;
 import com.aluguel.dto.DevolucaoDTO;
 import com.aluguel.model.Aluguel;
 import com.aluguel.model.Devolucao;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DevolucaoService {
 
     @Autowired

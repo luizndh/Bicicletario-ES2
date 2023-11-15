@@ -4,12 +4,14 @@ import com.aluguel.dto.BicicletaDTO;
 import com.aluguel.dto.CiclistaDTO;
 import com.aluguel.model.Aluguel;
 import com.aluguel.model.Ciclista;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static com.aluguel.model.Aluguel.alugueis;
 import static com.aluguel.model.Ciclista.ciclistas;
 
+@Service
 public class CiclistaService {
 
     final String CICLISTA_EXCEPTION_1 = "O ciclista com id ";

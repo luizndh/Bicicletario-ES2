@@ -2,11 +2,13 @@ package com.aluguel.service;
 
 import com.aluguel.dto.CartaoDeCreditoDTO;
 import com.aluguel.model.CartaoDeCredito;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static com.aluguel.model.CartaoDeCredito.cartoesDeCreditos;
 
+@Service
 public class CartaoDeCreditoService {
     public CartaoDeCredito recuperaCartaoDeCreditoPorId(int idCiclista) {
         for (CartaoDeCredito cartaoDeCredito : cartoesDeCreditos) {

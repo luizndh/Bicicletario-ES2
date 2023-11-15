@@ -2,11 +2,13 @@ package com.aluguel.service;
 
 import com.aluguel.dto.FuncionarioDTO;
 import com.aluguel.model.Funcionario;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static com.aluguel.model.Funcionario.funcionarios;;
 
+@Service
 public class FuncionarioService {
     public Funcionario recuperaFuncionarioPorMatricula(String matriculaFuncionario) {
         for (Funcionario funcionario : funcionarios) {
