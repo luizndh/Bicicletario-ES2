@@ -1,11 +1,16 @@
 package com.equipamento.controller;
 
+import com.equipamento.dto.BicicletaDTO;
 import com.equipamento.dto.InclusaoBicicletaDTO;
+import com.equipamento.dto.RetiradaBicicletaDTO;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Bicicleta.StatusBicicleta;
 import com.equipamento.servico.BicicletaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +30,6 @@ public class BicicletaController {
         return ResponseEntity.ok().body(t);
     }
 
-    /*
     @GetMapping("")
     @ApiOperation(value="Retorna todas as bicicletas cadastradas no sistema")
     public ResponseEntity<List<Bicicleta>> recuperaBicicletas() {
@@ -51,8 +55,6 @@ public class BicicletaController {
         return ResponseEntity.ok().build();
     }
 
-     */
-
     @PostMapping("/{idBicicleta}/status/{acao}")
     @ApiOperation(value="Altera o status de uma bicicleta")
     public ResponseEntity<Bicicleta> alteraStatusBicicleta(@PathVariable int idBicicleta, @PathVariable StatusBicicleta acao) {
@@ -61,18 +63,15 @@ public class BicicletaController {
 
     @PostMapping(value = "/integrarNaRede", consumes = "application/json")
     @ApiOperation(value="Coloca uma bicicleta nova ou retornando de reparo de volta na rede de totens")
-    public ResponseEntity integraNaRede(@RequestBody InclusaoBicicletaDTO dadosInclusao) {
+    public ResponseEntity<Void> integraNaRede(@RequestBody InclusaoBicicletaDTO dadosInclusao) {
         this.service.integrarNaRede(dadosInclusao);
         return ResponseEntity.status(200).build();
     }
 
-    /*
     @PostMapping(value = "/retirarDaRede", consumes = "application/json")
     @ApiOperation(value="Retira uma bicicleta para reparo ou aposentadoria")
-    public ResponseEntity retiraDaRede(@RequestBody RetiradaBicicletaDTO dadosRetirada) {
+    public ResponseEntity<Void> retiraDaRede(@RequestBody RetiradaBicicletaDTO dadosRetirada) {
         this.service.retirarDaRede(dadosRetirada);
         return ResponseEntity.ok().build();
     }
-
-     */
 }

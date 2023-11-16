@@ -1,8 +1,17 @@
 package com.equipamento.controller;
 
+import com.equipamento.dto.TotemDTO;
+import com.equipamento.model.Bicicleta;
+import com.equipamento.model.Totem;
+import com.equipamento.model.Tranca;
 import com.equipamento.servico.TotemService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,7 +22,6 @@ public class TotemController {
     @Autowired
     private TotemService service;
 
-    /*
     @GetMapping("")
     @ApiOperation(value="Retorna todos os totems cadastrados no sistema")
     public ResponseEntity<List<Totem>> recuperaTotens() {
@@ -50,5 +58,4 @@ public class TotemController {
     public ResponseEntity<List<Bicicleta>> recuperaBicicletasDoTotem(@PathVariable int idTotem) {
         return ResponseEntity.ok().body(this.service.recuperaBicicletasDoTotem(idTotem));
     }
-     */
 }

@@ -2,19 +2,20 @@ package com.equipamento.servico;
 
 import static com.equipamento.model.Tranca.trancas;
 
+import com.equipamento.dto.InclusaoTrancaDTO;
+import com.equipamento.dto.RetiradaTrancaDTO;
+import com.equipamento.dto.TrancaDTO;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Tranca.StatusTranca;
 import com.equipamento.model.Tranca;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 public class TrancaService {
-
-    @Autowired
-    private TotemService totemService;
 
     @Autowired
     private BicicletaService bicicletaService;
@@ -31,7 +32,6 @@ public class TrancaService {
         throw new NoSuchElementException("A tranca com id " + idTranca + " não existe");
     }
 
-    /*
     public List<Tranca> recuperaTrancas() {
         return trancas;
     }
@@ -56,8 +56,6 @@ public class TrancaService {
         Tranca t = recuperaTrancaPorId(idTranca);
         trancas.remove(t);
     }
-
-     */
 
     public Tranca alteraStatusTranca(int idTranca, StatusTranca acao) {
         Tranca t = recuperaTrancaPorId(idTranca);
@@ -85,7 +83,6 @@ public class TrancaService {
         return t;
     }
 
-    /*
     public void integrarNaRede(InclusaoTrancaDTO dadosInclusao) {
         //TODO: Em caso de repado, verificar se o funcionário é o mesmo que retirou a tranca? depois fazer o que?
         Tranca t = recuperaTrancaPorId(dadosInclusao.idTranca());
@@ -125,14 +122,11 @@ public class TrancaService {
 
     }
 
-     */
-
     public Bicicleta obterBicicletaNaTranca(int idTranca) {
         Tranca t = recuperaTrancaPorId(idTranca);
         return bicicletaService.recuperaBicicletaPorId(t.getBicicleta());
     }
 
-    /*
     private void enviaEmailFake(String email, String assunto, String corpo) {
         return;
     }
@@ -140,6 +134,4 @@ public class TrancaService {
     private String recuperaEmailDeFuncionarioPorId(int idFuncionario) {
         return "emailteste@gmail.com";
     }
-    */
-
 }

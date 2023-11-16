@@ -1,11 +1,17 @@
 package com.equipamento.controller;
 
+import com.equipamento.dto.InclusaoTrancaDTO;
+import com.equipamento.dto.RetiradaTrancaDTO;
+import com.equipamento.dto.TrancaDTO;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Tranca;
 import com.equipamento.model.Tranca.StatusTranca;
 import com.equipamento.servico.TrancaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +27,9 @@ public class TrancaController {
     @GetMapping("/{idTranca}")
     @ApiOperation(value="Retorna uma tranca com o id passado")
     public ResponseEntity<Tranca> recuperaTrancaPorId(@PathVariable int idTranca) {
-        Tranca t = this.service.recuperaTrancaPorId(idTranca);
-        return ResponseEntity.ok().body(t);
+        return ResponseEntity.ok().body(this.service.recuperaTrancaPorId(idTranca));
     }
 
-    /*
     @GetMapping("")
     @ApiOperation(value="Retorna todas as trancas cadastradas no sistema")
     public ResponseEntity<List<Tranca>> recuperaTrancas() {
@@ -46,19 +50,16 @@ public class TrancaController {
 
     @DeleteMapping("/{idTranca}")
     @ApiOperation(value="Exclui uma tranca do sistema")
-    public ResponseEntity excluiTranca(@PathVariable int idTranca) {
+    public ResponseEntity<Void> excluiTranca(@PathVariable int idTranca) {
         this.service.excluiTranca(idTranca);
         return ResponseEntity.ok().build();
     }
-
-     */
 
     @PostMapping("/{idTranca}/status/{acao}")
     @ApiOperation(value="Altera o status de uma tranca")
     public ResponseEntity<Tranca> alteraStatusTranca(@PathVariable int idTranca, @PathVariable StatusTranca acao) {
         return ResponseEntity.ok().body(this.service.alteraStatusTranca(idTranca, acao));
     }
-
 
     @PostMapping(value = "/{idTranca}/trancar", consumes = "application/json")
     @ApiOperation(value="Realiza o trancamento da tranca alterando o status da mesma de acordo. " +
@@ -74,22 +75,20 @@ public class TrancaController {
         return ResponseEntity.ok().body(this.service.realizarDestrancamento(idTranca, idBicicleta));
     }
 
-    /*
     @PostMapping(value = "/integrarNaRede", consumes = "application/json")
     @ApiOperation(value="Colocar uma tranca nova ou retornando de reparo de volta na rede de totens")
-    public ResponseEntity integrarNaRede(@RequestBody InclusaoTrancaDTO dadosInclusao) {
+    public ResponseEntity<Void> integrarNaRede(@RequestBody InclusaoTrancaDTO dadosInclusao) {
         this.service.integrarNaRede(dadosInclusao);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "retirarDaRede", consumes = "application/json")
     @ApiOperation(value="Retirar uma tranca para aposendatoria ou reparo")
+    @SuppressWarnings("rawtypes")
     public ResponseEntity retirarDaRede(@RequestBody RetiradaTrancaDTO dadosRetirada) {
         this.service.retirarDaRede(dadosRetirada);
         return ResponseEntity.ok().build();
     }
-
-     */
 
     @GetMapping("/{idTranca}/bicicleta")
     @ApiOperation(value="Obter bicicleta na tranca")

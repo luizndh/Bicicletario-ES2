@@ -1,16 +1,21 @@
 package com.equipamento.servico;
 
+import com.equipamento.dto.TotemDTO;
+import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Totem;
+import com.equipamento.model.Tranca;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static com.equipamento.model.Totem.totens;
 
 @Service
 public class TotemService {
-
 
     @Autowired
     private BicicletaService bicicletaService;
@@ -28,8 +33,6 @@ public class TotemService {
         }
         throw new NoSuchElementException("O totem com id " + idTotem + " não existe");
     }
-
-    /*
 
     public void excluiTotem(int idTotem) {
         Totem t = recuperaTotemPorId(idTotem);
@@ -68,8 +71,4 @@ public class TotemService {
 
         return bicicletas;
     }
-
-     */
-
-
 }

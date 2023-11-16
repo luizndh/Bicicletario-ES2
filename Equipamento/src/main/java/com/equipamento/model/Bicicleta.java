@@ -20,8 +20,6 @@ public class Bicicleta {
 
     public static List<Bicicleta> bicicletas = new ArrayList<>();
 
-
-
     public enum StatusBicicleta {
         DISPONIVEL,
         EM_USO,
@@ -31,6 +29,7 @@ public class Bicicleta {
         EM_REPARO
     }
 
+    public Bicicleta() {}
 
     public Bicicleta(BicicletaDTO dadosCadastroBicicleta) {
         this.id = bicicletas.size() + 1;

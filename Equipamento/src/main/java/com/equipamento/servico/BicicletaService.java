@@ -1,11 +1,13 @@
 package com.equipamento.servico;
 
+import com.equipamento.dto.BicicletaDTO;
 import com.equipamento.dto.InclusaoBicicletaDTO;
+import com.equipamento.dto.RetiradaBicicletaDTO;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Bicicleta.StatusBicicleta;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static com.equipamento.model.Bicicleta.bicicletas;
@@ -13,24 +15,18 @@ import static com.equipamento.model.Bicicleta.bicicletas;
 @Service
 public class BicicletaService {
 
-    @Autowired
-    private TotemService totemService;
-
     public Bicicleta recuperaBicicletaPorId(int idBicicleta) {
         if(idBicicleta < 0) {
             throw new IllegalArgumentException("Id da bicicleta invalido");
         }
-        System.out.println("PROCURANDO PELAS BICICLETAS...");
         for (Bicicleta b : bicicletas) {
             if (b.getId() == idBicicleta) {
                 return b;
             }
         }
-        System.out.println("ANTES DE VERIFICAR SE A BICICILETA EXISTE...");
         throw new NoSuchElementException("A bicicleta com id " + idBicicleta + " nao existe");
     }
 
-    /*
     public List<Bicicleta> recuperaBicicletas() {
         return bicicletas;
     }
@@ -52,8 +48,6 @@ public class BicicletaService {
         bicicletas.remove(b);
     }
 
-
-     */
     public Bicicleta alteraStatusBicicleta(int idBicicleta, StatusBicicleta acao) {
         Bicicleta b = recuperaBicicletaPorId(idBicicleta);
         b.setStatus(acao);
@@ -79,7 +73,6 @@ public class BicicletaService {
                         "Id do funcionário: " + dadosInclusao.idFuncionario());
     }
 
-    /*
     public void retirarDaRede(RetiradaBicicletaDTO dadosRetirada) {
         Bicicleta b = recuperaBicicletaPorId(dadosRetirada.idBicicleta());
         if(StatusBicicleta.valueOf(dadosRetirada.statusAcaoReparador()) == StatusBicicleta.EM_REPARO) {
@@ -91,18 +84,16 @@ public class BicicletaService {
         }
         b.adicionaRegistroNoHistoricoDeRetirada(dadosRetirada);
 
-        // Salva os dados de retirada
         //TODO: enviar email para o funcionario informando dados de retirada - INTEGRACAO
         this.enviaEmailFake(
                 this.recuperaEmailDeFuncionarioPorId(dadosRetirada.idFuncionario()),
                 "Integrando tranca na rede",
-                "Id da tranca: " + dadosRetirada.idTranca() +
+                        "Id da tranca: " + dadosRetirada.idTranca() +
                         "Id da bicicleta: " + dadosRetirada.idBicicleta() +
                         "Id do funcionário: " + dadosRetirada.idFuncionario() +
                         "Novo status da bicicleta: " + dadosRetirada.statusAcaoReparador());
-
     }
-     */
+
     private void enviaEmailFake(String email, String assunto, String corpo) {
         return;
     }
@@ -110,6 +101,4 @@ public class BicicletaService {
     private String recuperaEmailDeFuncionarioPorId(int idFuncionario) {
         return "emailteste@gmail.com";
     }
-
-
 }

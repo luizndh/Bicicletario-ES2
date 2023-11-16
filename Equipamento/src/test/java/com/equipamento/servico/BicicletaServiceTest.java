@@ -9,12 +9,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BicicletaServiceTest {
@@ -23,6 +26,12 @@ public class BicicletaServiceTest {
     BicicletaService bicicletaService;
     
     Bicicleta bicicleta;
+
+    @Mock
+    Bicicleta bicicletaMock;
+
+    @Spy
+    Bicicleta bicicletaSpy;
 
     @BeforeEach
     void setUp() {
@@ -74,13 +83,16 @@ public class BicicletaServiceTest {
     @Test
     void testIntegraNaRedeQuandoStatusEmUso() {
         // Arrange
-        Bicicleta b = Bicicleta.bicicletas.get(1);
+        when(bicicletaMock.getStatus()).thenReturn(StatusBicicleta.EM_USO);
+        when(bicicletaService.recuperaBicicletaPorId(2)).thenReturn(bicicletaMock);
 
         // Act
         bicicletaService.integrarNaRede(new InclusaoBicicletaDTO(1, 2, 1));
 
         // Assert
-        assertEquals(b.getStatus(), StatusBicicleta.EM_USO);
+        verify(bicicletaMock, times(0)).setStatus(StatusBicicleta.DISPONIVEL);
+        verify(bicicletaMock, times(0)).adicionaRegistroNoHistoricoDeInclusao(any(InclusaoBicicletaDTO.class));
+        assertEquals(bicicletaMock.getStatus(), StatusBicicleta.EM_USO);
     }
 
         @Test
