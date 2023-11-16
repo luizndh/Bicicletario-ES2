@@ -1,6 +1,4 @@
-package com.externo.DTO;
-
-import com.externo.dto.EmailDTO;
+package com.externo.dto;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

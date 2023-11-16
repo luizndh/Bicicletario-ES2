@@ -1,14 +1,11 @@
-package com.externo.DTO;
+package com.externo.dto;
 
 import com.externo.model.Cobranca;
-import com.externo.dto.CobrancaDTO;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-//TODO PRONTO
 public class CobrancaDTOTest {
-
     @Test
     public void testCiclistaDTO() {
         // Arrange

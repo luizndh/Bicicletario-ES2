@@ -1,19 +1,16 @@
-package com.externo.DTO;
+package com.externo.dto;
 
 import org.junit.jupiter.api.Test;
-
-import com.externo.dto.CartaoDeCreditoDTO;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CartaoDeCreditoDTOTest {
-//TODO PRONTO
     @Test
     public void testConstructor() {
         // Arrange
-        String nomeTitular = "Luis Fumado";
-        String numero = "2345678";
-        String validade = "12/25";
+        String nomeTitular = "Joao da Silva";
+        String numero = "1234567891234567";
+        String validade = "10/26";
         String cvv = "123";
 
         // Act
