@@ -70,7 +70,7 @@ public class TrancaControllerTest {
     void testRecuperaTrancaPorIdInvalido() throws Exception {
         // Arrange
         when(trancaService.recuperaTrancaPorId(-2)).thenThrow(IllegalArgumentException.class);
-        String json = "{\"codigo\":422,\"mensagem\":null}";
+        String json = "{\"codigo\":422,\"mensagem\":\"Argumento invalido\"}";
 
         // Act
         var response = this.mvc.perform(get("/tranca/{idTranca}", -2))
@@ -85,7 +85,7 @@ public class TrancaControllerTest {
     void testRecuperaTrancaQueNaoExiste() throws Exception {
         // Arrange
         when(trancaService.recuperaTrancaPorId(500)).thenThrow(NoSuchElementException.class);
-                String json = "{\"codigo\":404,\"mensagem\":null}";
+                String json = "{\"codigo\":404,\"mensagem\":\"Entidade nao existe\"}";
 
         // Act
         var response = this.mvc.perform(get("/tranca/{idTranca}", 500))
@@ -138,4 +138,88 @@ public class TrancaControllerTest {
         assertEquals(200, response.getStatus());
         assertEquals(jsonResposta, response.getContentAsString());
     }
+
+    @Test
+    void testCadastraNovaTrancaDadosIncorretos() throws Exception {
+        // Arrange
+        TrancaDTO dto = new TrancaDTO(1, "teste", "2020", "teste", "a");
+        when(trancaService.cadastraTranca(dto)).thenThrow(IllegalArgumentException.class);
+
+        String jsonEntrada = """
+                {
+                    "numero": 1,
+                    "localizacao": "teste",
+                    "anoDeFabricacao": "2020",
+                    "modelo": "teste",
+                    "status": "a"
+                }
+                """;
+        String jsonResposta = "{\"codigo\":422,\"mensagem\":\"Argumento invalido\"}";
+
+        // Act
+        var response = this.mvc.perform(post("/tranca")
+            .content(jsonEntrada)
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(422, response.getStatus());
+        assertEquals(jsonResposta, response.getContentAsString());
+    }
+
+    @Test
+    void testAlteraDadosValidosTranca() throws Exception {
+        // Arrange
+        TrancaDTO dto = new TrancaDTO(1, "teste", "2020", "teste", "NOVA");
+        Tranca t = new Tranca(dto);
+        when(trancaService.alteraTranca(1, dto)).thenReturn(t);
+        String jsonEntrada = """
+                {
+                    "numero": 1,
+                    "localizacao": "teste",
+                    "anoDeFabricacao": "2020",
+                    "modelo": "teste",
+                    "status": "NOVA"
+                }
+                """;
+        String jsonResposta = "{\"id\":1,\"bicicleta\":0,\"modelo\":\"teste\",\"status\":\"NOVA\"}";
+
+        // Act
+        var response = this.mvc.perform(put("/tranca/{idTranca}", 1)
+            .content(jsonEntrada)
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(200, response.getStatus());
+        assertEquals(jsonResposta, response.getContentAsString());
+    }
+
+    @Test
+    void testAlteraDadosInvalidosTranca() throws Exception {
+        // Arrange
+        TrancaDTO dto = new TrancaDTO(1, "teste", "2020", "teste", "a");
+        when(trancaService.alteraTranca(1, dto)).thenThrow(IllegalArgumentException.class);
+        String jsonEntrada = """
+                {
+                    "numero": 1,
+                    "localizacao": "teste",
+                    "anoDeFabricacao": "2020",
+                    "modelo": "teste",
+                    "status": "a"
+                }
+                """;
+        String jsonResposta = "{\"codigo\":422,\"mensagem\":\"Argumento invalido\"}";
+
+        // Act
+        var response = this.mvc.perform(put("/tranca/{idTranca}", 1)
+            .content(jsonEntrada)
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(422, response.getStatus());
+        assertEquals(jsonResposta, response.getContentAsString());
+    }
+    
 }

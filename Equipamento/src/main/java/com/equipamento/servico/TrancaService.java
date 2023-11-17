@@ -39,6 +39,7 @@ public class TrancaService {
     //TODO: validar os dados
     public Tranca cadastraTranca(TrancaDTO dadosCadastroTranca) {
         Tranca t = new Tranca(dadosCadastroTranca);
+
         trancas.add(t);
         //ok
         return t;

@@ -29,7 +29,7 @@ public class Tranca {
         EM_REPARO
     }
 
-    public Tranca(TrancaDTO dadosTranca) {
+    public Tranca(TrancaDTO dadosTranca) throws IllegalArgumentException {
         this.id = trancas.size() + 1;
         this.bicicleta = 0;
         this.numero = dadosTranca.numero();
@@ -41,7 +41,7 @@ public class Tranca {
         this.historicoRetirada = new ArrayList<>();
     }
 
-    public void atualizaTranca(TrancaDTO dadosAlteracaoTranca) {
+    public void atualizaTranca(TrancaDTO dadosAlteracaoTranca) throws IllegalArgumentException {
         this.anoDeFabricacao = dadosAlteracaoTranca.anoDeFabricacao();
         this.modelo = dadosAlteracaoTranca.modelo();
         this.status = StatusTranca.valueOf(dadosAlteracaoTranca.status());

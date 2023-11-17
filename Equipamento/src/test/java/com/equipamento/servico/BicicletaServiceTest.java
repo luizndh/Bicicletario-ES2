@@ -14,14 +14,17 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
+import static com.equipamento.model.Bicicleta.bicicletas;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BicicletaServiceTest {
 
+    @Spy
     @InjectMocks
     BicicletaService bicicletaService;
     
@@ -40,10 +43,10 @@ public class BicicletaServiceTest {
         BicicletaDTO bicicletaDTO3 = new BicicletaDTO("marca teste3", "modelo teste3", "2023", 3, "NOVA");
 
         Bicicleta.bicicletas = new ArrayList<>();
-        bicicleta = new Bicicleta(bicicletaDTO1);
+        bicicleta = new Bicicleta(bicicletaDTO2);
 
         Bicicleta.bicicletas.add(bicicleta);
-        Bicicleta.bicicletas.add(new Bicicleta(bicicletaDTO2));
+        Bicicleta.bicicletas.add(new Bicicleta(bicicletaDTO1));
         Bicicleta.bicicletas.add(new Bicicleta(bicicletaDTO3));
     }
 
@@ -54,6 +57,7 @@ public class BicicletaServiceTest {
 
     @Test
     void testRecuperaBicicletaPorIdQueNaoExiste() {
+        // Act + Assert
         assertThrows(NoSuchElementException.class, () -> bicicletaService.recuperaBicicletaPorId(10));
     }
 
@@ -65,19 +69,21 @@ public class BicicletaServiceTest {
         // Assert
         assertNotNull(bicicleta);
         assertEquals(bicicleta.getId(), 1);
-        assertEquals(bicicleta.getStatus(), StatusBicicleta.NOVA);
+        assertEquals(bicicleta.getStatus(), StatusBicicleta.EM_USO);
         assertEquals(Bicicleta.bicicletas.get(0), bicicleta);
     }
 
-    
     @Test
     void testAlteraStatus() {
+        // Arrange
+        when(bicicletaService.recuperaBicicletaPorId(2)).thenReturn(bicicleta);
+        assertEquals(bicicleta.getStatus(), StatusBicicleta.EM_USO);
+
         // Act
-        Bicicleta bicicleta = bicicletaService.alteraStatusBicicleta(1, StatusBicicleta.REPARO_SOLICITADO);
+        Bicicleta b = bicicletaService.alteraStatusBicicleta(2, StatusBicicleta.REPARO_SOLICITADO);
 
         // Assert
-        assertNotNull(bicicleta);
-        assertEquals(bicicleta.getStatus(), StatusBicicleta.REPARO_SOLICITADO);
+        assertEquals(b.getStatus(), StatusBicicleta.REPARO_SOLICITADO);
     }
     
     @Test
@@ -92,20 +98,54 @@ public class BicicletaServiceTest {
         // Assert
         verify(bicicletaMock, times(0)).setStatus(StatusBicicleta.DISPONIVEL);
         verify(bicicletaMock, times(0)).adicionaRegistroNoHistoricoDeInclusao(any(InclusaoBicicletaDTO.class));
-        assertEquals(bicicletaMock.getStatus(), StatusBicicleta.EM_USO);
     }
 
-        @Test
+    @Test
     void testIntegraNaRedeQuandoStatusDiferenteDeEmUso() {
         // Arrange
-        Bicicleta b = Bicicleta.bicicletas.get(0);
+        when(bicicletaMock.getStatus()).thenReturn(StatusBicicleta.NOVA);
+        when(bicicletaService.recuperaBicicletaPorId(1)).thenReturn(bicicletaMock);
 
         // Act
         bicicletaService.integrarNaRede(new InclusaoBicicletaDTO(1, 1, 1));
 
         // Assert
-        assertEquals(b.getStatus(), StatusBicicleta.DISPONIVEL);
-        assertEquals(b.getId(), 1);
+        verify(bicicletaMock, times(1)).setStatus(StatusBicicleta.DISPONIVEL);
+        verify(bicicletaMock, times(1)).adicionaRegistroNoHistoricoDeInclusao(any(InclusaoBicicletaDTO.class));
     }
 
+    @Test
+    void testRecuperaBicicletasArray() {
+        // Act
+        List<Bicicleta> lista = bicicletaService.recuperaBicicletas();
+
+        // Assert
+        assertEquals(lista.size(), 3);
+        assertEquals(lista.get(0), bicicleta);
+    }
+
+    @Test
+    void testCadastroBicicleta() {
+        // Act
+        BicicletaDTO bicicletaDTO = new BicicletaDTO("narca teste1", "modelo teste1", "2021", 1, "NOVA");
+        Bicicleta b = bicicletaService.cadastraBicicleta(bicicletaDTO);
+
+        // Assert
+        assertEquals(bicicletas.size(), 4);
+        assertEquals(bicicletas.get(3), b);
+        assertEquals(bicicletas.get(3).getStatus(), StatusBicicleta.NOVA);
+    }
+
+    @Test
+    void testAlteraBicicleta() {
+        // Arrange
+        BicicletaDTO dadosAlteracao = new BicicletaDTO("narca teste1", "modelo teste1", "2021", 1, "NOVA");
+        when(bicicletaService.recuperaBicicletaPorId(1)).thenReturn(bicicletaMock);
+        
+        // Act
+        bicicletaService.alteraBicicleta(1, dadosAlteracao);
+
+        // Assert
+        verify(bicicletaMock).atualizaBicicleta(dadosAlteracao);
+    }
 }
