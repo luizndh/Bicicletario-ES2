@@ -2,8 +2,14 @@ package com.externo.servico;
 
 import com.externo.dto.CobrancaDTO;
 import com.externo.model.Cobranca;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
 import org.springframework.stereotype.Service;
 import java.lang.Math;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.stripe.Stripe;
 
 import static com.externo.model.Cobranca.cobrancas;
@@ -12,11 +18,36 @@ import static com.externo.model.Cobranca.cobrancas;
 public class CobrancaService {
 
     public boolean realizaCobranca(CobrancaDTO dadosCobranca) {
-        Stripe.apiKey = "pk_test_51ODEoGK2SlPC0gAXqlT8OczBbK8MmnoQHihzsC1N1LgijjcU6Cn4L24yJgdtOYXZyBjv0MElx1EDf5R5nRdGvRom00DSGqfPfn";
+        if(!dadosCobranca.status().equals(Cobranca.StatusCobranca.PENDENTE)) return false;
+
+        try {
+            Stripe.apiKey = "sk_test_51ODEoGK2SlPC0gAXe7gRKx3tgwYgdxaYf8xoTkJvrMdUXMSXMPzwmdFEprKG654eo1h8JRuyQtNvqIU8iPW7T7nE00W6te3PX4";
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("amount", dadosCobranca.valor());
+            params.put("currency", "brl");
+            params.put("payment_method","card");
+
+            PaymentIntent paymentIntent = PaymentIntent.create(params);
+
+            System.out.println(paymentIntent.getStatus());
+            System.out.println(paymentIntent.getAmount());
+
+            if(paymentIntent.getStatus().equals("succeeded")) {
+                return true;
+            }
+        } catch (StripeException e) {
+            e.printStackTrace();
+            //TODO handling esse erro do stripe
+        }
+        //sends request to Stripe API, and returns true if payment is approved.
+        //(this is only a simulation, no real payment is made)
 
         //50% de chance de pagamento ser aprovado
-        if(!dadosCobranca.status().equals(Cobranca.StatusCobranca.PENDENTE)) return false;
+        /*
         if (Math.random() < 0.5) return true;
+        return false;
+         */
         return false;
     }
 

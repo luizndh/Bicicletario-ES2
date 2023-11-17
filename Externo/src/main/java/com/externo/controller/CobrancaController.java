@@ -20,6 +20,8 @@ public class CobrancaController {
     @PostMapping("/cobranca")
     @ApiOperation(value="Realiza a cobranca")
     public ResponseEntity<Boolean> realizaCobranca(@RequestBody CobrancaDTO dadosCobranca) {
+        System.out.println("Entrou no realizaCobranca");
+        System.out.println(dadosCobranca);
         return ResponseEntity.ok().body(this.service.realizaCobranca(dadosCobranca));
     }
 
