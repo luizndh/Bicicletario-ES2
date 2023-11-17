@@ -4,6 +4,7 @@ import com.externo.dto.CobrancaDTO;
 import com.externo.model.Cobranca;
 import org.springframework.stereotype.Service;
 import java.lang.Math;
+import com.stripe.Stripe;
 
 import static com.externo.model.Cobranca.cobrancas;
 
@@ -11,6 +12,8 @@ import static com.externo.model.Cobranca.cobrancas;
 public class CobrancaService {
 
     public boolean realizaCobranca(CobrancaDTO dadosCobranca) {
+        Stripe.apiKey = "pk_test_51ODEoGK2SlPC0gAXqlT8OczBbK8MmnoQHihzsC1N1LgijjcU6Cn4L24yJgdtOYXZyBjv0MElx1EDf5R5nRdGvRom00DSGqfPfn";
+
         //50% de chance de pagamento ser aprovado
         if(!dadosCobranca.status().equals(Cobranca.StatusCobranca.PENDENTE)) return false;
         if (Math.random() < 0.5) return true;
