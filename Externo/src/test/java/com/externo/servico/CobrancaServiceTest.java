@@ -28,10 +28,10 @@ public class CobrancaServiceTest {
     @BeforeEach
     void setUp() {
         // Arrange
-        CobrancaDTO dto1 = new CobrancaDTO(Cobranca.StatusCobranca.PAGA, "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 1);
-        CobrancaDTO dto2 = new CobrancaDTO(Cobranca.StatusCobranca.FALHA, "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 2);
-        CobrancaDTO dto3 = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE, "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 3);
-        CobrancaDTO dto4 = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE, "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 4);
+        CobrancaDTO dto1 = new CobrancaDTO(Cobranca.StatusCobranca.PAGA.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 1);
+        CobrancaDTO dto2 = new CobrancaDTO(Cobranca.StatusCobranca.FALHA.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 2);
+        CobrancaDTO dto3 = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 3);
+        CobrancaDTO dto4 = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 4);
 
         cobrancas.add(new Cobranca(dto1));
         cobrancas.add(new Cobranca(dto2));

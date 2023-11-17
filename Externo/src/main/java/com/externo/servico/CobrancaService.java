@@ -54,7 +54,7 @@ public class CobrancaService {
     public boolean processaCobrancasEmFila() {
         for (Cobranca c : cobrancas) {
             if(c.getStatus().equals(Cobranca.StatusCobranca.PENDENTE)) {
-                if(realizaCobranca(new CobrancaDTO(c.getStatus(), c.getHoraSolicitacao(), c.getHoraFinalizacao(), c.getValor(), c.getCiclista()))) {
+                if(realizaCobranca(new CobrancaDTO(c.getStatus().toString(), c.getHoraSolicitacao(), c.getHoraFinalizacao(), c.getValor(), c.getCiclista()))) {
                     c.setStatus(Cobranca.StatusCobranca.PAGA);
                 }
                 else {

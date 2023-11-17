@@ -18,7 +18,7 @@
     
         public Cobranca(CobrancaDTO dadosCadastroCobranca) {
             this.id = cobrancas.size() + 1;
-            this.status = dadosCadastroCobranca.status();
+            this.status = StatusCobranca.valueOf(dadosCadastroCobranca.status());
             this.horaSolicitacao = dadosCadastroCobranca.horaSolicitacao();
             this.horaFinalizacao = dadosCadastroCobranca.horaFinalizacao();
             this.valor = dadosCadastroCobranca.valor();
@@ -26,7 +26,7 @@
         }
     
         public void atualizaCobranca(CobrancaDTO dadosCadastroCobranca) {
-            this.status = dadosCadastroCobranca.status();
+            this.status = StatusCobranca.valueOf(dadosCadastroCobranca.status());
             this.horaSolicitacao = dadosCadastroCobranca.horaSolicitacao();
             this.horaFinalizacao = dadosCadastroCobranca.horaFinalizacao();
             this.valor = dadosCadastroCobranca.valor();

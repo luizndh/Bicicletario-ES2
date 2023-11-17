@@ -16,7 +16,7 @@ public class CobrancaDTOTest {
         int ciclista = 1;
 
         // Act
-        CobrancaDTO cobrancaDTO = new CobrancaDTO(status, horaSolicitacao, horaFinalizacao, valor, ciclista);
+        CobrancaDTO cobrancaDTO = new CobrancaDTO(status.toString(), horaSolicitacao, horaFinalizacao, valor, ciclista);
 
         // Assert
         assertNotNull(cobrancaDTO);

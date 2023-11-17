@@ -17,7 +17,7 @@ public class CobrancaController {
     @Autowired
     private CobrancaService service;
 
-    @PostMapping("/cobranca")
+    @PostMapping(value = "/cobranca", consumes = "application/json")
     @ApiOperation(value="Realiza a cobranca")
     public ResponseEntity<Boolean> realizaCobranca(@RequestBody CobrancaDTO dadosCobranca) {
         System.out.println("Entrou no realizaCobranca");
