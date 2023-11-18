@@ -1,6 +1,10 @@
 package com.equipamento.controller;
 
-import org.junit.jupiter.api.BeforeAll;
+import com.equipamento.dto.BicicletaDTO;
+import com.equipamento.dto.InclusaoTrancaDTO;
+import com.equipamento.dto.RetiradaTrancaDTO;
+import com.equipamento.model.Bicicleta;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,10 +35,14 @@ public class TrancaControllerTest {
     @MockBean
     TrancaService trancaService;
 
-    static Tranca t;
+    Tranca t;
 
-    @BeforeAll
-    static void setUp() {
+    final String JSON_ERRO_422 = "{\"codigo\":422,\"mensagem\":\"Argumento invalido\"}";
+    final String JSON_ERRO_404 = "{\"codigo\":404,\"mensagem\":\"Entidade nao existe\"}";
+
+
+    @BeforeEach
+    void setUp() {
         t = new Tranca(new TrancaDTO(1, "loc teste", "ano teste", "modelo teste", "NOVA"));
     }
 
@@ -55,7 +63,7 @@ public class TrancaControllerTest {
     void testRecuperaTrancasArrayNaoVazio() throws Exception {
         // Arrange
         when(trancaService.recuperaTrancas()).thenReturn(Arrays.asList(t));
-        String json = "[{\"id\":1,\"bicicleta\":0,\"modelo\":\"modelo teste\",\"status\":\"NOVA\"}]";
+        String json = "[{\"id\":1,\"bicicleta\":0,\"numero\":1,\"localizacao\":\"loc teste\",\"anoDeFabricacao\":\"ano teste\",\"modelo\":\"modelo teste\",\"status\":\"NOVA\"}]";
 
         // Act
         var response = this.mvc.perform(get("/tranca"))
@@ -70,7 +78,6 @@ public class TrancaControllerTest {
     void testRecuperaTrancaPorIdInvalido() throws Exception {
         // Arrange
         when(trancaService.recuperaTrancaPorId(-2)).thenThrow(IllegalArgumentException.class);
-        String json = "{\"codigo\":422,\"mensagem\":\"Argumento invalido\"}";
 
         // Act
         var response = this.mvc.perform(get("/tranca/{idTranca}", -2))
@@ -78,14 +85,13 @@ public class TrancaControllerTest {
 
         // Assert
         assertEquals(422, response.getStatus());
-        assertEquals(json, response.getContentAsString());
+        assertEquals(JSON_ERRO_422, response.getContentAsString());
     }
 
     @Test
     void testRecuperaTrancaQueNaoExiste() throws Exception {
         // Arrange
         when(trancaService.recuperaTrancaPorId(500)).thenThrow(NoSuchElementException.class);
-                String json = "{\"codigo\":404,\"mensagem\":\"Entidade nao existe\"}";
 
         // Act
         var response = this.mvc.perform(get("/tranca/{idTranca}", 500))
@@ -93,14 +99,14 @@ public class TrancaControllerTest {
 
         // Assert
         assertEquals(404, response.getStatus());
-        assertEquals(json, response.getContentAsString());
+        assertEquals(JSON_ERRO_404, response.getContentAsString());
     }
 
     @Test
     void testRecuperaTrancaPorIdValidoQueExiste() throws Exception {
         // Arrange
         when(trancaService.recuperaTrancaPorId(1)).thenReturn(t);
-        String json = "{\"id\":1,\"bicicleta\":0,\"modelo\":\"modelo teste\",\"status\":\"NOVA\"}";
+        String json = "{\"id\":1,\"bicicleta\":0,\"numero\":1,\"localizacao\":\"loc teste\",\"anoDeFabricacao\":\"ano teste\",\"modelo\":\"modelo teste\",\"status\":\"NOVA\"}";
 
         // Act
         var response = this.mvc.perform(get("/tranca/{idTranca}", 1))
@@ -126,7 +132,7 @@ public class TrancaControllerTest {
                     "status": "NOVA"
                 }
                 """;
-        String jsonResposta = "{\"id\":1,\"bicicleta\":0,\"modelo\":\"teste\",\"status\":\"NOVA\"}";
+        String jsonResposta = "{\"id\":1,\"bicicleta\":0,\"numero\":1,\"localizacao\":\"teste\",\"anoDeFabricacao\":\"2020\",\"modelo\":\"teste\",\"status\":\"NOVA\"}";
 
         // Act
         var response = this.mvc.perform(post("/tranca")
@@ -154,7 +160,6 @@ public class TrancaControllerTest {
                     "status": "a"
                 }
                 """;
-        String jsonResposta = "{\"codigo\":422,\"mensagem\":\"Argumento invalido\"}";
 
         // Act
         var response = this.mvc.perform(post("/tranca")
@@ -164,7 +169,7 @@ public class TrancaControllerTest {
 
         // Assert
         assertEquals(422, response.getStatus());
-        assertEquals(jsonResposta, response.getContentAsString());
+        assertEquals(JSON_ERRO_422, response.getContentAsString());
     }
 
     @Test
@@ -182,7 +187,7 @@ public class TrancaControllerTest {
                     "status": "NOVA"
                 }
                 """;
-        String jsonResposta = "{\"id\":1,\"bicicleta\":0,\"modelo\":\"teste\",\"status\":\"NOVA\"}";
+        String jsonResposta = "{\"id\":1,\"bicicleta\":0,\"numero\":1,\"localizacao\":\"teste\",\"anoDeFabricacao\":\"2020\",\"modelo\":\"teste\",\"status\":\"NOVA\"}";
 
         // Act
         var response = this.mvc.perform(put("/tranca/{idTranca}", 1)
@@ -209,7 +214,6 @@ public class TrancaControllerTest {
                     "status": "a"
                 }
                 """;
-        String jsonResposta = "{\"codigo\":422,\"mensagem\":\"Argumento invalido\"}";
 
         // Act
         var response = this.mvc.perform(put("/tranca/{idTranca}", 1)
@@ -219,7 +223,386 @@ public class TrancaControllerTest {
 
         // Assert
         assertEquals(422, response.getStatus());
+        assertEquals(JSON_ERRO_422, response.getContentAsString());
+    }
+
+    @Test
+    void testExcluiTranca() throws Exception {
+        // Arrange
+        doNothing().when(trancaService).excluiTranca(1);
+
+        // Act
+        var response = this.mvc.perform(delete("/tranca/{idTranca}", 1))
+            .andReturn().getResponse();
+
+        // Assert
+        assertEquals(200, response.getStatus());
+    }
+
+    @Test
+    void testExcluiTrancaNaoExistente() throws Exception {
+        // Arrange
+        doThrow(NoSuchElementException.class).when(trancaService).excluiTranca(500);
+
+        // Act
+        var response = this.mvc.perform(delete("/tranca/{idTranca}", 500))
+            .andReturn().getResponse();
+
+        // Assert
+        assertEquals(404, response.getStatus());
+        assertEquals(JSON_ERRO_404, response.getContentAsString());
+    }
+
+    @Test
+    void testExcluiTrancaIdInvalido() throws Exception {
+        // Arrange
+        doThrow(IllegalArgumentException.class).when(trancaService).excluiTranca(-2);
+
+        // Act
+        var response = this.mvc.perform(delete("/tranca/{idTranca}", -2))
+            .andReturn().getResponse();
+
+        // Assert
+        assertEquals(422, response.getStatus());
+        assertEquals(JSON_ERRO_422, response.getContentAsString());
+    }
+
+    @Test
+    void testAlteraStatusTrancaCorreto() throws Exception {
+        // Arrange
+        when(trancaService.alteraStatusTranca(1, "NOVA")).thenReturn(t);
+
+        String jsonResposta = "{\"id\":1,\"bicicleta\":0,\"numero\":1,\"localizacao\":\"loc teste\",\"anoDeFabricacao\":\"ano teste\",\"modelo\":\"modelo teste\",\"status\":\"NOVA\"}";
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/{idTranca}/status/{acao}", 1, "NOVA"))
+                .andReturn().getResponse();
+
+        // Assert
+        assertEquals(200, response.getStatus());
         assertEquals(jsonResposta, response.getContentAsString());
     }
-    
+
+    @Test
+    void testAlteraStatusTrancaInvalido() throws Exception {
+        // Arrange
+        when(trancaService.alteraStatusTranca(-2, "QUALQUER_COISA")).thenThrow(IllegalArgumentException.class);
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/{idTranca}/status/{acao}", -2, "QUALQUER_COISA"))
+                .andReturn().getResponse();
+
+        // Assert
+        assertEquals(422, response.getStatus());
+        assertEquals(JSON_ERRO_422, response.getContentAsString());
+    }
+
+    @Test
+    void testAlteraStatusTrancaNaoExiste() throws Exception {
+        // Arrange
+        when(trancaService.alteraStatusTranca(500, "NOVA")).thenThrow(NoSuchElementException.class);
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/{idTranca}/status/{acao}", 500, "NOVA"))
+                .andReturn().getResponse();
+
+        // Assert
+        assertEquals(404, response.getStatus());
+        assertEquals(JSON_ERRO_404, response.getContentAsString());
+    }
+
+    @Test
+    void testRealizaTrancamento() throws Exception {
+        // Arrange
+        when(trancaService.realizarTrancamento(1, 1)).thenReturn(t);
+
+        String jsonResposta = "{\"id\":1,\"bicicleta\":0,\"numero\":1,\"localizacao\":\"loc teste\",\"anoDeFabricacao\":\"ano teste\",\"modelo\":\"modelo teste\",\"status\":\"NOVA\"}";
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/{idTranca}/trancar", 1)
+                .content("1")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(200, response.getStatus());
+        assertEquals(jsonResposta, response.getContentAsString());
+    }
+
+    @Test
+    void testRealizaTrancamentoTrancaInvalida() throws Exception {
+        // Arrange
+        when(trancaService.realizarTrancamento(-1, 1)).thenThrow(IllegalArgumentException.class);
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/{idTranca}/trancar", -1)
+                .content("1")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(422, response.getStatus());
+        assertEquals(JSON_ERRO_422, response.getContentAsString());
+    }
+
+    @Test
+    void testRealizaTrancamentoTrancaNaoExiste() throws Exception {
+        // Arrange
+        when(trancaService.realizarTrancamento(500, 1)).thenThrow(NoSuchElementException.class);
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/{idTranca}/trancar", 500)
+                .content("1")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(404, response.getStatus());
+        assertEquals(JSON_ERRO_404, response.getContentAsString());
+    }
+
+    @Test
+    void testRealizaDestrancamento() throws Exception {
+        // Arrange
+        when(trancaService.realizarDestrancamento(1, 1)).thenReturn(t);
+
+        String jsonResposta = "{\"id\":1,\"bicicleta\":0,\"numero\":1,\"localizacao\":\"loc teste\",\"anoDeFabricacao\":\"ano teste\",\"modelo\":\"modelo teste\",\"status\":\"NOVA\"}";
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/{idTranca}/destrancar", 1)
+                .content("1")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(200, response.getStatus());
+        assertEquals(jsonResposta, response.getContentAsString());
+    }
+
+    @Test
+    void testRealizaDestrancamentoTrancaInvalida() throws Exception {
+        // Arrange
+        when(trancaService.realizarDestrancamento(-1, 1)).thenThrow(IllegalArgumentException.class);
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/{idTranca}/destrancar", -1)
+                .content("1")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(422, response.getStatus());
+        assertEquals(JSON_ERRO_422, response.getContentAsString());
+    }
+
+    @Test
+    void testRealizaDestrancamentoTrancaNaoExiste() throws Exception {
+        // Arrange
+        when(trancaService.realizarDestrancamento(500, 1)).thenThrow(NoSuchElementException.class);
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/{idTranca}/destrancar", 500)
+                .content("1")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(404, response.getStatus());
+        assertEquals(JSON_ERRO_404, response.getContentAsString());
+    }
+
+    @Test
+    void testIntegraNaRedeIdInvalido() throws Exception {
+        // Arrange
+        InclusaoTrancaDTO inclusaoDTO = new InclusaoTrancaDTO(1, 1, 1);
+        doThrow(IllegalArgumentException.class).when(trancaService).integrarNaRede(inclusaoDTO);
+        String json = """
+                {
+                    "idTranca": 1,
+                    "idFuncionario": 1,
+                    "idTotem": 1
+                }
+                """;
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/integrarNaRede")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(422, response.getStatus());
+        verify(trancaService).integrarNaRede(inclusaoDTO);
+        assertEquals(JSON_ERRO_422, response.getContentAsString());
+    }
+
+    @Test
+    void testRetiraDaRedeIdInvalido() throws Exception {
+        // Arrange
+        RetiradaTrancaDTO retiradaDTO = new RetiradaTrancaDTO(1, 1, 1, "NOVA");
+        doThrow(IllegalArgumentException.class).when(trancaService).retirarDaRede(retiradaDTO);
+        String json = """
+                {
+                    "idTranca": 1,
+                    "idFuncionario": 1,
+                    "statusAcaoReparador": "NOVA",
+                    "idTotem": 1
+                }
+                """;
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/retirarDaRede")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(422, response.getStatus());
+        verify(trancaService).retirarDaRede(retiradaDTO);
+        assertEquals(JSON_ERRO_422, response.getContentAsString());
+    }
+
+    @Test
+    void testIntegraNaRedeIdTrancaNaoExiste() throws Exception {
+        // Arrange
+        InclusaoTrancaDTO inclusaoDTO = new InclusaoTrancaDTO(1, 1, 1);
+        doThrow(NoSuchElementException.class).when(trancaService).integrarNaRede(inclusaoDTO);
+        String json = """
+                {
+                    "idTranca": 1,
+                    "idFuncionario": 1,
+                    "idTotem": 1
+                }
+                """;
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/integrarNaRede")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(404, response.getStatus());
+        verify(trancaService).integrarNaRede(inclusaoDTO);
+        assertEquals(JSON_ERRO_404, response.getContentAsString());
+    }
+
+    @Test
+    void testRetiraDaRedeIdTrancaNaoExiste() throws Exception {
+        // Arrange
+        RetiradaTrancaDTO retiradaDTO = new RetiradaTrancaDTO(1, 1, 1, "NOVA");
+        doThrow(NoSuchElementException.class).when(trancaService).retirarDaRede(retiradaDTO);
+        String json = """
+                {
+                    "idTranca": 1,
+                    "idFuncionario": 1,
+                    "statusAcaoReparador": "NOVA",
+                    "idTotem": 1
+                }
+                """;
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/retirarDaRede")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(404, response.getStatus());
+        verify(trancaService).retirarDaRede(retiradaDTO);
+        assertEquals(JSON_ERRO_404, response.getContentAsString());
+    }
+
+    @Test
+    void testIntegraNaRede() throws Exception {
+        // Arrange
+        InclusaoTrancaDTO inclusaoDTO = new InclusaoTrancaDTO(1, 1, 1);
+        doNothing().when(trancaService).integrarNaRede(inclusaoDTO);
+        String json = """
+                {
+                    "idTranca": 1,
+                    "idFuncionario": 1,
+                    "idTotem": 1
+                }
+                """;
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/integrarNaRede")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(200, response.getStatus());
+        verify(trancaService).integrarNaRede(inclusaoDTO);
+    }
+
+    @Test
+    void testRetiraDaRede() throws Exception {
+        // Arrange
+        RetiradaTrancaDTO retiradaDTO = new RetiradaTrancaDTO(1, 1, 1, "NOVA");
+        doNothing().when(trancaService).retirarDaRede(retiradaDTO);
+        String json = """
+                {
+                    "idTranca": 1,
+                    "idFuncionario": 1,
+                    "statusAcaoReparador": "NOVA",
+                    "idTotem": 1
+                }
+                """;
+
+        // Act
+        var response = this.mvc.perform(post("/tranca/retirarDaRede")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        // Assert
+        assertEquals(200, response.getStatus());
+        verify(trancaService).retirarDaRede(retiradaDTO);
+    }
+
+    @Test
+    void testObtemBicicletaNaTranca() throws Exception {
+        // Arrange
+        Bicicleta bicicleta = new Bicicleta(new BicicletaDTO("marca teste1", "modelo teste1", "2020", 1, "NOVA"));
+        when(trancaService.obterBicicletaNaTranca(1)).thenReturn(bicicleta);
+        String jsonResposta = "{\"id\":1,\"marca\":\"marca teste1\",\"modelo\":\"modelo teste1\",\"ano\":\"2020\",\"numero\":1,\"status\":\"NOVA\"}";
+
+        // Act
+        var response = this.mvc.perform(get("/tranca/{idTranca}/bicicleta", 1))
+                .andReturn().getResponse();
+
+        // Assert
+        assertEquals(200, response.getStatus());
+        assertEquals(jsonResposta, response.getContentAsString());
+    }
+
+    @Test
+    void testObtemBicicletaNaTrancaIdInvalido() throws Exception {
+        // Arrange
+        when(trancaService.obterBicicletaNaTranca(-1)).thenThrow(IllegalArgumentException.class);
+
+        // Act
+        var response = this.mvc.perform(get("/tranca/{idTranca}/bicicleta", -1))
+                .andReturn().getResponse();
+
+        // Assert
+        assertEquals(422, response.getStatus());
+        assertEquals(JSON_ERRO_422, response.getContentAsString());
+    }
+
+    @Test
+    void testObtemBicicletaNaTrancaIdNaoExiste() throws Exception {
+        // Arrange
+        when(trancaService.obterBicicletaNaTranca(500)).thenThrow(NoSuchElementException.class);
+
+        // Act
+        var response = this.mvc.perform(get("/tranca/{idTranca}/bicicleta", 500))
+                .andReturn().getResponse();
+
+        // Assert
+        assertEquals(404, response.getStatus());
+        assertEquals(JSON_ERRO_404, response.getContentAsString());
+    }
 }

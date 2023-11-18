@@ -30,7 +30,15 @@ public class Totem {
         return this.id;
     }
 
-    public List<Tranca> getTrancas() {
+    public List<Tranca> recuperaTrancas() {
         return this.trancas;
+    }
+
+    public String getLocalizacao() {
+        return localizacao;
+    }
+
+    public String getDescricao() {
+        return descricao;
     }
 }

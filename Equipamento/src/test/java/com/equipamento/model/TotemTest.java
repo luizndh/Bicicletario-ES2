@@ -25,11 +25,11 @@ public class TotemTest {
 
     @Test
     void testGetTrancas() {
-        assertEquals(0, totem.getTrancas().size());
+        assertEquals(0, totem.recuperaTrancas().size());
 
-        totem.getTrancas().add(new Tranca(new TrancaDTO(1, "localizacao teste", "2021", "modelo teste", "NOVA")));
+        totem.recuperaTrancas().add(new Tranca(new TrancaDTO(1, "localizacao teste", "2021", "modelo teste", "NOVA")));
 
-        assertEquals(1, totem.getTrancas().size());
+        assertEquals(1, totem.recuperaTrancas().size());
     }
 
 

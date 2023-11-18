@@ -58,9 +58,9 @@ public class TrancaService {
         trancas.remove(t);
     }
 
-    public Tranca alteraStatusTranca(int idTranca, StatusTranca acao) {
+    public Tranca alteraStatusTranca(int idTranca, String acao) {
         Tranca t = recuperaTrancaPorId(idTranca);
-        t.setStatus(acao);
+        t.setStatus(StatusTranca.valueOf(acao));
         return t;
     }
 
@@ -69,7 +69,7 @@ public class TrancaService {
         t.setStatus(StatusTranca.OCUPADA);
         if(idBicicleta != 0) {
             t.setBicicleta(idBicicleta);
-            bicicletaService.alteraStatusBicicleta(idBicicleta, Bicicleta.StatusBicicleta.DISPONIVEL);
+            bicicletaService.alteraStatusBicicleta(idBicicleta, "DISPONIVEL");
         }
         return t;
     }
@@ -79,7 +79,7 @@ public class TrancaService {
         t.setStatus(StatusTranca.LIVRE);
         if(idBicicleta != 0) {
             t.setBicicleta(0);
-            bicicletaService.alteraStatusBicicleta(idBicicleta, Bicicleta.StatusBicicleta.EM_USO);
+            bicicletaService.alteraStatusBicicleta(idBicicleta, "EM_USO");
         }
         return t;
     }

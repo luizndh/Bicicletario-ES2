@@ -57,7 +57,7 @@ public class TrancaController {
 
     @PostMapping("/{idTranca}/status/{acao}")
     @ApiOperation(value="Altera o status de uma tranca")
-    public ResponseEntity<Tranca> alteraStatusTranca(@PathVariable int idTranca, @PathVariable StatusTranca acao) {
+    public ResponseEntity<Tranca> alteraStatusTranca(@PathVariable int idTranca, @PathVariable String acao) {
         return ResponseEntity.ok().body(this.service.alteraStatusTranca(idTranca, acao));
     }
 

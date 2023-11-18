@@ -26,8 +26,7 @@ public class BicicletaController {
     @GetMapping("/{idBicicleta}")
     @ApiOperation(value="Retorna uma bicicleta com o id passado")
     public ResponseEntity<Bicicleta> recuperaBicicletaPorId(@PathVariable int idBicicleta) {
-        Bicicleta t = this.service.recuperaBicicletaPorId(idBicicleta);
-        return ResponseEntity.ok().body(t);
+        return ResponseEntity.ok().body(this.service.recuperaBicicletaPorId(idBicicleta));
     }
 
     @GetMapping("")
@@ -57,7 +56,7 @@ public class BicicletaController {
 
     @PostMapping("/{idBicicleta}/status/{acao}")
     @ApiOperation(value="Altera o status de uma bicicleta")
-    public ResponseEntity<Bicicleta> alteraStatusBicicleta(@PathVariable int idBicicleta, @PathVariable StatusBicicleta acao) {
+    public ResponseEntity<Bicicleta> alteraStatusBicicleta(@PathVariable int idBicicleta, @PathVariable String acao) {
         return ResponseEntity.ok().body(this.service.alteraStatusBicicleta(idBicicleta, acao));
     }
 

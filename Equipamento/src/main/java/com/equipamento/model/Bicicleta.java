@@ -62,6 +62,22 @@ public class Bicicleta {
         return this.status;
     }
 
+    public String getMarca() {
+        return this.marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public String getAno() {
+        return ano;
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
     public void adicionaRegistroNoHistoricoDeInclusao(InclusaoBicicletaDTO dadosInclusao) {
         this.historicoInclusao.add(dadosInclusao);
     }

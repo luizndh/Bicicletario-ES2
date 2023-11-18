@@ -48,9 +48,9 @@ public class BicicletaService {
         bicicletas.remove(b);
     }
 
-    public Bicicleta alteraStatusBicicleta(int idBicicleta, StatusBicicleta acao) {
+    public Bicicleta alteraStatusBicicleta(int idBicicleta, String acao) {
         Bicicleta b = recuperaBicicletaPorId(idBicicleta);
-        b.setStatus(acao);
+        b.setStatus(StatusBicicleta.valueOf(acao));
         return b;
     }
 

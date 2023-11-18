@@ -57,7 +57,7 @@ public class TotemService {
 
     public List<Tranca> recuperaTrancasDoTotem(int idTotem) {
         Totem t = recuperaTotemPorId(idTotem);
-        return t.getTrancas();
+        return t.recuperaTrancas();
     }
 
     public List<Bicicleta> recuperaBicicletasDoTotem(int idTotem) {

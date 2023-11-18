@@ -11,6 +11,7 @@ public class Tranca {
     private int bicicleta;
     private int numero;
     private String localizacao;
+
     private String anoDeFabricacao;
     private String modelo;
     private StatusTranca status;
@@ -70,6 +71,18 @@ public class Tranca {
     }
 
     public int getBicicleta() { return this.bicicleta; }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public String getLocalizacao() {
+        return localizacao;
+    }
+
+    public String getAnoDeFabricacao() {
+        return anoDeFabricacao;
+    }
 
     public void adicionaRegistroNoHistoricoDeInclusao(InclusaoTrancaDTO dadosInclusao) {
         this.historicoInclusao.add(dadosInclusao);

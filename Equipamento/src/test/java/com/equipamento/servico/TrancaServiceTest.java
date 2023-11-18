@@ -86,7 +86,7 @@ public class TrancaServiceTest {
     @Test
     void testAlteraStatusTranca() {
         // Act
-        Tranca novaTranca = trancaService.alteraStatusTranca(1, StatusTranca.OCUPADA);
+        Tranca novaTranca = trancaService.alteraStatusTranca(1, "OCUPADA");
 
         // Assert
         assertNotNull(novaTranca);
@@ -107,13 +107,13 @@ public class TrancaServiceTest {
     @Test
     void testRealizaTrancamentoTrancaQuandoBicicletaExiste() {
         // Act
-        when(bicicletaService.alteraStatusBicicleta(1, StatusBicicleta.DISPONIVEL)).thenReturn(bicicletaMock);
+        when(bicicletaService.alteraStatusBicicleta(1, "DISPONIVEL")).thenReturn(bicicletaMock);
         Tranca novaTranca = trancaService.realizarTrancamento(1, 1);
 
         // Assert
         assertEquals(novaTranca.getStatus(), StatusTranca.OCUPADA);
         assertEquals(novaTranca.getBicicleta(), 1);
-        verify(bicicletaService).alteraStatusBicicleta(1, StatusBicicleta.DISPONIVEL);
+        verify(bicicletaService).alteraStatusBicicleta(1, "DISPONIVEL");
     }
     
 
@@ -130,12 +130,12 @@ public class TrancaServiceTest {
     @Test
     void testRealizaDestrancamentoTrancaQuandoBicicletaExiste() {
         // Act
-        when(bicicletaService.alteraStatusBicicleta(1, StatusBicicleta.EM_USO)).thenReturn(bicicletaMock);
+        when(bicicletaService.alteraStatusBicicleta(1, "EM_USO")).thenReturn(bicicletaMock);
         Tranca novaTranca = trancaService.realizarDestrancamento(1, 1);
 
         // Assert
         assertEquals(novaTranca.getStatus(), StatusTranca.LIVRE);
         assertEquals(novaTranca.getBicicleta(), 0);
-        verify(bicicletaService).alteraStatusBicicleta(1, StatusBicicleta.EM_USO);
+        verify(bicicletaService).alteraStatusBicicleta(1, "EM_USO");
     }
 }

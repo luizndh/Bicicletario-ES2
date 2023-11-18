@@ -80,7 +80,7 @@ public class BicicletaServiceTest {
         assertEquals(bicicleta.getStatus(), StatusBicicleta.EM_USO);
 
         // Act
-        Bicicleta b = bicicletaService.alteraStatusBicicleta(2, StatusBicicleta.REPARO_SOLICITADO);
+        Bicicleta b = bicicletaService.alteraStatusBicicleta(2, "REPARO_SOLICITADO");
 
         // Assert
         assertEquals(b.getStatus(), StatusBicicleta.REPARO_SOLICITADO);
