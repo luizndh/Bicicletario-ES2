@@ -60,6 +60,20 @@ public class CobrancaServiceTest {
         assertEquals(cobranca.getStatus(), Cobranca.StatusCobranca.PAGA);
     }
 
+    @Test
+    void testRealizaCobranca() {
+        //TODO fazer o teste quando o servico estiver funcionando com o stripe
+        // Arrange
+        CartaoDeCreditoDTO cartao = new CartaoDeCreditoDTO("4242424242424242", "123", "12/2028", "2021");
+        CobrancaDTO cobranca = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 1);
+
+        // Act
+        boolean result = cobrancaService.realizaCobranca(cobranca);
+
+        // Assert
+        assertTrue(result);
+    }
+
     //TODO adicionar o resto dos testes:
     // - testar se a cobranca foi adicionada na fila
     // - testar se a cobranca foi processada e aprovada
