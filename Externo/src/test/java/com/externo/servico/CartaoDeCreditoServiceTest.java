@@ -25,10 +25,10 @@ public class CartaoDeCreditoServiceTest {
     @BeforeEach
     void setUp() {
         // Arrange
-        CartaoDeCreditoDTO dto1 = new CartaoDeCreditoDTO("Luiz Inacio", "102936574391", "09/29","857");
-        CartaoDeCreditoDTO dto2 = new CartaoDeCreditoDTO("Jose das Neves", "9372548102937461", "05/266", "175");
-        CartaoDeCreditoDTO dto3 = new CartaoDeCreditoDTO("Fernando Barbosa", "8172637461098627", "01/24", "0384");
-        CartaoDeCreditoDTO dto4 = new CartaoDeCreditoDTO("Joao Silva", "7042654798098364", "08/27", "038");
+        CartaoDeCreditoDTO dto1 = new CartaoDeCreditoDTO("Luiz Inacio", "102936574391", "09/2029","857");
+        CartaoDeCreditoDTO dto2 = new CartaoDeCreditoDTO("Jose das Neves", "9372548102937461", "05/20066", "175");
+        CartaoDeCreditoDTO dto3 = new CartaoDeCreditoDTO("Fernando Barbosa", "8172637461098627", "01/2024", "0384");
+        CartaoDeCreditoDTO dto4 = new CartaoDeCreditoDTO("Joao Silva", "7042654798098364", "08/2027", "038");
 
         cartoesDeCreditos.add(dto1);
         cartoesDeCreditos.add(dto2);
