@@ -1,9 +1,13 @@
 package com.externo.servico;
 
+import com.externo.dto.CartaoDeCreditoDTO;
 import com.externo.dto.CobrancaDTO;
 import com.externo.model.Cobranca;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
+import com.stripe.model.PaymentMethod;
+import com.stripe.model.Token;
+import com.stripe.param.TokenCreateParams;
 import com.stripe.param.PaymentIntentCreateParams;
 import org.springframework.stereotype.Service;
 import java.lang.Math;
@@ -18,36 +22,52 @@ import static com.externo.model.Cobranca.cobrancas;
 public class CobrancaService {
 
     public boolean realizaCobranca(CobrancaDTO dadosCobranca) {
-        if(!dadosCobranca.status().equals(Cobranca.StatusCobranca.PENDENTE)) return false;
+        if(!dadosCobranca.status().equals(Cobranca.StatusCobranca.PENDENTE.toString())) return false;
 
+        //STRIPE
         try {
             Stripe.apiKey = "sk_test_51ODEoGK2SlPC0gAXe7gRKx3tgwYgdxaYf8xoTkJvrMdUXMSXMPzwmdFEprKG654eo1h8JRuyQtNvqIU8iPW7T7nE00W6te3PX4";
 
-            Map<String, Object> params = new HashMap<>();
-            params.put("amount", dadosCobranca.valor());
-            params.put("currency", "brl");
-            params.put("payment_method","card");
+            //TODO INTEGRACAO
+            //vou criar um cartao de credito para simular,
+            //mas quando integrar ele vai pegar do cartao do ciclista usando o id
+            CartaoDeCreditoDTO cartao = new CartaoDeCreditoDTO("João da Silva", "1212121212121212", "09/2029", "123");
 
-            PaymentIntent paymentIntent = PaymentIntent.create(params);
+            // Create a test token
+            TokenCreateParams.Card card = TokenCreateParams.Card.builder().setNumber(cartao.numero()).setExpMonth(cartao.validade().substring(0, 2)).setExpYear(cartao.validade().substring(3)).setCvc(cartao.cvv()).build();
 
-            System.out.println(paymentIntent.getStatus());
-            System.out.println(paymentIntent.getAmount());
+            TokenCreateParams tokenParams = TokenCreateParams.builder().setCard(card).build();
 
-            if(paymentIntent.getStatus().equals("succeeded")) {
+            Token token = Token.create(tokenParams);
+
+            // Create a PaymentMethod using the token
+            Map<String, Object> paymentMethodParams = new HashMap<>();
+            paymentMethodParams.put("type", "card");
+            paymentMethodParams.put("card[token]", token.getId());
+
+            PaymentMethod paymentMethod = PaymentMethod.create(paymentMethodParams);
+
+            // Create PaymentIntent using the PaymentMethod ID
+            PaymentIntentCreateParams createParams = PaymentIntentCreateParams.builder().setAmount((long) dadosCobranca.valor()).setCurrency("brl").setPaymentMethod(paymentMethod.getId()).build();
+
+            PaymentIntent paymentIntent = PaymentIntent.create(createParams);
+
+            // Display information
+            System.out.println("Token ID: " + token.getId());
+            System.out.println("PaymentMethod ID: " + paymentMethod.getId());
+            System.out.println("PaymentIntent Status: " + paymentIntent.getStatus());
+            System.out.println("PaymentIntent Amount: " + paymentIntent.getAmount());
+
+            if (paymentIntent.getStatus().equals("succeeded")) {
                 return true;
             }
-        } catch (StripeException e) {
+
+        } catch (Exception e) {
+            System.out.println("Erro no stripe!");
             e.printStackTrace();
             //TODO handling esse erro do stripe
         }
-        //sends request to Stripe API, and returns true if payment is approved.
-        //(this is only a simulation, no real payment is made)
 
-        //50% de chance de pagamento ser aprovado
-        /*
-        if (Math.random() < 0.5) return true;
-        return false;
-         */
         return false;
     }
 

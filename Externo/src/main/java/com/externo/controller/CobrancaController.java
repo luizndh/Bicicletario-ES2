@@ -22,7 +22,8 @@ public class CobrancaController {
     public ResponseEntity<Boolean> realizaCobranca(@RequestBody CobrancaDTO dadosCobranca) {
         System.out.println("Entrou no realizaCobranca");
         System.out.println(dadosCobranca);
-        return ResponseEntity.ok().body(this.service.realizaCobranca(dadosCobranca));
+        boolean resultado = this.service.realizaCobranca(dadosCobranca);
+        return ResponseEntity.ok().body(resultado);
     }
 
     @GetMapping("/cobranca/{idCobranca}")
