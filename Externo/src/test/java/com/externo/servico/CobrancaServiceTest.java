@@ -2,6 +2,7 @@ package com.externo.servico;
 
 import com.externo.dto.CartaoDeCreditoDTO;
 import com.externo.model.Cobranca;
+import com.stripe.exception.StripeException;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,10 +29,10 @@ public class CobrancaServiceTest {
     @BeforeEach
     void setUp() {
         // Arrange
-        CobrancaDTO dto1 = new CobrancaDTO(Cobranca.StatusCobranca.PAGA.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 1);
-        CobrancaDTO dto2 = new CobrancaDTO(Cobranca.StatusCobranca.FALHA.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 2);
-        CobrancaDTO dto3 = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 3);
-        CobrancaDTO dto4 = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 4);
+        CobrancaDTO dto1 = new CobrancaDTO(Cobranca.StatusCobranca.PAGA.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 1000L, 1);
+        CobrancaDTO dto2 = new CobrancaDTO(Cobranca.StatusCobranca.FALHA.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 1000L, 2);
+        CobrancaDTO dto3 = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 1000L, 3);
+        CobrancaDTO dto4 = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 1000L, 4);
 
         cobrancas.add(new Cobranca(dto1));
         cobrancas.add(new Cobranca(dto2));
@@ -61,11 +62,11 @@ public class CobrancaServiceTest {
     }
 
     @Test
-    void testRealizaCobranca() {
+    void testRealizaCobranca() throws StripeException {
         //TODO fazer o teste quando o servico estiver funcionando com o stripe
         // Arrange
         CartaoDeCreditoDTO cartao = new CartaoDeCreditoDTO("4242424242424242", "123", "12/2028", "2021");
-        CobrancaDTO cobranca = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 10.0f, 1);
+        CobrancaDTO cobranca = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "2021-05-01T12:00:00", "2021-05-01T12:00:00", 1000L, 1);
 
         // Act
         boolean result = cobrancaService.realizaCobranca(cobranca);

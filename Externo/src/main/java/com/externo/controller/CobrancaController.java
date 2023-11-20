@@ -3,6 +3,7 @@ package com.externo.controller;
 import com.externo.dto.CobrancaDTO;
 import com.externo.model.Cobranca;
 import com.externo.servico.CobrancaService;
+import com.stripe.exception.StripeException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,7 @@ public class CobrancaController {
 
     @PostMapping(value = "/cobranca", consumes = "application/json")
     @ApiOperation(value="Realiza a cobranca")
-    public ResponseEntity<Boolean> realizaCobranca(@RequestBody CobrancaDTO dadosCobranca) {
-        System.out.println("Entrou no realizaCobranca");
+    public ResponseEntity<Boolean> realizaCobranca(@RequestBody CobrancaDTO dadosCobranca) throws StripeException {
         System.out.println(dadosCobranca);
         boolean resultado = this.service.realizaCobranca(dadosCobranca);
         return ResponseEntity.ok().body(resultado);
@@ -34,7 +34,7 @@ public class CobrancaController {
 
     @PostMapping("/processaCobrancasEmFila")
     @ApiOperation(value="Processa todas as cobrancas atradadas colocadas em fila anteriormente")
-    public ResponseEntity<Boolean> processaCobrancasEmFila() {
+    public ResponseEntity<Boolean> processaCobrancasEmFila() throws StripeException {
         return ResponseEntity.ok().body(this.service.processaCobrancasEmFila());
     }
 

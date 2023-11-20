@@ -11,7 +11,7 @@
         private StatusCobranca status;
         private String horaSolicitacao;
         private String horaFinalizacao;
-        private float valor;
+        private long valor;
         private int ciclista;
     
         public static final List<Cobranca> cobrancas = new ArrayList<>();
@@ -65,11 +65,11 @@
             this.horaFinalizacao = horaFinalizacao;
         }
 
-        public float getValor() {
+        public long getValor() {
             return this.valor;
         }
 
-        public void setValor(float valor) {
+        public void setValor(long valor) {
             this.valor = valor;
         }
 

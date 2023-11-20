@@ -12,7 +12,7 @@ public class CobrancaDTOTest {
         Cobranca.StatusCobranca status = Cobranca.StatusCobranca.PENDENTE;
         String horaSolicitacao = "01/01/2023 00:00:00";
         String horaFinalizacao = "01/01/2023 00:19:30";
-        float valor = 3.22f;
+        long valor = 322L;
         int ciclista = 1;
 
         // Act

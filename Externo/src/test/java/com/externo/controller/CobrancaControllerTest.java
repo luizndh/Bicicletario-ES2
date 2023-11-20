@@ -36,7 +36,7 @@ public class CobrancaControllerTest {
 
     @BeforeEach
     void setUp() {
-        cobranca = new Cobranca(new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 15.00f, 3));
+        cobranca = new Cobranca(new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3));
         //TODO ver se é necessario
     }
 
@@ -44,7 +44,7 @@ public class CobrancaControllerTest {
     @Test
     void testCobrancaCorreta() throws Exception {
         // Arrange
-        CobrancaDTO cobrancaDTO = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 15.00f, 3);
+        CobrancaDTO cobrancaDTO = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
         String jsonEntrada = """
     {
         "status": "PENDENTE",
@@ -71,7 +71,7 @@ public class CobrancaControllerTest {
     @Test
     void testCobrancaIncorreta() throws Exception {
         // Arrange
-        CobrancaDTO cobrancaDTO = new CobrancaDTO("", "02/01/2023 12:00", "02/01/2023 13:40", 15.00f, 3);
+        CobrancaDTO cobrancaDTO = new CobrancaDTO("", "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
         String jsonEntrada = """
     {
         "status": "",
@@ -125,7 +125,7 @@ public class CobrancaControllerTest {
     @Test
     void testFilaCobrancaCorreto() throws Exception {
         // Arrange
-        CobrancaDTO cobrancaDTO = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 15.00f, 3);
+        CobrancaDTO cobrancaDTO = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
         String jsonEntrada = """
                 {
                     "status": "PENDENTE",
@@ -151,7 +151,7 @@ public class CobrancaControllerTest {
     @Test
     void testFilaCobrancaIncorreto() throws Exception {
         // Arrange
-        CobrancaDTO cobrancaDTO = new CobrancaDTO("", "02/01/2023 12:00", "02/01/2023 13:40", 15.00f, 3);
+        CobrancaDTO cobrancaDTO = new CobrancaDTO("", "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
         String jsonEntrada = """
                 {
                     "status": "",
@@ -176,7 +176,7 @@ public class CobrancaControllerTest {
     @Test
     void testCobrancaPorIdCorreto () throws Exception {
         // Arrange
-        CobrancaDTO cobrancaDTO = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 15.00f, 3);
+        CobrancaDTO cobrancaDTO = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
         String jsonEntrada = """
                 {
                     "status": "PENDENTE",
@@ -202,7 +202,7 @@ public class CobrancaControllerTest {
     @Test
     void testCobrancaPorIdIncorretor () throws Exception {
         // Arrange
-        CobrancaDTO cobrancaDTO = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 15.00f, 3);
+        CobrancaDTO cobrancaDTO = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
         String jsonEntrada = """
                 {
                     "status": "PENDENTE",
