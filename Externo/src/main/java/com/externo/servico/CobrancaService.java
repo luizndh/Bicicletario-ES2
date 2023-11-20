@@ -33,21 +33,21 @@ public class CobrancaService {
             //mas quando integrar ele vai pegar do cartao do ciclista usando o id
             CartaoDeCreditoDTO cartao = new CartaoDeCreditoDTO("João da Silva", "1212121212121212", "09/2029", "123");
 
-            // Create a test token
+            //Token
             TokenCreateParams.Card card = TokenCreateParams.Card.builder().setNumber(cartao.numero()).setExpMonth(cartao.validade().substring(0, 2)).setExpYear(cartao.validade().substring(3)).setCvc(cartao.cvv()).build();
 
             TokenCreateParams tokenParams = TokenCreateParams.builder().setCard(card).build();
 
             Token token = Token.create(tokenParams);
 
-            // Create a PaymentMethod using the token
+            //PaymentMethod
             Map<String, Object> paymentMethodParams = new HashMap<>();
             paymentMethodParams.put("type", "card");
             paymentMethodParams.put("card[token]", token.getId());
 
             PaymentMethod paymentMethod = PaymentMethod.create(paymentMethodParams);
 
-            // Create PaymentIntent using the PaymentMethod ID
+            //PaymentIntent
             PaymentIntentCreateParams createParams = PaymentIntentCreateParams.builder().setAmount((long) dadosCobranca.valor()).setCurrency("brl").setPaymentMethod(paymentMethod.getId()).build();
 
             PaymentIntent paymentIntent = PaymentIntent.create(createParams);
