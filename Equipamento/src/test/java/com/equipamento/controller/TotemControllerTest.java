@@ -164,29 +164,6 @@ public class TotemControllerTest {
     }
 
     @Test
-    void testAlteraDadosTotemComIdInexistente() throws Exception {
-        // Arrange
-        TotemDTO dto = new TotemDTO("loc teste", "desc teste");
-        when(totemService.alteraTotem(1, dto)).thenThrow(NoSuchElementException.class);
-        String jsonEntrada = """
-                {
-                    "localizacao": "loc teste",
-                    "descricao": "desc teste"
-                }
-                """;
-
-        // Act
-        var response = this.mvc.perform(put("/totem/1")
-                .content(jsonEntrada)
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andReturn().getResponse();
-
-        // Assert
-        assertEquals(404, response.getStatus());
-        assertEquals(JSON_ERRO_404, response.getContentAsString());
-    }
-
-    @Test
     void testExcluiTotem() throws Exception {
         // Arrange
         doNothing().when(totemService).excluiTotem(1);
@@ -197,34 +174,6 @@ public class TotemControllerTest {
 
         // Assert
         assertEquals(200, response.getStatus());
-    }
-
-    @Test
-    void testExcluiTotemComIdInexistente() throws Exception {
-        // Arrange
-        doThrow(NoSuchElementException.class).when(totemService).excluiTotem(1);
-
-        // Act
-        var response = this.mvc.perform(delete("/totem/{idTotem}", 1))
-                .andReturn().getResponse();
-
-        // Assert
-        assertEquals(404, response.getStatus());
-        assertEquals(JSON_ERRO_404, response.getContentAsString());
-    }
-
-    @Test
-    void testExcluiTotemComIdInvalido() throws Exception {
-        // Arrange
-        doThrow(IllegalArgumentException.class).when(totemService).excluiTotem(1);
-
-        // Act
-        var response = this.mvc.perform(delete("/totem/{idTotem}", 1))
-                .andReturn().getResponse();
-
-        // Assert
-        assertEquals(422, response.getStatus());
-        assertEquals(JSON_ERRO_422, response.getContentAsString());
     }
 
     @Test

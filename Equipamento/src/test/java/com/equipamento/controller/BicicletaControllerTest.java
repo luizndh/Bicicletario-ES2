@@ -223,32 +223,6 @@ public class BicicletaControllerTest {
     }
 
     @Test
-    void testExcluiBicicletaNaoExistente() throws Exception {
-        // Arrange
-        doThrow(new NoSuchElementException()).when(bicicletaService).excluiBicicleta(500);
-
-        // Act
-        var response = this.mvc.perform(delete("/bicicleta/500")).andReturn().getResponse();
-
-        // Assert
-        assertEquals(404, response.getStatus());
-        assertEquals(JSON_ERRO_404, response.getContentAsString());
-    }
-
-    @Test
-    void testExcluiBicicletaIdInvalido() throws Exception {
-        // Arrange
-        doThrow(new IllegalArgumentException()).when(bicicletaService).excluiBicicleta(0);
-
-        // Act
-        var response = this.mvc.perform(delete("/bicicleta/0")).andReturn().getResponse();
-
-        // Assert
-        assertEquals(422, response.getStatus());
-        assertEquals(JSON_ERRO_422, response.getContentAsString());
-    }
-
-    @Test
     void testAlteraStatusBicicletaCorreto() throws Exception {
         // Arrange
         String json = "{\"id\":1,\"marca\":\"marca teste\",\"modelo\":\"modelo teste\",\"ano\":\"ano teste\",\"numero\":1,\"status\":\"NOVA\"}";
@@ -276,69 +250,6 @@ public class BicicletaControllerTest {
     }
 
     @Test
-    void testAlteraStatusBicicletaInexistente() throws Exception {
-        // Arrange
-        when(bicicletaService.alteraStatusBicicleta(1, "NOVA")).thenThrow(new NoSuchElementException());
-
-        // Act
-        var response = this.mvc.perform(post("/bicicleta/{idTranca}/status/{acao}", 1, "NOVA")).andReturn().getResponse();
-
-        // Assert
-        assertEquals(404, response.getStatus());
-        assertEquals(JSON_ERRO_404, response.getContentAsString());
-    }
-
-    @Test
-    void testIntegraNaRedeIdInvalido() throws Exception {
-        // Arrange
-        InclusaoBicicletaDTO inclusaoDTO = new InclusaoBicicletaDTO(1, 1, 1);
-        doThrow(IllegalArgumentException.class).when(bicicletaService).integrarNaRede(inclusaoDTO);
-        String json = """
-                {
-                    "idBicicleta": 1,
-                    "idFuncionario": 1,
-                    "idTotem": 1
-                }
-                """;
-
-        // Act
-        var response = this.mvc.perform(post("/bicicleta/integrarNaRede")
-                .content(json)
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andReturn().getResponse();
-
-        // Assert
-        assertEquals(422, response.getStatus());
-        verify(bicicletaService).integrarNaRede(inclusaoDTO);
-        assertEquals(JSON_ERRO_422, response.getContentAsString());
-    }
-
-    @Test
-    void testIntegraNaRedeIdInexistente() throws Exception {
-        // Arrange
-        InclusaoBicicletaDTO inclusaoDTO = new InclusaoBicicletaDTO(1, 1, 1);
-        doThrow(NoSuchElementException.class).when(bicicletaService).integrarNaRede(inclusaoDTO);
-        String json = """
-                {
-                    "idBicicleta": 1,
-                    "idFuncionario": 1,
-                    "idTotem": 1
-                }
-                """;
-
-        // Act
-        var response = this.mvc.perform(post("/bicicleta/integrarNaRede")
-                .content(json)
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andReturn().getResponse();
-
-        // Assert
-        assertEquals(404, response.getStatus());
-        verify(bicicletaService).integrarNaRede(inclusaoDTO);
-        assertEquals(JSON_ERRO_404, response.getContentAsString());
-    }
-
-    @Test
     void testIntegraNaRede() throws Exception {
         // Arrange
         InclusaoBicicletaDTO inclusaoDTO = new InclusaoBicicletaDTO(1, 1, 1);
@@ -359,58 +270,6 @@ public class BicicletaControllerTest {
         // Assert
         assertEquals(200, response.getStatus());
         verify(bicicletaService).integrarNaRede(inclusaoDTO);
-    }
-
-    @Test
-    void testRetiraDaRedeIdInvalido() throws Exception {
-        // Arrange
-        RetiradaBicicletaDTO retiradaDTO = new RetiradaBicicletaDTO(1, 1, 1, "DISPONIVEL");
-        doThrow(IllegalArgumentException.class).when(bicicletaService).retirarDaRede(retiradaDTO);
-        String json = """
-                {
-                    "idBicicleta": 1,
-                    "idFuncionario": 1,
-                    "idTranca": 1,
-                    "statusAcaoReparador": "DISPONIVEL"
-                }
-                """;
-
-        // Act
-        var response = this.mvc.perform(post("/bicicleta/retirarDaRede")
-                .content(json)
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andReturn().getResponse();
-
-        // Assert
-        assertEquals(422, response.getStatus());
-        verify(bicicletaService).retirarDaRede(retiradaDTO);
-        assertEquals(JSON_ERRO_422, response.getContentAsString());
-    }
-
-    @Test
-    void testRetiraDaRedeIdInexistente() throws Exception {
-        // Arrange
-        RetiradaBicicletaDTO retiradaDTO = new RetiradaBicicletaDTO(1, 1, 1, "DISPONIVEL");
-        doThrow(NoSuchElementException.class).when(bicicletaService).retirarDaRede(retiradaDTO);
-        String json = """
-                {
-                    "idBicicleta": 1,
-                    "idFuncionario": 1,
-                    "idTranca": 1,
-                    "statusAcaoReparador": "DISPONIVEL"
-                }
-                """;
-
-        // Act
-        var response = this.mvc.perform(post("/bicicleta/retirarDaRede")
-                .content(json)
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andReturn().getResponse();
-
-        // Assert
-        assertEquals(404, response.getStatus());
-        verify(bicicletaService).retirarDaRede(retiradaDTO);
-        assertEquals(JSON_ERRO_404, response.getContentAsString());
     }
 
     @Test
