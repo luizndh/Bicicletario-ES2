@@ -1,6 +1,6 @@
 package com.aluguel.service;
 
-import com.aluguel.dto.FuncionarioDTO;
+import com.aluguel.dto.NovoFuncionarioDTO;
 import com.aluguel.model.Funcionario;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,9 +33,9 @@ public class FuncionarioServiceTest {
     void setUp() {
         // Arrange
 
-        FuncionarioDTO funcionarioDTO1 = new FuncionarioDTO("123", "123", "kleber@kalango.com", "kleber", 5, "muito jovem aprendiz", "333.222.111-00");
-        FuncionarioDTO funcionarioDTO2 = new FuncionarioDTO("42424", "42424", "mia@miojo.com", "mia", 23, "entreter", "696.969.696-96");
-        FuncionarioDTO funcionarioDTO3 = new FuncionarioDTO("666", "666", "tulio@tijolo.com", "tulio", 45, "ter 3 empregos", "666.666.666-66");
+        NovoFuncionarioDTO funcionarioDTO1 = new NovoFuncionarioDTO("123", "123", "kleber@kalango.com", "kleber", 5, "muito jovem aprendiz", "333.222.111-00");
+        NovoFuncionarioDTO funcionarioDTO2 = new NovoFuncionarioDTO("42424", "42424", "mia@miojo.com", "mia", 23, "entreter", "696.969.696-96");
+        NovoFuncionarioDTO funcionarioDTO3 = new NovoFuncionarioDTO("666", "666", "tulio@tijolo.com", "tulio", 45, "ter 3 empregos", "666.666.666-66");
 
         funcionarios = new ArrayList<Funcionario>();
         funcionarios.add(new Funcionario(funcionarioDTO1));
@@ -79,7 +79,7 @@ public class FuncionarioServiceTest {
     @Test
     void testCadastraFuncionario() {
         // Arrange
-        FuncionarioDTO dadosCadastroFuncionario = new FuncionarioDTO("fogoNoMendingo", "fogoNoMendingo", "euFumoVerde@brisa.com", "joãozin", 14, "fumante", "###.###.###-##");
+        NovoFuncionarioDTO dadosCadastroFuncionario = new NovoFuncionarioDTO("faiscaGratuita", "faiscaGratuita", "frifas@boyahh.com", "joãozin", 14, "fumante", "###.###.###-##");
         when(funcionarioService.cadastraFuncionario(dadosCadastroFuncionario)).then(invocation -> {
             Funcionario novoFuncionario = new Funcionario(dadosCadastroFuncionario);
             funcionarios.add(novoFuncionario);
@@ -99,7 +99,7 @@ public class FuncionarioServiceTest {
     @Test
     void testAlteraFuncionario() {
         // Arrange
-        FuncionarioDTO dadosAlteracaoFuncionario = new FuncionarioDTO("omg123", "omg123", "mikaGuei@nemLimpei.com", "Mika Guei", 19, "cagante", "823.794.383-12");
+        NovoFuncionarioDTO dadosAlteracaoFuncionario = new NovoFuncionarioDTO("omg123", "omg123", "mikaGuei@nemLimpei.com", "Mika Guei", 19, "cagante", "823.794.383-12");
         when(funcionarioService.alteraFuncionario("1", dadosAlteracaoFuncionario)).then(invocation -> {
             Funcionario funcionario = funcionarios.get(0);
             funcionario.atualizaFuncionario(dadosAlteracaoFuncionario);

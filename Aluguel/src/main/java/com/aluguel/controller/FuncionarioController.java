@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aluguel.dto.FuncionarioDTO;
+import com.aluguel.dto.NovoFuncionarioDTO;
 import com.aluguel.model.Funcionario;
 import com.aluguel.service.FuncionarioService;
 
@@ -28,34 +28,34 @@ public class FuncionarioController {
     @Autowired
     private FuncionarioService service;
 
-    @GetMapping("/{idFuncionario}")
+    @GetMapping("/{matriculaFuncionario}")
     @ApiOperation(value="Retorna um funcionario com o id passado")
-    public ResponseEntity<Funcionario> recuperaFuncionarioPorId(@PathVariable String matriculaFuncionario) {
+    public ResponseEntity<Funcionario> recuperaFuncionarioPorMatricula(@PathVariable String matriculaFuncionario) {
         Funcionario funcionario = this.service.recuperaFuncionarioPorMatricula(matriculaFuncionario);
         return ResponseEntity.ok().body(funcionario);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     @ApiOperation(value="Retorna todos os funcionarios cadastrados no sistema")
     public ResponseEntity<List<Funcionario>> recuperaFuncionarios() {
         return ResponseEntity.ok().body(this.service.recuperaFuncionarios());
     }
 
-    @PostMapping("/")
+    @PostMapping(value="", consumes = "application/json")
     @ApiOperation(value="Cadastra um novo funcionario no sistema")
-    public ResponseEntity<Funcionario> cadastraFuncionario(@RequestBody FuncionarioDTO dadosCadastroFuncionario) {
+    public ResponseEntity<Funcionario> cadastraFuncionario(@RequestBody NovoFuncionarioDTO dadosCadastroFuncionario) {
         return ResponseEntity.ok().body(this.service.cadastraFuncionario(dadosCadastroFuncionario));
     }
 
-    @PutMapping("/{matriculaFuncionario}")
+    @PutMapping(value="/{matriculaFuncionario}", consumes = "application/json")
     @ApiOperation(value="Altera os dados de um funcionario existente")
-    public ResponseEntity<Funcionario> alteraFuncionario(@PathVariable String matriculaFuncionario, @RequestBody FuncionarioDTO dadosAlteracaoFuncionario) {
+    public ResponseEntity<Funcionario> alteraFuncionario(@PathVariable String matriculaFuncionario, @RequestBody NovoFuncionarioDTO dadosAlteracaoFuncionario) {
         return ResponseEntity.ok().body(this.service.alteraFuncionario(matriculaFuncionario, dadosAlteracaoFuncionario));
     }
 
     @DeleteMapping("/{matriculaFuncionario}")
     @ApiOperation(value="Exclui um funcionario do sistema")
-    public ResponseEntity excluiBicicleta(@PathVariable String matriculaFuncionario) {
+    public ResponseEntity<?> excluiBicicleta(@PathVariable String matriculaFuncionario) {
         this.service.excluiFuncionario(matriculaFuncionario);
         return ResponseEntity.ok().build();
     }

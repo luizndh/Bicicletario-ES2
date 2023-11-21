@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.aluguel.dto.AluguelDTO;
 import com.aluguel.dto.BicicletaDTO;
 import com.aluguel.dto.DevolucaoDTO;
+import com.aluguel.dto.NovaDevolucaoDTO;
 import com.aluguel.model.Aluguel;
 import com.aluguel.model.Devolucao;
 import org.springframework.stereotype.Service;
@@ -19,16 +20,16 @@ public class DevolucaoService {
     @Autowired
     private AluguelService aluguelService;
     
-    public Devolucao registraDevolucao(String idTranca, String idBicicleta) {
+    public Devolucao registraDevolucao(NovaDevolucaoDTO dadosCadastroDevolucao) {
         // TODO: get /tranca/{idTranca}/bicicleta
-        BicicletaDTO bicicleta = new BicicletaDTO(Integer.parseInt(idBicicleta), "Caloi", "BMX", "1990", 7, "Disponível");
+        BicicletaDTO bicicleta = new BicicletaDTO(Integer.parseInt(dadosCadastroDevolucao.idBicicleta()), "Caloi", "BMX", "1990", 7, "Disponível");
 
         if (bicicleta.status().equals("nova") || bicicleta.status().equals("em reparo")) {
             // TODO: get /bicicleta/integrarNaRede
             throw new RuntimeException("Bicicleta não integrada na rede");
         }
 
-        Aluguel aluguel = aluguelService.recuperaAluguelPorIdBicicleta(Integer.parseInt(idBicicleta));
+        Aluguel aluguel = aluguelService.recuperaAluguelPorIdBicicleta(Integer.parseInt(dadosCadastroDevolucao.idBicicleta()));
 
         String dataFinal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         SimpleDateFormat format = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
@@ -53,7 +54,7 @@ public class DevolucaoService {
             // post /cobranca (valorDevido, idCiclista)
         }
 
-        aluguel.atualizaAluguel(new AluguelDTO(aluguel.getBicicleta(), aluguel.getHoraInicio(), Integer.parseInt(idTranca), dataFinal, aluguel.getCobranca(), aluguel.getCiclista(), aluguel.getTrancaInicio()));
+        aluguel.atualizaAluguel(new AluguelDTO(aluguel.getBicicleta(), aluguel.getHoraInicio(), Integer.parseInt(dadosCadastroDevolucao.trancaFim()), dataFinal, aluguel.getCobranca(), aluguel.getCiclista(), aluguel.getTrancaInicio()));
         // TODO: atualizar status da bicicleta
         // put /bicicleta/{idBicicleta} (New BicicletaDTO(bicicleta.id(), bicicleta.marca(), bicicleta.modelo(), bicicleta.ano(), bicicleta.numero(), "Disponível"))
         //TODO: atualizar status da tranca solicitando seu fechamento
@@ -75,7 +76,7 @@ public class DevolucaoService {
         //        "Atenciosamente,\n" +
         //        "Equipe Aluguel de Bicicletas");
 
-        Devolucao devolucao = new Devolucao(new DevolucaoDTO(Integer.parseInt(idBicicleta), aluguel.getHoraInicio(), Integer.parseInt(idTranca), dataFinal, valorDevido, aluguel.getCiclista()));
+        Devolucao devolucao = new Devolucao(new DevolucaoDTO(Integer.parseInt(dadosCadastroDevolucao.idBicicleta()), aluguel.getHoraInicio(), Integer.parseInt(dadosCadastroDevolucao.trancaFim()), dataFinal, valorDevido, aluguel.getCiclista()));
         Devolucao.devolucoes.add(devolucao);
         return devolucao;
     }

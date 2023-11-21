@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aluguel.dto.NovoAluguelDTO;
 import com.aluguel.model.Aluguel;
 import com.aluguel.service.AluguelService;
 
@@ -21,9 +22,9 @@ public class AluguelController {
     @Autowired
     private AluguelService service;
 
-    @PostMapping("/")
+    @PostMapping(value = "", consumes = "application/json")
     @ApiOperation(value="Registra um novo aluguel no sistema")
-    public ResponseEntity<Aluguel> registraAluguel(@RequestBody String ciclista, @RequestBody String trancaInicio) {
-        return ResponseEntity.ok().body(this.service.registraAluguel(ciclista, trancaInicio));
+    public ResponseEntity<Aluguel> registraAluguel(@RequestBody NovoAluguelDTO dadosCadastroAluguel) {
+        return ResponseEntity.ok().body(this.service.registraAluguel(dadosCadastroAluguel));
     }
 }

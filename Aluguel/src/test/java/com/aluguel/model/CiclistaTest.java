@@ -1,7 +1,7 @@
 package com.aluguel.model;
 
 import com.aluguel.dto.CiclistaDTO;
-import com.aluguel.model.Ciclista.StatusCiclista;
+import com.aluguel.dto.NovoCiclistaDTO;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,13 +13,13 @@ public class CiclistaTest {
 
     @BeforeEach
     void setUp() {
-        CiclistaDTO dadosCadastroCiclista = new CiclistaDTO(StatusCiclista.AGUARDANDO_CONFIRMACAO,"Luis Fumado", "01/01/2000", "123.456.789-00", new Passaporte("2345678","12/2025", "BR"), "Brasileiro", "luisfumado@teste.com", "https://teste.com/foto.jpg");
+        NovoCiclistaDTO dadosCadastroCiclista = new NovoCiclistaDTO("Luis Fumado", "01/01/2000", "123.456.789-00", new Passaporte("2345678","12/2025", "BR"), "Brasileiro", "luisfumado@teste.com", "https://teste.com/foto.jpg");
         ciclista = new Ciclista(dadosCadastroCiclista);
     }
 
     @Test
     void testAtualizaCiclista() {
-        CiclistaDTO dadosAlteracaoCiclista = new CiclistaDTO(StatusCiclista.ATIVO,"Luisa Fumada", "31/12/2001", "009.876.543-21", new Passaporte("8765432","12/2025", "BR"), "Brasileira", "luisafumada@teste.com", "http://url-da-foto.com");
+        CiclistaDTO dadosAlteracaoCiclista = new CiclistaDTO(1, "ATIVO","Luisa Fumada", "31/12/2001", "009.876.543-21", new Passaporte("8765432","12/2025", "BR"), "Brasileira", "luisafumada@teste.com", "http://url-da-foto.com");
 
 
         ciclista.atualizaCiclista(dadosAlteracaoCiclista);

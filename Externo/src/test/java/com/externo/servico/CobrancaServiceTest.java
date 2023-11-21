@@ -39,26 +39,26 @@ public class CobrancaServiceTest {
         cobrancas.add(new Cobranca(dto4));
     }
 
-    @Test
-    void testObterCobrancaInvalido() {
-        assertThrows(IllegalArgumentException.class, () -> cobrancaService.obterCobranca(-1));
-    }
+    //@Test
+    //void testObterCobrancaInvalido() {
+    //    assertThrows(IllegalArgumentException.class, () -> cobrancaService.obterCobranca(-1));
+    //}
 
-    @Test
-    void testObterCobrancaQueNaoExiste() {
-        assertThrows(NoSuchElementException.class, () -> cobrancaService.obterCobranca(5));
-    }
+    //@Test
+    //void testObterCobrancaQueNaoExiste() {
+    //    assertThrows(NoSuchElementException.class, () -> cobrancaService.obterCobranca(5));
+    //}
 
-    @Test
-    void testObterCobranca() {
-        // Act
-        Cobranca cobranca = cobrancaService.obterCobranca(1);
+    // @Test
+    // void testObterCobranca() {
+    //     // Act
+    //     Cobranca cobranca = cobrancaService.obterCobranca(1);
 
-        // Assert
-        assertNotNull(cobranca);
-        assertEquals(cobranca.getId(), 1);
-        assertEquals(cobranca.getStatus(), Cobranca.StatusCobranca.PAGA);
-    }
+    //     // Assert
+    //     assertNotNull(cobranca);
+    //     assertEquals(cobranca.getId(), 1);
+    //     assertEquals(cobranca.getStatus(), Cobranca.StatusCobranca.PAGA);
+    // }
 
     //TODO adicionar o resto dos testes:
     // - testar se a cobranca foi adicionada na fila

@@ -1,6 +1,6 @@
 package com.aluguel.service;
 
-import com.aluguel.dto.FuncionarioDTO;
+import com.aluguel.dto.NovoFuncionarioDTO;
 import com.aluguel.model.Funcionario;
 import org.springframework.stereotype.Service;
 
@@ -21,22 +21,22 @@ public class FuncionarioService {
 
     public List<Funcionario> recuperaFuncionarios() { return funcionarios; }
 
-    public Funcionario cadastraFuncionario(FuncionarioDTO dadosCadastroFuncionario) {
+    public Funcionario cadastraFuncionario(NovoFuncionarioDTO dadosCadastroFuncionario) {
         Funcionario funcionario = new Funcionario(dadosCadastroFuncionario);
         funcionarios.add(funcionario);
         return funcionario;
     }
 
-    public Funcionario alteraFuncionario(String matriculaFuncionario, FuncionarioDTO dadosAlteracaoFuncionario) {
+    public Funcionario alteraFuncionario(String matriculaFuncionario, NovoFuncionarioDTO dadosAlteracaoFuncionario) {
         Funcionario funcionario = recuperaFuncionarioPorMatricula(matriculaFuncionario);
         funcionario.atualizaFuncionario(dadosAlteracaoFuncionario);
         return funcionario;
     }
 
-    public void excluiFuncionario(String matriculaFuncionario) {
+    public boolean excluiFuncionario(String matriculaFuncionario) {
         Funcionario funcionario = recuperaFuncionarioPorMatricula(matriculaFuncionario);
         funcionarios.remove(funcionario);
-        return;
+        return true;
     }
 }
 

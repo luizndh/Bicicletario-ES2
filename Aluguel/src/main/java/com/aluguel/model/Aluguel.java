@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.aluguel.dto.AluguelDTO;
+import com.aluguel.dto.NovoAluguelDTO;
 
 public class Aluguel {
 
@@ -17,14 +18,9 @@ public class Aluguel {
 
     public static final List<Aluguel> alugueis = new ArrayList<>();
 
-    public Aluguel(AluguelDTO dadosCadastroAluguel) {
-        this.bicicleta = dadosCadastroAluguel.bicicleta();
-        this.horaInicio = dadosCadastroAluguel.horaInicio();
-        this.trancaFim = dadosCadastroAluguel.trancaFim();
-        this.horaFim = dadosCadastroAluguel.horaFim();
-        this.cobranca = dadosCadastroAluguel.cobranca();
-        this.ciclista = dadosCadastroAluguel.ciclista();
-        this.trancaInicio = dadosCadastroAluguel.trancaInicio();
+    public Aluguel(NovoAluguelDTO dadosCadastroAluguel) {
+        this.ciclista = Integer.parseInt(dadosCadastroAluguel.ciclista());
+        this.trancaInicio = Integer.parseInt(dadosCadastroAluguel.trancaInicio());
     }
 
     public void atualizaAluguel(AluguelDTO dadosAlteracaoAluguel) {

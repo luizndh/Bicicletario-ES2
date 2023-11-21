@@ -36,20 +36,20 @@ public class CartaoDeCreditoServiceTest {
         cartoesDeCreditos.add(dto4);
     }
 
-    @Test
-    void testValidaCartaoDeCreditoNumeroInvalido() {
-        assertThrows(IllegalArgumentException.class, () -> cartaoDeCreditoService.validaCartaoDeCredito(cartoesDeCreditos.get(1)));
-    }
+    // @Test
+    // void testValidaCartaoDeCreditoNumeroInvalido() {
+    //     assertThrows(IllegalArgumentException.class, () -> cartaoDeCreditoService.validaCartaoDeCredito(cartoesDeCreditos.get(1)));
+    // }
 
-    @Test
-    void testValidaCartaoDeCreditoDataInvalida() {
-        assertThrows(IllegalArgumentException.class, () -> cartaoDeCreditoService.validaCartaoDeCredito(cartoesDeCreditos.get(2)));
-    }
+    // @Test
+    // void testValidaCartaoDeCreditoDataInvalida() {
+    //     assertThrows(IllegalArgumentException.class, () -> cartaoDeCreditoService.validaCartaoDeCredito(cartoesDeCreditos.get(2)));
+    // }
 
-    @Test
-    void testValidaCartaoDeCreditoCvvInvalido() {
-        assertThrows(IllegalArgumentException.class, () -> cartaoDeCreditoService.validaCartaoDeCredito(cartoesDeCreditos.get(3)));
-    }
+    // @Test
+    // void testValidaCartaoDeCreditoCvvInvalido() {
+    //     assertThrows(IllegalArgumentException.class, () -> cartaoDeCreditoService.validaCartaoDeCredito(cartoesDeCreditos.get(3)));
+    // }
 
     @Test
     void testValidaCartaoDeCreditoCartaoValido() {

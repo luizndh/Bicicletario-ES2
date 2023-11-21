@@ -1,6 +1,5 @@
 package com.aluguel.dto;
 
-import com.aluguel.model.Ciclista.StatusCiclista;
 import com.aluguel.model.Passaporte;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,7 +10,8 @@ public class CiclistaDTOTest {
     @Test
     void testCiclistaDTO() {
         // Arrange
-        StatusCiclista status = StatusCiclista.ATIVO;
+        int id = 1;
+        String status = "ATIVO";
         String nome = "Luis Fumado";
         String nascimento = "01/01/2000";
         String cpf = "123.456.789-00";
@@ -21,7 +21,7 @@ public class CiclistaDTOTest {
         String urlFotoDocumento = "https://teste.com/foto.jpg";
 
         // Act
-        CiclistaDTO ciclistaDTO = new CiclistaDTO(status, nome, nascimento, cpf, passaporte, nacionalidade, email, urlFotoDocumento);
+        CiclistaDTO ciclistaDTO = new CiclistaDTO(id, status, nome, nascimento, cpf, passaporte, nacionalidade, email, urlFotoDocumento);
 
         // Assert
         assertNotNull(ciclistaDTO);

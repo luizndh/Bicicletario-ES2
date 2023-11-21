@@ -1,6 +1,6 @@
 package com.aluguel.model;
 
-import com.aluguel.dto.FuncionarioDTO;
+import com.aluguel.dto.NovoFuncionarioDTO;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,7 +13,7 @@ public class FuncionarioTest {
 
     @BeforeEach
     void setUp() {
-        FuncionarioDTO dadosCadastroFuncionario = new FuncionarioDTO("batoEmIdosas123", "batoEmIdosas123", "raphito@arroz.com", "raphito", 30, "Gerente", "777.777.777-77");
+        NovoFuncionarioDTO dadosCadastroFuncionario = new NovoFuncionarioDTO("senhaTeste123", "senhaTeste123", "raphito@arroz.com", "raphito", 30, "Gerente", "777.777.777-77");
         funcionario = new Funcionario(dadosCadastroFuncionario);
     }
 
@@ -24,16 +24,16 @@ public class FuncionarioTest {
 
     @Test
     void testAtualizaFuncionario() {
-        FuncionarioDTO dadosAlteracaoFuncionario = new FuncionarioDTO("vouMeMatar123", "vouMeMatar123", "raphito@feijao.com", "otihpar", 3, "escravo", "000.000.000-00");
+        NovoFuncionarioDTO dadosAlteracaoFuncionario = new NovoFuncionarioDTO("testeSenha321", "testeSenha321", "raphito@feijao.com", "otihpar", 3, "garçom", "000.000.000-00");
 
         funcionario.atualizaFuncionario(dadosAlteracaoFuncionario);
 
-        assertEquals("vouMeMatar123", funcionario.getSenha());
-        assertEquals("vouMeMatar123", funcionario.getConfirmacaoSenha());
+        assertEquals("testeSenha321", funcionario.getSenha());
+        assertEquals("testeSenha321", funcionario.getConfirmacaoSenha());
         assertEquals("raphito@feijao.com", funcionario.getEmail());
         assertEquals("otihpar", funcionario.getNome());
         assertEquals(3, funcionario.getIdade());
-        assertEquals("escravo", funcionario.getFuncao());
+        assertEquals("garçom", funcionario.getFuncao());
         assertEquals("000.000.000-00", funcionario.getCpf());
     }
 }

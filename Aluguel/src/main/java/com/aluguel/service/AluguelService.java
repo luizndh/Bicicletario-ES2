@@ -2,6 +2,7 @@ package com.aluguel.service;
 
 import com.aluguel.dto.AluguelDTO;
 import com.aluguel.dto.BicicletaDTO;
+import com.aluguel.dto.NovoAluguelDTO;
 import com.aluguel.dto.TrancaDTO;
 import com.aluguel.model.Aluguel;
 
@@ -21,24 +22,25 @@ public class AluguelService {
 
     public List<Aluguel> recuperaAlugueis() { return alugueis; }
 
-    public Aluguel registraAluguel(String ciclista, String trancaInicio) {
+    public Aluguel registraAluguel(NovoAluguelDTO dadosCadastroAluguel) {
         // TODO: get /tranca/{idTranca}
-        TrancaDTO tranca = new TrancaDTO(1, 1, 10, "Urca", "2010", "TrancaPika", "Ocupada");
+        TrancaDTO tranca = new TrancaDTO(1, 1, 10, "Urca", "2010", "Tranca Teste", "Ocupada");
         // TODO: get /tranca/{idTranca}/bicicleta
         BicicletaDTO bicicleta = new BicicletaDTO(1, "Caloi", "BMX", "1990", 7, "Disponível");
 
-        ciclistaService.verificaSeCiclistaPodeAlugar(Integer.parseInt(ciclista));
+        ciclistaService.verificaSeCiclistaPodeAlugar(Integer.parseInt(dadosCadastroAluguel.ciclista()));
             
             
         if (bicicleta.status().equals("Indicada para reparo")) {
-            throw new RuntimeException("Bicicleta indicada para reparo");
+            throw new IllegalArgumentException("Bicicleta indicada para reparo");
         }
 
         // TODO: enviar cobrança dos R$10 iniciais para administradora de cartão de crédito
         
         String horaInicio = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        AluguelDTO dadosRegistroAluguel = new AluguelDTO(bicicleta.id(), horaInicio, -1, "", 10, Integer.parseInt(ciclista), tranca.id());
-        Aluguel aluguel = new Aluguel(dadosRegistroAluguel);
+        Aluguel aluguel = new Aluguel(dadosCadastroAluguel);
+        aluguel.atualizaAluguel(new AluguelDTO(bicicleta.id(), horaInicio, -1, "", 10, Integer.parseInt(dadosCadastroAluguel.ciclista()), tranca.id()));
+        // Caso fosse inserção em um banco de dados, seria chamada uma função de persistência aqui. Essa função seria sobreescrita nos testes.
         alugueis.add(aluguel);
 
         // TODO: atualizar status da bicicleta

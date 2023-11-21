@@ -2,11 +2,13 @@ package com.aluguel.service;
 
 import com.aluguel.dto.BicicletaDTO;
 import com.aluguel.dto.CiclistaDTO;
+import com.aluguel.dto.NovoCiclistaDTO;
 import com.aluguel.model.Aluguel;
 import com.aluguel.model.Ciclista;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.aluguel.model.Aluguel.alugueis;
 import static com.aluguel.model.Ciclista.ciclistas;
@@ -23,7 +25,7 @@ public class CiclistaService {
                 return ciclista;
             }
         }
-        throw new IllegalArgumentException(CICLISTA_EXCEPTION_1 + idCiclista + CICLISTA_EXCEPTION_2);
+        throw new NoSuchElementException(CICLISTA_EXCEPTION_1 + idCiclista + CICLISTA_EXCEPTION_2);
     }
 
     public List<Ciclista> recuperaCiclistas() { return ciclistas; }
@@ -48,31 +50,28 @@ public class CiclistaService {
     }
 
     // TODO verificar senhas iguais
-    public Ciclista cadastraCiclista(CiclistaDTO dadosCadastroCiclista) {
-        if (dadosCadastroCiclista.cpf().isEmpty() && dadosCadastroCiclista.nacionalidade().equals("brasileiro")) {
-            throw new IllegalArgumentException("O CPF é obrigatório para brasileiros");
-        } else if (dadosCadastroCiclista.passaporte().getNumero().isEmpty() && dadosCadastroCiclista.nacionalidade().equals("estrangeiro")) {
-            throw new IllegalArgumentException("O passaporte é obrigatório para estrangeiros");
-        } else {
-            //if (false) { // TODO validar cartão junto a administradora CC
-            //    return null;
-            //}
-            
-            // TODO tenta enviar email e se não conseguir, indica o erro. Se der erro no envio do email, não salva o ciclista.
-            ///enviarEmail(ciclista.getEmail(), "Bem vindo ao Aluguel de Bicicletas", 
-            //        "Olá " + ciclista.getNome() + ",\n\n" +
-            //        "Seu cadastro foi realizado com sucesso!\n\n" +
-            //        "Agora você já pode alugar bicicletas e aproveitar o melhor da cidade.\n\n" +
-            //        "Atenciosamente,\n" +
-            //        "Equipe Aluguel de Bicicletas");
+    public Ciclista cadastraCiclista(NovoCiclistaDTO dadosCadastroCiclista) {
+        
+        validaNacionalidade(dadosCadastroCiclista.cpf(), dadosCadastroCiclista.passaporte().getNumero(), dadosCadastroCiclista.nacionalidade());
 
-            Ciclista ciclista = new Ciclista(dadosCadastroCiclista);
-            ciclistas.add(ciclista);
-            return ciclista;
-        }
+        //if (false) { // TODO validar cartão junto a administradora CC
+        //    return null;
+        //}
+        
+        // TODO tenta enviar email e se não conseguir, indica o erro. Se der erro no envio do email, não salva o ciclista.
+        ///enviarEmail(ciclista.getEmail(), "Bem vindo ao Aluguel de Bicicletas", 
+        //        "Olá " + ciclista.getNome() + ",\n\n" +
+        //        "Seu cadastro foi realizado com sucesso!\n\n" +
+        //        "Agora você já pode alugar bicicletas e aproveitar o melhor da cidade.\n\n" +
+        //        "Atenciosamente,\n" +
+        //        "Equipe Aluguel de Bicicletas");
+
+        Ciclista ciclista = new Ciclista(dadosCadastroCiclista);
+        ciclistas.add(ciclista);
+        return ciclista;
     }
 
-    // Onde diabos ele quer que "O sistema registre a data/hora da confirmação."?
+    // Onde "O sistema registre a data/hora da confirmação."?
     public Ciclista ativaCiclista(int idCiclista) {
         Ciclista ciclista = recuperaCiclistaPorId(idCiclista);
 
@@ -81,7 +80,7 @@ public class CiclistaService {
             return ciclista;
         }
 
-        throw new IllegalArgumentException(CICLISTA_EXCEPTION_1 + idCiclista + CICLISTA_EXCEPTION_2);
+        throw new NoSuchElementException(CICLISTA_EXCEPTION_1 + idCiclista + CICLISTA_EXCEPTION_2);
     }
 
     public boolean verificaSeCiclistaPodeAlugar(int idCiclista) {
@@ -104,12 +103,12 @@ public class CiclistaService {
             //         "Atenciosamente,\n" +
             //         "Equipe Aluguel de Bicicletas");
             
-            throw new RuntimeException("Ciclista já tem aluguel em andamento");
+            throw new IllegalArgumentException("Ciclista já tem aluguel em andamento");
         }
         return true;
     }
     
-    private Ciclista recuperaCiclistaPorIdEmAluguel(int idCiclista) {
+    public Ciclista recuperaCiclistaPorIdEmAluguel(int idCiclista) {
         if (!alugueis.isEmpty()) {
             for (Aluguel aluguel : alugueis) {
                 if (aluguel.getCiclista() == idCiclista) {
@@ -123,12 +122,7 @@ public class CiclistaService {
     public Ciclista alteraCiclista(int idCiclista, CiclistaDTO dadosAlteracaoCiclista) {
         Ciclista ciclista = recuperaCiclistaPorId(idCiclista);
 
-        if (ciclista.getCpf().isEmpty() && ciclista.getNacionalidade().equals("brasileiro")) {
-            throw new IllegalArgumentException("O CPF é obrigatório para brasileiros");
-        } 
-        if (ciclista.getPassaporte().getNumero().isEmpty() && ciclista.getNacionalidade().equals("estrangeiro")) {
-            throw new IllegalArgumentException("O passaporte é obrigatório para estrangeiros");
-        }
+        validaNacionalidade(ciclista.getCpf(), ciclista.getPassaporte().getNumero(), dadosAlteracaoCiclista.nacionalidade());
 
         // TODO: enviar email para o ciclista informando que os dados foram alterados
             ///enviarEmail(ciclista.getEmail(), "Dados alterados no Aluguel de Bicicletas",
@@ -142,18 +136,19 @@ public class CiclistaService {
     }
 
     public BicicletaDTO recuperaBicicletaAlugada (int idCiclista) {
-        recuperaCiclistaPorId(idCiclista);
+        /*Ciclista ciclista = */recuperaCiclistaPorIdEmAluguel(idCiclista);
 
-        if (!alugueis.isEmpty()) {
-            for (Aluguel aluguel : alugueis) {
-                if (aluguel.getCiclista() == idCiclista) {
-                    // TODO: return get /bicicleta/{idBicicleta}
-                    return new BicicletaDTO(3, "xupetada", "molenga", "25696969", 3, "Em uso");
-                }
-            }
-        }
-        return new BicicletaDTO(-1, "", "", "", -1, "");
+        // TODO: return get /bicicleta/{idBicicleta}
+        return new BicicletaDTO(3, "xupetada", "molenga", "25696969", 3, "Em uso");
     }
 
+    private void validaNacionalidade(String cpf, String passaporte, String nacionalidade) {
+        if (cpf.isEmpty() && nacionalidade.equals("brasileiro")) {
+            throw new IllegalArgumentException("O CPF é obrigatório para brasileiros");
+        } 
+        if (passaporte.isEmpty() && nacionalidade.equals("estrangeiro")) {
+            throw new IllegalArgumentException("O passaporte é obrigatório para estrangeiros");
+        }
+    }
 }
 

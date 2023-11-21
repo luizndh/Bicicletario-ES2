@@ -1,6 +1,6 @@
 package com.aluguel.model;
 
-import com.aluguel.dto.FuncionarioDTO;
+import com.aluguel.dto.NovoFuncionarioDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class Funcionario {
 
     public static final List<Funcionario> funcionarios = new ArrayList<>();
 
-    public Funcionario(FuncionarioDTO dadosCadastroFuncionario) {
+    public Funcionario(NovoFuncionarioDTO dadosCadastroFuncionario) {
         this.matricula = String.valueOf(funcionarios.size() + 1);
         this.senha = dadosCadastroFuncionario.senha();
         this.confirmacaoSenha = dadosCadastroFuncionario.confirmacaoSenha();
@@ -29,7 +29,7 @@ public class Funcionario {
         this.cpf = dadosCadastroFuncionario.cpf();
     }
 
-    public void atualizaFuncionario(FuncionarioDTO dadosAlteracaoFuncionario) {
+    public void atualizaFuncionario(NovoFuncionarioDTO dadosAlteracaoFuncionario) {
         this.senha = dadosAlteracaoFuncionario.senha();
         this.confirmacaoSenha = dadosAlteracaoFuncionario.confirmacaoSenha();
         this.email = dadosAlteracaoFuncionario.email();

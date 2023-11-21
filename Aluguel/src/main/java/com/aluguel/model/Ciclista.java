@@ -1,6 +1,7 @@
 package com.aluguel.model;
 
 import com.aluguel.dto.CiclistaDTO;
+import com.aluguel.dto.NovoCiclistaDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +20,9 @@ public class Ciclista {
     
     public static final List<Ciclista> ciclistas = new ArrayList<>();
 
-    public Ciclista(CiclistaDTO dadosCadastroCiclista) {
+    public Ciclista(NovoCiclistaDTO dadosCadastroCiclista) {
         this.id = ciclistas.size() + 1;
-        this.status = dadosCadastroCiclista.status();
+        this.status = StatusCiclista.AGUARDANDO_CONFIRMACAO;
         this.nome = dadosCadastroCiclista.nome();
         this.nascimento = dadosCadastroCiclista.nascimento();
         this.cpf = dadosCadastroCiclista.cpf();

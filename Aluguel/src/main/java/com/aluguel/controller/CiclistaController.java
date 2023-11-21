@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.aluguel.dto.BicicletaDTO;
 import com.aluguel.dto.CiclistaDTO;
+import com.aluguel.dto.NovoCiclistaDTO;
 import com.aluguel.model.Ciclista;
 import com.aluguel.service.CiclistaService;
 
@@ -39,9 +40,9 @@ public class CiclistaController {
         return ResponseEntity.ok().body(this.service.verificaEmail(email));
     }
 
-    @PostMapping("/")
+    @PostMapping(value="", consumes="application/json")
     @ApiOperation(value="Cadastra um novo ciclista no sistema")
-    public ResponseEntity<Ciclista> cadastraCiclista(@RequestBody CiclistaDTO dadosCadastroCiclista) {
+    public ResponseEntity<Ciclista> cadastraCiclista(@RequestBody NovoCiclistaDTO dadosCadastroCiclista) {
         return ResponseEntity.ok().body(this.service.cadastraCiclista(dadosCadastroCiclista));
     }
 
@@ -57,7 +58,7 @@ public class CiclistaController {
         return ResponseEntity.ok().body(this.service.ativaCiclista(idCiclista));
     }
 
-    @PutMapping("/{idCiclista}")
+    @PutMapping(value="/{idCiclista}", consumes = "application/json")
     @ApiOperation(value="Altera os dados de um ciclista existente")
     public ResponseEntity<Ciclista> alteraCiclista(@PathVariable int idCiclista, @RequestBody CiclistaDTO dadosAlteracaoCiclista) {
         return ResponseEntity.ok().body(this.service.alteraCiclista(idCiclista, dadosAlteracaoCiclista));

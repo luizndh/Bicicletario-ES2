@@ -1,19 +1,26 @@
 package com.aluguel.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.aluguel.dto.AluguelDTO;
+import com.aluguel.dto.NovoAluguelDTO;
 
 public class AluguelTest {
 
     private Aluguel aluguel;
+    List<Aluguel> alugueis;
 
     @BeforeEach
     public void setUp() {
-        aluguel = new Aluguel(new AluguelDTO(1, "10:00", 2, "11:00", 10, 3, 4));
-        Aluguel.alugueis.add(aluguel);
+        aluguel = new Aluguel(new NovoAluguelDTO("1", "2"));
+        aluguel.atualizaAluguel(new AluguelDTO(1, "10:00", 2, "11:00", 10, 3, 4));
+
+        alugueis = new ArrayList<>();
+        alugueis.add(aluguel);
     }
 
     @Test
@@ -61,7 +68,6 @@ public class AluguelTest {
 
     @Test
     void testAlugueis() {
-        List<Aluguel> alugueis = Aluguel.alugueis;
         assertEquals(1, alugueis.size());
         assertEquals(aluguel, alugueis.get(0));
     }
