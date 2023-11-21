@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-//TODO na teoria pronto, mas falta testar
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CobrancaControllerTest {
@@ -40,7 +39,6 @@ public class CobrancaControllerTest {
     @BeforeEach
     void setUp() {
         cobranca = new Cobranca(new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3));
-        //TODO ver se é necessario
     }
 
     // /cobranca
@@ -98,7 +96,7 @@ public class CobrancaControllerTest {
 
     // /processaCobrancasEmFila
     @Test
-    void testProcessaFilaCorreto() throws Exception {//TODO!
+    void testProcessaFilaCorreto() throws Exception {
         // Arrange
         //CobrancaDTO cobrancaDTO = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
         String jsonEntrada = """

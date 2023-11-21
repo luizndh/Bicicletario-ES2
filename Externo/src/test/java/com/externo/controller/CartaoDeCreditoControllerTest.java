@@ -36,7 +36,6 @@ public class CartaoDeCreditoControllerTest {
     @BeforeEach
     void setUp() {
         cartao = new CartaoDeCreditoDTO("Marcos da Silva", "9182736451230192", "02/2028","987");
-        //TODO ver se é necessario
     }
 
     @Test

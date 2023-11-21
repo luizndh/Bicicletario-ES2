@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.*;
-//TODO na teoria pronto, mas falta testar
 @ExtendWith(MockitoExtension.class)
 public class EmailServiceTest {
 

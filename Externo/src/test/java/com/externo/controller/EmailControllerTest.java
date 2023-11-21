@@ -39,7 +39,6 @@ public class EmailControllerTest {
     @BeforeEach
     void setUp() {
         email = new Email(new EmailDTO("joaodasneves@gmail.com", "Bom dia", "Bom dia meu querido, como vai?"));
-        //TODO ver se é necessario
     }
 
     @Test
