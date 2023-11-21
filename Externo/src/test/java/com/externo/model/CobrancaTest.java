@@ -12,19 +12,19 @@ public class CobrancaTest {
 
     @BeforeEach
     public void setUp() {
-        CobrancaDTO cobrancaDTO = new CobrancaDTO(StatusCobranca.PENDENTE.toString(), "01/01/2023 12:00", "01/01/2023 13:00", 10.00f, 2);
+        CobrancaDTO cobrancaDTO = new CobrancaDTO(StatusCobranca.PENDENTE.toString(), "01/01/2023 12:00", "01/01/2023 13:00", 10L, 2);
         cobranca = new Cobranca(cobrancaDTO);
     }
 
     @Test
     public void testAtualizaCobranca() {
-        CobrancaDTO cobrancaDTO2 = new CobrancaDTO(StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 15.00f, 3);
+        CobrancaDTO cobrancaDTO2 = new CobrancaDTO(StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
         cobranca.atualizaCobranca(cobrancaDTO2);
 
         assertEquals(StatusCobranca.PENDENTE, cobranca.getStatus());
         assertEquals("02/01/2023 12:00", cobranca.getHoraSolicitacao());
         assertEquals("02/01/2023 13:40", cobranca.getHoraFinalizacao());
-        assertEquals(15.00f, cobranca.getValor());
+        assertEquals(1500L, cobranca.getValor());
         assertEquals(3, cobranca.getCiclista());
     }
 
