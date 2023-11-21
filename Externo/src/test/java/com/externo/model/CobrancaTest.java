@@ -12,7 +12,7 @@ public class CobrancaTest {
 
     @BeforeEach
     public void setUp() {
-        CobrancaDTO cobrancaDTO = new CobrancaDTO(StatusCobranca.PENDENTE.toString(), "01/01/2023 12:00", "01/01/2023 13:00", 10, 2);
+        CobrancaDTO cobrancaDTO = new CobrancaDTO(StatusCobranca.PENDENTE.toString(), "01/01/2023 12:00", "01/01/2023 13:00", 10L, 2);
         cobranca = new Cobranca(cobrancaDTO);
     }
 
@@ -24,7 +24,7 @@ public class CobrancaTest {
         assertEquals(StatusCobranca.PENDENTE, cobranca.getStatus());
         assertEquals("02/01/2023 12:00", cobranca.getHoraSolicitacao());
         assertEquals("02/01/2023 13:40", cobranca.getHoraFinalizacao());
-        assertEquals(15.00f, cobranca.getValor());
+        assertEquals(1500L, cobranca.getValor());
         assertEquals(3, cobranca.getCiclista());
     }
 

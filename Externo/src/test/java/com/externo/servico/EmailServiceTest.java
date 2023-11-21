@@ -1,6 +1,7 @@
 package com.externo.servico;
 
 import com.externo.dto.EmailDTO;
+import com.externo.model.Email;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -34,15 +35,13 @@ public class EmailServiceTest {
         EmailDTO emailDTO = new EmailDTO("recipient@example.com", "Subject", "Body");
 
         // When
-        boolean result = emailService.enviarEmail(emailDTO);
+        Email result = emailService.enviarEmail(emailDTO);
 
         // Then
-        assertTrue(result); // Assuming you expect the method to return true
+        assertEquals(result.getId(), new Email(emailDTO).getId());
 
-        // Verify that the send method was called with the expected parameters
         verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
 
-        // You can also capture the argument passed to the send method and make more detailed assertions
         ArgumentCaptor<SimpleMailMessage> messageCaptor = ArgumentCaptor.forClass(SimpleMailMessage.class);
         verify(mailSender).send(messageCaptor.capture());
 

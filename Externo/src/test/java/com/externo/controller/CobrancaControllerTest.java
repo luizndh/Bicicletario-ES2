@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,7 +23,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 //TODO na teoria pronto, mas falta testar
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class CobrancaControllerTest {
     @Autowired
     private MockMvc mvc;
@@ -50,14 +53,13 @@ public class CobrancaControllerTest {
         "status": "PENDENTE",
         "horaSolicitacao": "02/01/2023 12:00",
         "horaFinalizacao": "02/01/2023 13:40",
-        "valor": 15.00,
+        "valor": 1500,
         "ciclista": 3
     }
     """;
-        String json = "{\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":15.00,\"ciclista\":3}";
+        String json = "{\"id\":1,\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":1500,\"ciclista\":3}";
 
-
-        when(this.cobrancaService.realizaCobranca(cobrancaDTO)).thenReturn(true);
+        when(this.cobrancaService.realizaCobranca(new Cobranca(cobrancaDTO))).thenReturn(cobranca);
 
         // Act
         var response = this.mvc.perform(post("/cobranca")
@@ -71,21 +73,23 @@ public class CobrancaControllerTest {
     @Test
     void testCobrancaIncorreta() throws Exception {
         // Arrange
-        CobrancaDTO cobrancaDTO = new CobrancaDTO("", "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
+        CobrancaDTO cobrancaDTO = new CobrancaDTO("CANCELADA", "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
         String jsonEntrada = """
     {
-        "status": "",
+        "status": "CANCELADA",
         "horaSolicitacao": "02/01/2023 12:00",
         "horaFinalizacao": "02/01/2023 13:40",
-        "valor": 15.00,
+        "valor": 1500,
         "ciclista": 3
     }
     """;
-
-        when(this.cobrancaService.realizaCobranca(cobrancaDTO)).thenThrow(new IllegalArgumentException());
+        Cobranca cobranca = new Cobranca(cobrancaDTO);
+        System.out.println(cobranca.getValor());
+        when(cobrancaService.realizaCobranca(cobranca)).thenThrow(new IllegalArgumentException());
 
         // Act
-        var response = this.mvc.perform(post("/cobranca").content(jsonEntrada).contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        var response = this.mvc.perform(post("/cobranca")
+                .content(jsonEntrada).contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
 
         // Assert
         assertEquals(422, response.getStatus());
@@ -94,12 +98,23 @@ public class CobrancaControllerTest {
 
     // /processaCobrancasEmFila
     @Test
-    void testProcessaFilaCorreto() throws Exception {
+    void testProcessaFilaCorreto() throws Exception {//TODO!
         // Arrange
+        //CobrancaDTO cobrancaDTO = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
+        String jsonEntrada = """
+                {
+                    "status": "PENDENTE",
+                    "horaSolicitacao": "02/01/2023 12:00",
+                    "horaFinalizacao": "02/01/2023 13:40",
+                    "valor": 1500,
+                    "ciclista": 3
+                }
+                """;
+        this.mvc.perform(post("/filaCobranca").content(jsonEntrada).contentType(MediaType.APPLICATION_JSON));
 
         // Act
         var response = this.mvc.perform(post("/processaCobrancasEmFila")).andReturn().getResponse();
-        String json = "{\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":15.00,\"ciclista\":3}";
+        String json = "[{\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":1500,\"ciclista\":3}]";
 
         // Assert
         assertEquals(200, response.getStatus());
@@ -113,8 +128,8 @@ public class CobrancaControllerTest {
         when(cobrancaService.processaCobrancasEmFila()).thenThrow(new IllegalArgumentException());
 
         // Act
-        var response = this.mvc.perform(get("/processaCobrancasEmFila")).andReturn().getResponse();
-        String json = "{\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":15.00,\"ciclista\":3}";
+        var response = this.mvc.perform(post("/processaCobrancasEmFila")).andReturn().getResponse();
+        String json = "{\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":1500,\"ciclista\":3}";
 
         // Assert
         assertEquals(422, response.getStatus());
@@ -131,13 +146,13 @@ public class CobrancaControllerTest {
                     "status": "PENDENTE",
                     "horaSolicitacao": "02/01/2023 12:00",
                     "horaFinalizacao": "02/01/2023 13:40",
-                    "valor": 15.00,
+                    "valor": 1500,
                     "ciclista": 3
                 }
                 """;
-        String json = "{\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":15.00,\"ciclista\":3}";
+        String json = "{\"id\":1,\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":1500,\"ciclista\":3}";
 
-        when(this.cobrancaService.incluiFilaCobranca(cobrancaDTO)).thenReturn(true);
+        when(this.cobrancaService.incluiFilaCobranca(cobrancaDTO)).thenReturn(cobranca);
 
         // Act
         var response = this.mvc.perform(post("/filaCobranca")
@@ -151,13 +166,13 @@ public class CobrancaControllerTest {
     @Test
     void testFilaCobrancaIncorreto() throws Exception {
         // Arrange
-        CobrancaDTO cobrancaDTO = new CobrancaDTO("", "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
+        CobrancaDTO cobrancaDTO = new CobrancaDTO("", "02/01/2023 12:00", "02/01/2023 13:40", -1L, 3);
         String jsonEntrada = """
                 {
                     "status": "",
                     "horaSolicitacao": "02/01/2023 12:00",
                     "horaFinalizacao": "02/01/2023 13:40",
-                    "valor": 15.00,
+                    "valor": -1,
                     "ciclista": 3
                 }
                 """;
@@ -182,11 +197,11 @@ public class CobrancaControllerTest {
                     "status": "PENDENTE",
                     "horaSolicitacao": "02/01/2023 12:00",
                     "horaFinalizacao": "02/01/2023 13:40",
-                    "valor": 15.00,
+                    "valor": 1500,
                     "ciclista": 3
                 }
                 """;
-        String json = "{\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":15.00,\"ciclista\":3}";
+        String json = "{\"id\":1,\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":1500,\"ciclista\":3}";
 
         when(this.cobrancaService.obterCobranca(1)).thenReturn(cobranca);
 
@@ -200,7 +215,7 @@ public class CobrancaControllerTest {
     }
 
     @Test
-    void testCobrancaPorIdIncorretor () throws Exception {
+    void testCobrancaPorIdIncorreto () throws Exception {
         // Arrange
         CobrancaDTO cobrancaDTO = new CobrancaDTO(Cobranca.StatusCobranca.PENDENTE.toString(), "02/01/2023 12:00", "02/01/2023 13:40", 1500L, 3);
         String jsonEntrada = """
@@ -208,11 +223,11 @@ public class CobrancaControllerTest {
                     "status": "PENDENTE",
                     "horaSolicitacao": "02/01/2023 12:00",
                     "horaFinalizacao": "02/01/2023 13:40",
-                    "valor": 15.00,
+                    "valor": 1500,
                     "ciclista": 3
                 }
                 """;
-        String json = "{\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":15.00,\"ciclista\":3}";
+        String json = "{\"status\":\"PENDENTE\",\"horaSolicitacao\":\"02/01/2023 12:00\",\"horaFinalizacao\":\"02/01/2023 13:40\",\"valor\":1500,\"ciclista\":3}";
 
         when(this.cobrancaService.obterCobranca(10)).thenThrow(new NoSuchElementException());
 
