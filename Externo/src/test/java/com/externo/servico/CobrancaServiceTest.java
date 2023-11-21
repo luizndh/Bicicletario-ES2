@@ -120,14 +120,14 @@ public class CobrancaServiceTest {
         assertThrows(IllegalArgumentException.class, () -> cobrancaService.obterCobranca(50));
     }
 
-    // @Test
-    // void testObterCobranca() {
-    //     // Act
-    //     Cobranca cobranca = cobrancaService.obterCobranca(1);
-    //
-    //    // Assert
-    //    assertNotNull(cobranca);
-    //    assertEquals(cobranca.getId(), 1);
-    //    assertEquals(Cobranca.StatusCobranca.PAGA, cobranca.getStatus());
-    //}
+    @Test //!
+    void testObterCobranca() {
+        // Act
+        Cobranca cobranca = cobrancaService.obterCobranca(1);
+
+        // Assert
+        assertNotNull(cobranca);
+        assertEquals(cobranca.getId(), 1);
+        assertEquals(Cobranca.StatusCobranca.PAGA, cobranca.getStatus());
+    }
 }
