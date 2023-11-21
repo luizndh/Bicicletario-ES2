@@ -42,6 +42,22 @@ public class Tranca {
         this.historicoRetirada = new ArrayList<>();
     }
 
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public void setLocalizacao(String localizacao) {
+        this.localizacao = localizacao;
+    }
+
+    public void setAnoDeFabricacao(String anoDeFabricacao) {
+        this.anoDeFabricacao = anoDeFabricacao;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
     public void atualizaTranca(TrancaDTO dadosAlteracaoTranca) throws IllegalArgumentException {
         this.anoDeFabricacao = dadosAlteracaoTranca.anoDeFabricacao();
         this.modelo = dadosAlteracaoTranca.modelo();

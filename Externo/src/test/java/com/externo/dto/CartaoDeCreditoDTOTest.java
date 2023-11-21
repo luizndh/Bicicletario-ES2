@@ -10,7 +10,7 @@ public class CartaoDeCreditoDTOTest {
         // Arrange
         String nomeTitular = "Joao da Silva";
         String numero = "1234567891234567";
-        String validade = "10/26";
+        String validade = "10/2026";
         String cvv = "123";
 
         // Act

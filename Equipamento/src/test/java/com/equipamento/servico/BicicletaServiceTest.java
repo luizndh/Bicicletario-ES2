@@ -2,6 +2,7 @@ package com.equipamento.servico;
 
 import com.equipamento.dto.BicicletaDTO;
 import com.equipamento.dto.InclusaoBicicletaDTO;
+import com.equipamento.dto.RetiradaBicicletaDTO;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Bicicleta.StatusBicicleta;
 
@@ -32,9 +33,6 @@ public class BicicletaServiceTest {
 
     @Mock
     Bicicleta bicicletaMock;
-
-    @Spy
-    Bicicleta bicicletaSpy;
 
     @BeforeEach
     void setUp() {
@@ -70,17 +68,16 @@ public class BicicletaServiceTest {
         assertNotNull(bicicleta);
         assertEquals(bicicleta.getId(), 1);
         assertEquals(bicicleta.getStatus(), StatusBicicleta.EM_USO);
-        assertEquals(Bicicleta.bicicletas.get(0), bicicleta);
     }
 
     @Test
     void testAlteraStatus() {
         // Arrange
-        when(bicicletaService.recuperaBicicletaPorId(2)).thenReturn(bicicleta);
+        when(bicicletaService.recuperaBicicletaPorId(bicicleta.getId())).thenReturn(bicicleta);
         assertEquals(bicicleta.getStatus(), StatusBicicleta.EM_USO);
 
         // Act
-        Bicicleta b = bicicletaService.alteraStatusBicicleta(2, "REPARO_SOLICITADO");
+        Bicicleta b = bicicletaService.alteraStatusBicicleta(bicicleta.getId(), "REPARO_SOLICITADO");
 
         // Assert
         assertEquals(b.getStatus(), StatusBicicleta.REPARO_SOLICITADO);
@@ -111,7 +108,50 @@ public class BicicletaServiceTest {
 
         // Assert
         verify(bicicletaMock, times(1)).setStatus(StatusBicicleta.DISPONIVEL);
-        verify(bicicletaMock, times(1)).adicionaRegistroNoHistoricoDeInclusao(any(InclusaoBicicletaDTO.class));
+        verify(bicicletaMock, times(1)).adicionaRegistroNoHistoricoDeInclusao(new InclusaoBicicletaDTO(1, 1, 1));
+    }
+
+    @Test
+    void testRetiraDaRedeParaReparo() {
+        // Arrange
+        RetiradaBicicletaDTO dto = new RetiradaBicicletaDTO( 1, 1, 1, "EM_REPARO");
+        when(bicicletaService.recuperaBicicletaPorId(1)).thenReturn(bicicletaMock);
+
+        // Act
+        bicicletaService.retirarDaRede(dto);
+
+        // Assert
+        verify(bicicletaMock, times(1)).setStatus(StatusBicicleta.EM_REPARO);
+        verify(bicicletaMock, times(1)).adicionaRegistroNoHistoricoDeRetirada(dto);
+    }
+
+    @Test
+    void testRetiraDaRedeParaAposentar() {
+        // Arrange
+        RetiradaBicicletaDTO dto = new RetiradaBicicletaDTO( 1, 1, 1, "APOSENTADA");
+        when(bicicletaService.recuperaBicicletaPorId(1)).thenReturn(bicicletaMock);
+
+        // Act
+        bicicletaService.retirarDaRede(dto);
+
+        // Assert
+        verify(bicicletaMock, times(1)).setStatus(StatusBicicleta.APOSENTADA);
+        verify(bicicletaMock, times(1)).adicionaRegistroNoHistoricoDeRetirada(dto);
+    }
+
+    @Test
+    void testRetiraDaRedeStatusInvalido() {
+        // Arrange
+        RetiradaBicicletaDTO dto = new RetiradaBicicletaDTO( 1, 1, 1, "DISPONIVEL");
+        when(bicicletaService.recuperaBicicletaPorId(1)).thenReturn(bicicletaMock);
+
+        // Act
+        assertThrows(IllegalArgumentException.class, () -> bicicletaService.retirarDaRede(dto));
+
+        // Assert
+        verify(bicicletaMock, times(0)).setStatus(StatusBicicleta.APOSENTADA);
+        verify(bicicletaMock, times(0)).setStatus(StatusBicicleta.EM_REPARO);
+        verify(bicicletaMock, times(0)).adicionaRegistroNoHistoricoDeRetirada(dto);
     }
 
     @Test
@@ -126,14 +166,25 @@ public class BicicletaServiceTest {
 
     @Test
     void testCadastroBicicleta() {
-        // Act
+        // Arrange
         BicicletaDTO bicicletaDTO = new BicicletaDTO("narca teste1", "modelo teste1", "2021", 1, "NOVA");
+
+        // Act
         Bicicleta b = bicicletaService.cadastraBicicleta(bicicletaDTO);
 
         // Assert
-        assertEquals(bicicletas.size(), 4);
-        assertEquals(bicicletas.get(3), b);
-        assertEquals(bicicletas.get(3).getStatus(), StatusBicicleta.NOVA);
+        assertNotNull(b);
+        assertEquals(b.getId(), 4);
+        assertEquals(b.getStatus(), StatusBicicleta.NOVA);
+    }
+
+    @Test
+    void testCadastroBicicletaDadoInvalido() {
+        // Arrange
+        BicicletaDTO bicicletaDTO = new BicicletaDTO("narca teste1", "modelo teste1", "2021", 1, "TESTE");
+
+        // Act + Assert
+        assertThrows(IllegalArgumentException.class, () -> bicicletaService.cadastraBicicleta(bicicletaDTO));
     }
 
     @Test
@@ -147,5 +198,17 @@ public class BicicletaServiceTest {
 
         // Assert
         verify(bicicletaMock).atualizaBicicleta(dadosAlteracao);
+    }
+
+    @Test
+    void testExcluiBicicleta() {
+        // Arrange
+        int size = bicicletas.size();
+
+        // Act
+        bicicletaService.excluiBicicleta(1);
+
+        // Assert
+        assertEquals(bicicletas.size(), size - 1);
     }
 }

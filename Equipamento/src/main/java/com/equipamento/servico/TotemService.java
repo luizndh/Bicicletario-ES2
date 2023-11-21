@@ -20,9 +20,10 @@ public class TotemService {
     @Autowired
     private BicicletaService bicicletaService;
 
-    @Autowired TrancaService trancaService;
+    @Autowired
+    TrancaService trancaService;
 
-    private Totem recuperaTotemPorId(int idTotem) {
+    public Totem recuperaTotemPorId(int idTotem) {
         if(idTotem < 0) {
             throw new IllegalArgumentException("Id da tranca inválido");
         }
@@ -41,7 +42,7 @@ public class TotemService {
 
     public Totem alteraTotem(int idTotem, TotemDTO dadosAlteracaoTotem) {
         Totem t = recuperaTotemPorId(idTotem);
-        t.atualizaTotem(dadosAlteracaoTotem);
+        atualizaTotem(t, dadosAlteracaoTotem);
         return t;
     }
 
@@ -70,5 +71,10 @@ public class TotemService {
         }
 
         return bicicletas;
+    }
+
+    void atualizaTotem(Totem totem, TotemDTO dadosAlteracao) {
+        totem.setLocalizacao(dadosAlteracao.localizacao());
+        totem.setDescricao(dadosAlteracao.descricao());
     }
 }

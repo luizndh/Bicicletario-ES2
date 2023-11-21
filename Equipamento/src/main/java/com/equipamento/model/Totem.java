@@ -12,18 +12,21 @@ public class Totem {
     private String descricao;
     private List<Tranca> trancas;
 
-    public static final List<Totem> totens = new ArrayList<>();
+    public void setLocalizacao(String localizacao) {
+        this.localizacao = localizacao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public static List<Totem> totens = new ArrayList<>();
 
     public Totem(TotemDTO dadosCadastroTotem) {
         this.id = totens.size() + 1;
         this.descricao = dadosCadastroTotem.descricao();
         this.localizacao = dadosCadastroTotem.localizacao();
         this.trancas = new ArrayList<>();
-    }
-
-    public void atualizaTotem(TotemDTO dadosAlteracaoTotem) {
-        this.descricao = dadosAlteracaoTotem.descricao();
-        this.localizacao = dadosAlteracaoTotem.localizacao();
     }
 
     public int getId() {

@@ -1,6 +1,7 @@
 package com.externo.controller;
 
 import com.externo.dto.EmailDTO;
+import com.externo.model.Email;
 import com.externo.servico.EmailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,9 +17,9 @@ public class EmailController {
     @Autowired
     private EmailService service;
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = "application/json")
     @ApiOperation(value="Envia um email")
-    public ResponseEntity<Boolean> enviarEmail(@RequestBody EmailDTO dadosEmail) {
+    public ResponseEntity<Email> enviarEmail(@RequestBody EmailDTO dadosEmail) {
         return ResponseEntity.ok().body(this.service.enviarEmail(dadosEmail));
     }
 }

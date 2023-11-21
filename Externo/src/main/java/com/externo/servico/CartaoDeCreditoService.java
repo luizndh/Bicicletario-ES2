@@ -18,8 +18,8 @@ public class CartaoDeCreditoService {
         if (dadosCadastroCartao.cvv().length() != 3) {
             throw new IllegalArgumentException("O tamanho do cvv " + dadosCadastroCartao.cvv() + " nao eh 3");
         }
-        if(!validaData(dadosCadastroCartao.validade(), "MM/yy")){
-            throw new IllegalArgumentException("Formato incorreto da data " + dadosCadastroCartao.numero());
+        if(!validaData(dadosCadastroCartao.validade(), "MM/yyyy")){
+            throw new IllegalArgumentException("Formato incorreto da data " + dadosCadastroCartao.validade());
         }
         return true;
     }
