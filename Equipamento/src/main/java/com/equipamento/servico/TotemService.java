@@ -25,14 +25,14 @@ public class TotemService {
 
     public Totem recuperaTotemPorId(int idTotem) {
         if(idTotem < 0) {
-            throw new IllegalArgumentException("Id da tranca inválido");
+            throw new IllegalArgumentException();
         }
         for (Totem t : totens) {
             if (t.getId() == idTotem) {
                 return t;
             }
         }
-        throw new NoSuchElementException("O totem com id " + idTotem + " não existe");
+        throw new NoSuchElementException();
     }
 
     public void excluiTotem(int idTotem) {

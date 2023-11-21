@@ -7,6 +7,7 @@ import com.equipamento.dto.TotemDTO;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Totem;
 import com.equipamento.model.Tranca;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,8 +51,8 @@ public class TotemServiceTest {
     @Mock
     Bicicleta bicicletaMock3;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         Totem totem1 = new Totem(new TotemDTO("localizacao teste1", "descricao teste1"));
         Totem totem2 = new Totem(new TotemDTO("localizacao teste2", "descricao teste2"));
         Totem totem3 = new Totem(new TotemDTO("localizacao teste3", "descricao teste3"));
