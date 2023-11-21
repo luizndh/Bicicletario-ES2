@@ -42,7 +42,7 @@ public class TotemController {
 
     @DeleteMapping("/{idTotem}")
     @ApiOperation(value="Exclui um totem do sistema")
-    public ResponseEntity<?> excluiTotem(@PathVariable int idTotem) {
+    public ResponseEntity<Void> excluiTotem(@PathVariable int idTotem) {
         this.service.excluiTotem(idTotem);
         return ResponseEntity.ok().build();
     }

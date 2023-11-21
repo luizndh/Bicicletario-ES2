@@ -55,7 +55,7 @@ public class FuncionarioController {
 
     @DeleteMapping("/{matriculaFuncionario}")
     @ApiOperation(value="Exclui um funcionario do sistema")
-    public ResponseEntity<?> excluiBicicleta(@PathVariable String matriculaFuncionario) {
+    public ResponseEntity<Void> excluiBicicleta(@PathVariable String matriculaFuncionario) {
         this.service.excluiFuncionario(matriculaFuncionario);
         return ResponseEntity.ok().build();
     }

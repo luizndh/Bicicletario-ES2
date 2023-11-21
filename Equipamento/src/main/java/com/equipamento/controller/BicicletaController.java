@@ -49,7 +49,7 @@ public class BicicletaController {
 
     @DeleteMapping("/{idBicicleta}")
     @ApiOperation(value="Exclui uma bicicleta do sistema")
-    public ResponseEntity<?> excluiBicicleta(@PathVariable int idBicicleta) {
+    public ResponseEntity<Void> excluiBicicleta(@PathVariable int idBicicleta) {
         this.service.excluiBicicleta(idBicicleta);
         return ResponseEntity.ok().build();
     }
