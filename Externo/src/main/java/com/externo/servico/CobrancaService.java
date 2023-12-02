@@ -1,49 +1,91 @@
 package com.externo.servico;
 
-import com.externo.dto.CartaoDeCreditoDTO;
-import com.externo.dto.CobrancaDTO;
-import com.externo.dto.EmailDTO;
+import com.externo.dto.*;
 import com.externo.model.Cobranca;
-import com.externo.servico.EmailService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stripe.model.Card;
+import com.stripe.model.Customer;
 import com.stripe.model.PaymentIntent;
+import com.stripe.model.Token;
 import com.stripe.param.PaymentIntentConfirmParams;
 import com.stripe.param.PaymentIntentCreateParams;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.stripe.Stripe;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.externo.model.Cobranca.cobrancas;
 
 @Service
 public class CobrancaService {
 
+    @Autowired
+    private EmailService service;
+
     public Cobranca realizaCobranca(Cobranca dadosCobranca) {
         System.out.println("Realizando cobranca com id: " + dadosCobranca.getId());
-        if (!dadosCobranca.getStatus().toString().equals(Cobranca.StatusCobranca.PENDENTE.toString())) throw new IllegalArgumentException("Pagamento nao esta pendente!");
-        EmailService emailService = new EmailService();
+        if (!dadosCobranca.getStatus().equals(Cobranca.StatusCobranca.PENDENTE.toString())) throw new IllegalArgumentException("Pagamento nao esta pendente!");
+        if (dadosCobranca.getValor() < 0) throw new IllegalArgumentException("Valor da cobranca nao pode ser negativo");
+        if (dadosCobranca.getCiclista() < 0) throw new IllegalArgumentException("Id do ciclista nao pode ser negativo");
+        System.out.println("passou das validacoes");
+
+        System.out.println("passou da criacao do emailservice");
+
+        //String emailCiclista = recuperaEmailDeCiclistaPorId(dadosCobranca.getCiclista());
+        String emailCiclista = "lucas.arruda@edu.unirio.br";
+
+        //CartaoDeCreditoResponseDTO cartaoCiclista = recuperaCartaoDeCreditoDeCiclistaPorId(dadosCobranca.getCiclista());
+        CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2021", "123");
+
+        System.out.println("passou da recuperacao do cartao do ciclista");
 
         try {
             Stripe.apiKey = "sk_test_51ODEoGK2SlPC0gAXe7gRKx3tgwYgdxaYf8xoTkJvrMdUXMSXMPzwmdFEprKG654eo1h8JRuyQtNvqIU8iPW7T7nE00W6te3PX4";
 
-            //TODO INTEGRACAO
-            //vou criar um cartao de credito para simular,
-            //mas quando integrar ele vai pegar do cartao do ciclista usando o id
-            CartaoDeCreditoDTO cartao = new CartaoDeCreditoDTO("João da Silva", "1212121212121212", "09/2029", "123");
             //IMPORTANTE: por causa de uma limitacao do stripe, por enquanto ele nao consegue passar o cartao diretamente
+            //parte que cria o cartao no stripe
+            System.out.println("Test area enter");
+            Customer customer = Customer.retrieve("cus_P7CoGl1HpcOQoC");
+            Map<String, Object> cardParams = new HashMap<String, Object>();
+            cardParams.put("number", cartaoCiclista.numero());
+            cardParams.put("exp_month", cartaoCiclista.validade().split("/")[0]);
+            cardParams.put("exp_year", cartaoCiclista.validade().split("/")[1]);
+            cardParams.put("cvc", cartaoCiclista.cvv());
 
+            Map<String, Object> tokenParams = new HashMap<String, Object>();
+            tokenParams.put("card", cardParams);
+            Token cardToken = Token.create(tokenParams);
+
+            Map<String, Object> sourceParams = new HashMap<String, Object>();
+            sourceParams.put("source", cardToken.getId()); //?
+            Card source = (Card) customer.getSources().create(sourceParams);
+            System.out.println("Card created: " + source.toString());
+
+            System.out.println("Test area exit");
+            //
+
+            System.out.println("payment intent enter");
             PaymentIntentCreateParams createParams = PaymentIntentCreateParams.builder().setAmount(dadosCobranca.getValor()).setCurrency("brl").build();
             PaymentIntent paymentIntent = PaymentIntent.create(createParams);
 
             PaymentIntent confirmedPaymentIntent = paymentIntent.confirm(PaymentIntentConfirmParams.builder().setPaymentMethod("pm_card_visa").build());
+            System.out.println("payment intent exit");
 
             if (confirmedPaymentIntent.getStatus().equals("succeeded")) {
                 System.out.println("Cobranca realizada com sucesso");
                 //envia email notificando ciclista que a cobranca atrasada foi paga
-                //TODO integracao, pegar email do ciclista
-                emailService.enviarEmail(new EmailDTO("lucas.arruda@edu.unirio.br", "Cobranca paga", "Sua cobranca em atraso com o valor " + dadosCobranca.getValor() + " foi paga com sucesso!"));
+
+
+                service.enviarEmail(new EmailDTO(emailCiclista, "Cobranca paga", "Sua cobranca em atraso com o valor " + dadosCobranca.getValor() + " foi paga com sucesso!"));
                 //altera o status da cobranca na fila para paga
                 for (Cobranca c : cobrancas) {
                     if (c.getId() == dadosCobranca.getId()) {
@@ -54,13 +96,13 @@ public class CobrancaService {
             }
 
         } catch (Exception e) {
-            //TODO integracao, pegar email do ciclista
-            emailService.enviarEmail(new EmailDTO("lucas.arruda@edu.unirio.br", "Erro na cobranca em atraso", "Houve um erro no processamento do pagamento da sua cobranca em atraso com o valor " + dadosCobranca.getValor()));
             e.printStackTrace();
+
+            service.enviarEmail(new EmailDTO(emailCiclista, "Erro na cobranca em atraso", "Houve um erro no processamento do pagamento da sua cobranca em atraso com o valor " + dadosCobranca.getValor()));
             throw new IllegalArgumentException("Erro no processamento do pagamento");
         }
-        //TODO integracao, pegar email do ciclista
-        emailService.enviarEmail(new EmailDTO("lucas.arruda@edu.unirio.br", "Erro na cobranca em atraso", "Houve um erro no pagamento da sua cobranca em atraso com o valor " + dadosCobranca.getValor()));
+
+        service.enviarEmail(new EmailDTO(emailCiclista, "Erro na cobranca em atraso", "Houve um erro no pagamento da sua cobranca em atraso com o valor " + dadosCobranca.getValor()));
         throw new IllegalArgumentException("Erro no processamento do pagamento");
     }
 
@@ -68,10 +110,10 @@ public class CobrancaService {
         List<Cobranca> processadas = new ArrayList<>();
         boolean flag = false;
         for (Cobranca c : cobrancas) {
-            if (c.getStatus().equals(Cobranca.StatusCobranca.PENDENTE)) {
+            if (c.getStatus().equals(Cobranca.StatusCobranca.PENDENTE.toString())) {
                 flag = true;
                 System.out.println("Processando cobranca com id " + c.getId());
-                processadas.add(realizaCobranca(new Cobranca(new CobrancaDTO(c.getStatus().toString(), c.getHoraSolicitacao(), c.getHoraFinalizacao(), c.getValor(), c.getCiclista()))));
+                processadas.add(realizaCobranca(new Cobranca(new CobrancaDTO(c.getStatus(), c.getHoraSolicitacao(), c.getHoraFinalizacao(), c.getValor(), c.getCiclista()))));
             }
         }
         if(!flag) throw new IllegalArgumentException("Nao ha cobrancas pendentes");
@@ -100,5 +142,43 @@ public class CobrancaService {
             }
         }
         throw new IllegalArgumentException("A cobranca com id " + idCobranca + " não existe");
+    }
+
+    private String recuperaEmailDeCiclistaPorId(int idCiclista) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("localhost:8081/ciclista/" + idCiclista))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            CiclistaResponseDTO ciclistaResponse = mapper.readValue(response.body(), CiclistaResponseDTO.class);
+            return ciclistaResponse.email();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private CartaoDeCreditoResponseDTO recuperaCartaoDeCreditoDeCiclistaPorId(int idCiclista) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("localhost:8081/cartaoDeCredito/" + idCiclista))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            CartaoDeCreditoResponseDTO cartaoResponse = mapper.readValue(response.body(), CartaoDeCreditoResponseDTO.class);
+            return cartaoResponse;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
