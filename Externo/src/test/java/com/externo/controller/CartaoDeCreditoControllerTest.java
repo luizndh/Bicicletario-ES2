@@ -14,6 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,7 +54,7 @@ public class CartaoDeCreditoControllerTest {
     """;
         String json = "{\"nomeTitular\":\"Marcos da Silva\",\"numero\":\"9182736451230192\",\"validade\":\"02/2028\",\"cvv\":\"987\"}";
 
-        when(cartaoDeCreditoService.validaCartaoDeCredito(cartaoDTO)).thenReturn(true);
+        when(cartaoDeCreditoService.validaCartaoDeCredito(cartaoDTO)).thenReturn(Map.of("codigo", "200", "mensagem", "Cartao Valido"));
 
         // Act
         var response = this.mvc.perform(post("/validaCartaoDeCredito")
