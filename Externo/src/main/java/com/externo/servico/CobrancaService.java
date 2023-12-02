@@ -18,6 +18,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,65 +35,47 @@ public class CobrancaService {
 
     public Cobranca realizaCobranca(Cobranca dadosCobranca) {
         System.out.println("Realizando cobranca com id: " + dadosCobranca.getId());
-        if (!dadosCobranca.getStatus().equals(Cobranca.StatusCobranca.PENDENTE.toString())) throw new IllegalArgumentException("Pagamento nao esta pendente!");
-        if (dadosCobranca.getValor() < 0) throw new IllegalArgumentException("Valor da cobranca nao pode ser negativo");
-        if (dadosCobranca.getCiclista() < 0) throw new IllegalArgumentException("Id do ciclista nao pode ser negativo");
-        System.out.println("passou das validacoes");
-
-        System.out.println("passou da criacao do emailservice");
+        if(dadosCobranca.getStatus() != null) {
+            if (!dadosCobranca.getStatus().equals(Cobranca.StatusCobranca.PENDENTE.toString()))
+                throw new IllegalArgumentException("Pagamento nao esta pendente!");
+            if (dadosCobranca.getValor() < 0)
+                throw new IllegalArgumentException("Valor da cobranca nao pode ser negativo");
+            if (dadosCobranca.getCiclista() < 0)
+                throw new IllegalArgumentException("Id do ciclista nao pode ser negativo");
+        }
+        else if(dadosCobranca.getHoraSolicitacao() == null) {
+            dadosCobranca.setHoraSolicitacao(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        }
 
         //String emailCiclista = recuperaEmailDeCiclistaPorId(dadosCobranca.getCiclista());
         String emailCiclista = "lucas.arruda@edu.unirio.br";
 
         //CartaoDeCreditoResponseDTO cartaoCiclista = recuperaCartaoDeCreditoDeCiclistaPorId(dadosCobranca.getCiclista());
-        CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2021", "123");
-
-        System.out.println("passou da recuperacao do cartao do ciclista");
+        CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2029", "123");
 
         try {
             Stripe.apiKey = "sk_test_51ODEoGK2SlPC0gAXe7gRKx3tgwYgdxaYf8xoTkJvrMdUXMSXMPzwmdFEprKG654eo1h8JRuyQtNvqIU8iPW7T7nE00W6te3PX4";
 
-            //IMPORTANTE: por causa de uma limitacao do stripe, por enquanto ele nao consegue passar o cartao diretamente
-            //parte que cria o cartao no stripe
-            System.out.println("Test area enter");
-            Customer customer = Customer.retrieve("cus_P7CoGl1HpcOQoC");
-            Map<String, Object> cardParams = new HashMap<String, Object>();
-            cardParams.put("number", cartaoCiclista.numero());
-            cardParams.put("exp_month", cartaoCiclista.validade().split("/")[0]);
-            cardParams.put("exp_year", cartaoCiclista.validade().split("/")[1]);
-            cardParams.put("cvc", cartaoCiclista.cvv());
-
-            Map<String, Object> tokenParams = new HashMap<String, Object>();
-            tokenParams.put("card", cardParams);
-            Token cardToken = Token.create(tokenParams);
-
-            Map<String, Object> sourceParams = new HashMap<String, Object>();
-            sourceParams.put("source", cardToken.getId()); //?
-            Card source = (Card) customer.getSources().create(sourceParams);
-            System.out.println("Card created: " + source.toString());
-
-            System.out.println("Test area exit");
-            //
-
-            System.out.println("payment intent enter");
             PaymentIntentCreateParams createParams = PaymentIntentCreateParams.builder().setAmount(dadosCobranca.getValor()).setCurrency("brl").build();
             PaymentIntent paymentIntent = PaymentIntent.create(createParams);
 
             PaymentIntent confirmedPaymentIntent = paymentIntent.confirm(PaymentIntentConfirmParams.builder().setPaymentMethod("pm_card_visa").build());
-            System.out.println("payment intent exit");
 
             if (confirmedPaymentIntent.getStatus().equals("succeeded")) {
                 System.out.println("Cobranca realizada com sucesso");
                 //envia email notificando ciclista que a cobranca atrasada foi paga
-
-
                 service.enviarEmail(new EmailDTO(emailCiclista, "Cobranca paga", "Sua cobranca em atraso com o valor " + dadosCobranca.getValor() + " foi paga com sucesso!"));
+
                 //altera o status da cobranca na fila para paga
                 for (Cobranca c : cobrancas) {
                     if (c.getId() == dadosCobranca.getId()) {
                         c.setStatus(Cobranca.StatusCobranca.PAGA.toString());
+                        c.setHoraFinalizacao(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                        System.out.println("Cobranca com id " + c.getId() + " alterada para paga");
                     }
                 }
+                dadosCobranca.setStatus(Cobranca.StatusCobranca.PAGA.toString());
+                dadosCobranca.setHoraFinalizacao(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                 return dadosCobranca;
             }
 
@@ -125,7 +109,8 @@ public class CobrancaService {
         if(dadosCobranca.ciclista() < 0) throw new IllegalArgumentException("Id do ciclista nao pode ser negativo");
 
         Cobranca cob = new Cobranca(dadosCobranca);
-        //cob.setStatus(Cobranca.StatusCobranca.PENDENTE);
+        cob.setStatus(Cobranca.StatusCobranca.PENDENTE.toString());
+        cob.setHoraSolicitacao(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
         cobrancas.add(cob);
         return cob;

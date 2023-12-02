@@ -24,9 +24,12 @@ public class CobrancaController {
     @ApiOperation(value="Realiza a cobranca")
     public ResponseEntity<Cobranca> realizaCobranca(@RequestBody CobrancaDTO dadosCobranca) throws StripeException {
         System.out.println(dadosCobranca);
+        //TODO em andamento
         Cobranca dados = new Cobranca(dadosCobranca);
         System.out.println(dados.getValor());
+
         Cobranca resultado = this.service.realizaCobranca(dados);
+
         return ResponseEntity.ok().body(resultado);
     }
 
