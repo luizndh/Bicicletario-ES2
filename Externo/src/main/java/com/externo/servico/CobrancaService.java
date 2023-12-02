@@ -2,7 +2,9 @@ package com.externo.servico;
 
 import com.externo.dto.CartaoDeCreditoDTO;
 import com.externo.dto.CobrancaDTO;
+import com.externo.dto.EmailDTO;
 import com.externo.model.Cobranca;
+import com.externo.servico.EmailService;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentConfirmParams;
 import com.stripe.param.PaymentIntentCreateParams;
@@ -19,9 +21,9 @@ import static com.externo.model.Cobranca.cobrancas;
 public class CobrancaService {
 
     public Cobranca realizaCobranca(Cobranca dadosCobranca) {
-        System.out.println("Realizando cobranca com id " + dadosCobranca.getId());
-        System.out.println("sussy: " + dadosCobranca.getStatus().toString());
+        System.out.println("Realizando cobranca com id: " + dadosCobranca.getId());
         if (!dadosCobranca.getStatus().toString().equals(Cobranca.StatusCobranca.PENDENTE.toString())) throw new IllegalArgumentException("Pagamento nao esta pendente!");
+        EmailService emailService = new EmailService();
 
         try {
             Stripe.apiKey = "sk_test_51ODEoGK2SlPC0gAXe7gRKx3tgwYgdxaYf8xoTkJvrMdUXMSXMPzwmdFEprKG654eo1h8JRuyQtNvqIU8iPW7T7nE00W6te3PX4";
@@ -39,19 +41,26 @@ public class CobrancaService {
 
             if (confirmedPaymentIntent.getStatus().equals("succeeded")) {
                 System.out.println("Cobranca realizada com sucesso");
+                //envia email notificando ciclista que a cobranca atrasada foi paga
+                //TODO integracao, pegar email do ciclista
+                emailService.enviarEmail(new EmailDTO("lucas.arruda@edu.unirio.br", "Cobranca paga", "Sua cobranca em atraso com o valor " + dadosCobranca.getValor() + " foi paga com sucesso!"));
                 //altera o status da cobranca na fila para paga
                 for (Cobranca c : cobrancas) {
                     if (c.getId() == dadosCobranca.getId()) {
-                        c.setStatus(Cobranca.StatusCobranca.PAGA);
+                        c.setStatus(Cobranca.StatusCobranca.PAGA.toString());
                     }
                 }
                 return dadosCobranca;
             }
 
         } catch (Exception e) {
+            //TODO integracao, pegar email do ciclista
+            emailService.enviarEmail(new EmailDTO("lucas.arruda@edu.unirio.br", "Erro na cobranca em atraso", "Houve um erro no processamento do pagamento da sua cobranca em atraso com o valor " + dadosCobranca.getValor()));
             e.printStackTrace();
             throw new IllegalArgumentException("Erro no processamento do pagamento");
         }
+        //TODO integracao, pegar email do ciclista
+        emailService.enviarEmail(new EmailDTO("lucas.arruda@edu.unirio.br", "Erro na cobranca em atraso", "Houve um erro no pagamento da sua cobranca em atraso com o valor " + dadosCobranca.getValor()));
         throw new IllegalArgumentException("Erro no processamento do pagamento");
     }
 
