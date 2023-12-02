@@ -2,15 +2,18 @@ package com.equipamento.servico;
 
 import static com.equipamento.model.Tranca.trancas;
 
-import com.equipamento.dto.InclusaoTrancaDTO;
-import com.equipamento.dto.RetiradaTrancaDTO;
-import com.equipamento.dto.TrancaDTO;
+import com.equipamento.dto.*;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Tranca.StatusTranca;
 import com.equipamento.model.Tranca;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -92,7 +95,7 @@ public class TrancaService {
         t.adicionaRegistroNoHistoricoDeInclusao(dadosInclusao);
 
         //TODO: enviar email para o funcionario informando dados de inclusao - INTEGRACAO
-        this.enviaEmailFake(
+        this.enviaEmail(
                 this.recuperaEmailDeFuncionarioPorId(dadosInclusao.idFuncionario()),
                 "Integrando tranca na rede",
                 "Id da tranca: " + dadosInclusao.idTranca() +
@@ -113,7 +116,7 @@ public class TrancaService {
         t.adicionaRegistroNoHistoricoDeRetirada(dadosRetirada);
 
         //TODO: enviar email para o funcionario informando dados de inclusao - INTEGRACAO
-        this.enviaEmailFake(
+        this.enviaEmail(
                 this.recuperaEmailDeFuncionarioPorId(dadosRetirada.idFuncionario()),
                 "Integrando tranca na rede",
                 "Id da tranca: " + dadosRetirada.idTranca() +
@@ -128,11 +131,43 @@ public class TrancaService {
         return bicicletaService.recuperaBicicletaPorId(t.getBicicleta());
     }
 
-    private void enviaEmailFake(String email, String assunto, String corpo) {
-        return;
+    private void enviaEmail(String email, String assunto, String mensagem) {
+        ObjectMapper mapper = new ObjectMapper();
+        EmailDTO novoEmail = new EmailDTO(email, assunto, mensagem);
+
+        try {
+            String jsonEntrada = mapper.writeValueAsString(novoEmail);
+
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("localhost:8081/enviarEmail"))
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonEntrada))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            EmailResponseDTO emailResponse = mapper.readValue(response.body(), EmailResponseDTO.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private String recuperaEmailDeFuncionarioPorId(int idFuncionario) {
-        return "emailteste@gmail.com";
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("localhost:8082/funcionario/" + idFuncionario))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            FuncionarioDTO funcionarioResponse = mapper.readValue(response.body(), FuncionarioDTO.class);
+            return funcionarioResponse.email();
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

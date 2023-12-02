@@ -1,12 +1,15 @@
 package com.equipamento.servico;
 
-import com.equipamento.dto.BicicletaDTO;
-import com.equipamento.dto.InclusaoBicicletaDTO;
-import com.equipamento.dto.RetiradaBicicletaDTO;
+import com.equipamento.dto.*;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.model.Bicicleta.StatusBicicleta;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -55,17 +58,16 @@ public class BicicletaService {
     }
 
     public void integrarNaRede(InclusaoBicicletaDTO dadosInclusao) {
-        //TODO: Em caso de repado, verificar se o funcionário é o mesmo que retirou a tranca? depois fazer o que?
         Bicicleta b = recuperaBicicletaPorId(dadosInclusao.idBicicleta());
         if(b.getStatus() == StatusBicicleta.EM_USO) {
             //TODO: Redirecionar para UC4 passo 3
+            // Fazer chamada para devolver bicicleta do aluguel.
             return;
         }
         b.setStatus(StatusBicicleta.DISPONIVEL);
         b.adicionaRegistroNoHistoricoDeInclusao(dadosInclusao);
 
-        //TODO: enviar email para o funcionario informando dados de inclusao - INTEGRACAO
-        this.enviaEmailFake(
+        this.enviaEmail(
                 this.recuperaEmailDeFuncionarioPorId(dadosInclusao.idFuncionario()),
                 "Integrando bicicleta na rede",
                 "Id da tranca: " + dadosInclusao.idBicicleta() +
@@ -84,8 +86,7 @@ public class BicicletaService {
         }
         b.adicionaRegistroNoHistoricoDeRetirada(dadosRetirada);
 
-        //TODO: enviar email para o funcionario informando dados de retirada - INTEGRACAO
-        this.enviaEmailFake(
+        this.enviaEmail(
                 this.recuperaEmailDeFuncionarioPorId(dadosRetirada.idFuncionario()),
                 "Integrando tranca na rede",
                         "Id da tranca: " + dadosRetirada.idTranca() +
@@ -94,11 +95,43 @@ public class BicicletaService {
                         "Novo status da bicicleta: " + dadosRetirada.statusAcaoReparador());
     }
 
-    private void enviaEmailFake(String email, String assunto, String corpo) {
-        return;
+    private void enviaEmail(String email, String assunto, String mensagem) {
+        ObjectMapper mapper = new ObjectMapper();
+        EmailDTO novoEmail = new EmailDTO(email, assunto, mensagem);
+
+        try {
+            String jsonEntrada = mapper.writeValueAsString(novoEmail);
+
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("localhost:8081/enviarEmail"))
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonEntrada))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            EmailResponseDTO emailResponse = mapper.readValue(response.body(), EmailResponseDTO.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private String recuperaEmailDeFuncionarioPorId(int idFuncionario) {
-        return "emailteste@gmail.com";
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("localhost:8082/funcionario/" + idFuncionario))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            FuncionarioDTO funcionarioResponse = mapper.readValue(response.body(), FuncionarioDTO.class);
+            return funcionarioResponse.email();
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
