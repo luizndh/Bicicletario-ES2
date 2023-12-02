@@ -44,7 +44,7 @@ public class CobrancaService {
                 throw new IllegalArgumentException("Id do ciclista nao pode ser negativo");
         }
         else if(dadosCobranca.getHoraSolicitacao() == null) {
-            dadosCobranca.setHoraSolicitacao(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            dadosCobranca.setHoraSolicitacao(LocalDateTime. now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }
 
         //String emailCiclista = recuperaEmailDeCiclistaPorId(dadosCobranca.getCiclista());
@@ -97,7 +97,7 @@ public class CobrancaService {
             if (c.getStatus().equals(Cobranca.StatusCobranca.PENDENTE.toString())) {
                 flag = true;
                 System.out.println("Processando cobranca com id " + c.getId());
-                processadas.add(realizaCobranca(new Cobranca(new CobrancaDTO(c.getStatus(), c.getHoraSolicitacao(), c.getHoraFinalizacao(), c.getValor(), c.getCiclista()))));
+                processadas.add(realizaCobranca(c));
             }
         }
         if(!flag) throw new IllegalArgumentException("Nao ha cobrancas pendentes");
