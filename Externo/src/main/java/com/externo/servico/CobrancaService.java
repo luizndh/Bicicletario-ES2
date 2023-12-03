@@ -20,10 +20,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.externo.model.Cobranca.cobrancas;
 
@@ -126,7 +123,7 @@ public class CobrancaService {
                 }
             }
         }
-        throw new IllegalArgumentException("A cobranca com id " + idCobranca + " não existe");
+        throw new NoSuchElementException("A cobranca com id " + idCobranca + " não existe");
     }
 
     private String recuperaEmailDeCiclistaPorId(int idCiclista) {
