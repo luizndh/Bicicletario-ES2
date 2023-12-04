@@ -48,11 +48,11 @@ public class CobrancaService {
             dadosCobranca.setHoraSolicitacao(LocalDateTime. now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }
 
-        //String emailCiclista = recuperaEmailDeCiclistaPorId(dadosCobranca.getCiclista());
-        String emailCiclista = "lucas.arruda@edu.unirio.br";
+        String emailCiclista = recuperaEmailDeCiclistaPorId(dadosCobranca.getCiclista());
+        //String emailCiclista = "lucas.arruda@edu.unirio.br";
 
-        //CartaoDeCreditoResponseDTO cartaoCiclista = recuperaCartaoDeCreditoDeCiclistaPorId(dadosCobranca.getCiclista());
-        CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2029", "123");
+        CartaoDeCreditoResponseDTO cartaoCiclista = recuperaCartaoDeCreditoDeCiclistaPorId(dadosCobranca.getCiclista());
+        //CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2029", "123");
 
         try {
             Stripe.apiKey = "sk_test_51ODEoGK2SlPC0gAXe7gRKx3tgwYgdxaYf8xoTkJvrMdUXMSXMPzwmdFEprKG654eo1h8JRuyQtNvqIU8iPW7T7nE00W6te3PX4";
