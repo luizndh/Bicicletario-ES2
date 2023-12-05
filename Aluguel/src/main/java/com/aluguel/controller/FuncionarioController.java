@@ -2,6 +2,7 @@ package com.aluguel.controller;
 
 import java.util.List;
 
+import com.aluguel.dto.FuncionarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,7 +50,7 @@ public class FuncionarioController {
 
     @PutMapping(value="/{matriculaFuncionario}", consumes = "application/json")
     @ApiOperation(value="Altera os dados de um funcionario existente")
-    public ResponseEntity<Funcionario> alteraFuncionario(@PathVariable String matriculaFuncionario, @RequestBody NovoFuncionarioDTO dadosAlteracaoFuncionario) {
+    public ResponseEntity<Funcionario> alteraFuncionario(@PathVariable String matriculaFuncionario, @RequestBody FuncionarioDTO dadosAlteracaoFuncionario) {
         return ResponseEntity.ok().body(this.service.alteraFuncionario(matriculaFuncionario, dadosAlteracaoFuncionario));
     }
 

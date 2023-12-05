@@ -30,6 +30,8 @@ public class CobrancaService {
     @Autowired
     private EmailService service;
 
+    final String URL = "http://localhost:8082";
+
     public Cobranca realizaCobranca(Cobranca dadosCobranca) {
         System.out.println("Realizando cobranca com id: " + dadosCobranca.getId());
         if(dadosCobranca.getStatus() != null) {
@@ -48,10 +50,12 @@ public class CobrancaService {
             dadosCobranca.setHoraSolicitacao(LocalDateTime. now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }
 
-        String emailCiclista = recuperaEmailDeCiclistaPorId(dadosCobranca.getCiclista());
+        System.out.println("Recuperando dados do ciclista");
+        CiclistaResponseDTO ciclistaResponse = recuperaCiclistaPorId(dadosCobranca.getCiclista());
+        String emailCiclista = ciclistaResponse.email();
         //String emailCiclista = "lucas.arruda@edu.unirio.br";
 
-        CartaoDeCreditoResponseDTO cartaoCiclista = recuperaCartaoDeCreditoDeCiclistaPorId(dadosCobranca.getCiclista());
+        CartaoDeCreditoResponseDTO cartaoCiclista = ciclistaResponse.cartaoDeCredito();
         //CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2029", "123");
 
         try {
@@ -131,21 +135,27 @@ public class CobrancaService {
         throw new NoSuchElementException("A cobranca com id " + idCobranca + " não existe");
     }
 
-    private String recuperaEmailDeCiclistaPorId(int idCiclista) {
+    private CiclistaResponseDTO recuperaCiclistaPorId(int idCiclista) {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/ciclista/" + idCiclista))
+                    .uri(new URI(URL + "/ciclista/" + idCiclista))
                     .GET()
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+            if(response.statusCode() == 404) throw new NoSuchElementException("Ciclista com id " + idCiclista + " nao existe");
+            if(response.statusCode() == 422) throw new IllegalArgumentException("Argumento invalido");
+
             CiclistaResponseDTO ciclistaResponse = mapper.readValue(response.body(), CiclistaResponseDTO.class);
-            return ciclistaResponse.email();
+            System.out.println("Email recuperado: " + ciclistaResponse.email());
+            System.out.println("Ciclista recuperado: " + ciclistaResponse.toString());
+            return ciclistaResponse;
         } catch (Exception e) {
+            //e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -156,13 +166,17 @@ public class CobrancaService {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/cartaoDeCredito/" + idCiclista))
+                    .uri(new URI(URL + "/cartaoDeCredito/" + idCiclista))
                     .GET()
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+            if(response.statusCode() == 404) throw new NoSuchElementException("Ciclista com id " + idCiclista + " nao existe");
+            if(response.statusCode() == 422) throw new IllegalArgumentException("Argumento invalido");
+
             CartaoDeCreditoResponseDTO cartaoResponse = mapper.readValue(response.body(), CartaoDeCreditoResponseDTO.class);
+            System.out.println("Cartao recuperado: " + cartaoResponse.toString());
             return cartaoResponse;
         } catch (Exception e) {
             throw new RuntimeException(e);

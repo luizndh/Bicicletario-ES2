@@ -34,6 +34,8 @@ public class IntegracaoTest {
     @Autowired
     private MockMvc mvc;
 
+    final String URL = "http://localhost:8082";
+
     final String JSON_ERRO_422 = "{\"codigo\":422,\"mensagem\":\"Argumento invalido\"}";
     final String JSON_ERRO_404 = "{\"codigo\":404,\"mensagem\":\"Entidade nao existe\"}";
 
@@ -42,7 +44,7 @@ public class IntegracaoTest {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/restaurarDados"))
+                    .uri(new URI(URL + "/restaurarDados"))
                     .GET()
                     .build();
         } catch (Exception e) {
@@ -51,10 +53,11 @@ public class IntegracaoTest {
     }
 
     @Test
-    void recuperaEmailDeCiclistaPorIdCorreto() throws Exception {
+    void recuperaCiclistaPorIdCorreto() throws Exception {
         // Arrange
         String emailEsperado = "user@example.com";
         String idCiclista = "1";
+        String json = "{\"id\":1,\"status\":\"AGUARDANDO_CONFIRMACAO\",\"nome\":\"Fulano Beltrano\",\"nascimento\":\"2021-05-02\",\"cpf\":\"78804034009\",\"nacionalidade\":\"Brasileiro\",\"email\":\"user@example.com\",\"urlFotoDocumento\":null,\"senha\":\"ABC123\",\"cartaoDeCredito\":{\"id\":1,\"nomeTitular\":\"Fulano Beltrano\",\"numero\":\"4012001037141112\",\"validade\":\"2022-12\",\"cvv\":\"132\"},\"ativo\":false}";
 
         // Act
         ObjectMapper mapper = new ObjectMapper();
@@ -63,7 +66,7 @@ public class IntegracaoTest {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/ciclista/" + idCiclista))
+                    .uri(new URI(URL + "/ciclista/" + idCiclista))
                     .GET()
                     .build();
 
@@ -75,11 +78,12 @@ public class IntegracaoTest {
 
         // Assert
         assertEquals(200, response.statusCode());
+        assertEquals(json, response.body());
         assertEquals(emailEsperado, ciclistaResponse.email());
     }
 
     @Test
-    void recuperaEmailDeCiclistaPorIdNotFound() throws Exception {
+    void recuperaCiclistaPorIdNotFound() throws Exception {
         // Arrange
         String idCiclista = "50";
 
@@ -88,30 +92,7 @@ public class IntegracaoTest {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/ciclista/" + idCiclista))
-                    .GET()
-                    .build();
-
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        // Assert
-        assertEquals(422, response.statusCode());
-        assertEquals(JSON_ERRO_422, response.body());
-    }
-
-    @Test
-    void recuperaEmailDeCiclistaPorIdRequisicaoMalFormatada() throws Exception {
-        // Arrange
-
-        // Act
-        HttpResponse<String> response = null;
-        try {
-            HttpClient client = HttpClient.newBuilder().build();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/ciclista/"))
+                    .uri(new URI(URL + "/ciclista/" + idCiclista))
                     .GET()
                     .build();
 
@@ -126,63 +107,7 @@ public class IntegracaoTest {
     }
 
     @Test
-    void recuperaCartaoDeCreditoPorIdCorreto() throws Exception {
-        // Arrange
-        String numeroEsperado = "4012001037141112";
-        String validadeEsperada = "12/2022";
-        String cvvEsperado = "123";
-        String idCiclista = "1";
-
-        // Act
-        ObjectMapper mapper = new ObjectMapper();
-
-        HttpResponse<String> response = null;
-        try {
-            HttpClient client = HttpClient.newBuilder().build();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/cartaoDeCredito/" + idCiclista))
-                    .GET()
-                    .build();
-
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        CartaoDeCreditoResponseDTO cartaoResponse = mapper.readValue(response.body(), CartaoDeCreditoResponseDTO.class);
-
-        // Assert
-        assertEquals(200, response.statusCode());
-        assertEquals(numeroEsperado, cartaoResponse.numero());
-        assertEquals(validadeEsperada, cartaoResponse.validade());
-        assertEquals(cvvEsperado, cartaoResponse.cvv());
-    }
-
-    @Test
-    void recuperaCartaoDeCreditoPorIdNotFound() throws Exception {
-        // Arrange
-        String idCiclista = "50";
-
-        // Act
-        HttpResponse<String> response = null;
-        try {
-            HttpClient client = HttpClient.newBuilder().build();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/cartaoDeCredito/" + idCiclista))
-                    .GET()
-                    .build();
-
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        // Assert
-        assertEquals(404, response.statusCode());
-        assertEquals(JSON_ERRO_404, response.body());
-    }
-
-    @Test
-    void recuperaCartaoDeCreditoPorIdDadosInvalidos() throws Exception {
+    void recuperaCiclistaPorIdRequisicaoMalFormatada() throws Exception {
         // Arrange
 
         // Act
@@ -190,7 +115,7 @@ public class IntegracaoTest {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/cartaoDeCredito/"))
+                    .uri(new URI(URL + "/ciclista/a"))
                     .GET()
                     .build();
 
