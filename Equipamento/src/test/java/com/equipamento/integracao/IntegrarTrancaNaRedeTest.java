@@ -58,6 +58,6 @@ public class IntegrarTrancaNaRedeTest {
         InclusaoTrancaDTO dto = new InclusaoTrancaDTO(1, 5, 100);
 
         // Act + assert
-        assertThrows(NoSuchElementException.class, () -> trancaService.integrarNaRede(dto));
+        assertThrows(IllegalArgumentException.class, () -> trancaService.integrarNaRede(dto));
     }
 }

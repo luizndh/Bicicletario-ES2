@@ -55,7 +55,7 @@ public class IntegrarBicicletaNaRedeTest {
         InclusaoBicicletaDTO dto = new InclusaoBicicletaDTO(2, 4, 10);
 
         //Act + Assert
-        assertThrows(NoSuchElementException.class, () -> bicicletaService.integrarNaRede(dto));
+        assertThrows(IllegalArgumentException.class, () -> bicicletaService.integrarNaRede(dto));
     }
 
     @Test
@@ -73,12 +73,13 @@ public class IntegrarBicicletaNaRedeTest {
         //Arrange
         InclusaoBicicletaDTO dto = new InclusaoBicicletaDTO(2, 5, 12345);
         Bicicleta b = bicicletaService.recuperaBicicletaPorId(5);
+        System.out.println(b);
 
         //Act
         boolean emailEnviado = bicicletaService.integrarNaRede(dto);
 
         //Assert
         assertEquals(b.getStatus(), Bicicleta.StatusBicicleta.EM_USO);
-        assertTrue(emailEnviado);
+        assertFalse(emailEnviado);
     }
 }

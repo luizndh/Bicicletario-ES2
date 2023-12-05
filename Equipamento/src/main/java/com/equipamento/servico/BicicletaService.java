@@ -62,6 +62,7 @@ public class BicicletaService {
     }
 
     public boolean integrarNaRede(InclusaoBicicletaDTO dadosInclusao) {
+        System.out.println("integrando bicicleta na rede...");
         Bicicleta b = recuperaBicicletaPorId(dadosInclusao.idBicicleta());
         if(b.getStatus() == StatusBicicleta.EM_USO) {
             DevolucaoBicicletaDTO devolucaoDTO = new DevolucaoBicicletaDTO(dadosInclusao.idTranca(), dadosInclusao.idBicicleta());
@@ -71,8 +72,12 @@ public class BicicletaService {
         b.setStatus(StatusBicicleta.DISPONIVEL);
         b.adicionaRegistroNoHistoricoDeInclusao(dadosInclusao);
 
+        System.out.println("RECUPERANDO EMAIL DO FUNCIONARIO...");
+        String emailFuncionario = this.recuperaEmailDeFuncionarioPorId(dadosInclusao.idFuncionario());
+        System.out.println("EMAIL DO FUNCIONARIO: " + emailFuncionario);
+
         return this.enviaEmail(
-                this.recuperaEmailDeFuncionarioPorId(dadosInclusao.idFuncionario()),
+                emailFuncionario,
                 "Integrando bicicleta na rede",
                 "Id da tranca: " + dadosInclusao.idBicicleta() +
                         "Id da tranca: " + dadosInclusao.idTranca() +
@@ -107,8 +112,10 @@ public class BicicletaService {
         }
         b.adicionaRegistroNoHistoricoDeRetirada(dadosRetirada);
 
+        String emailFuncionario = this.recuperaEmailDeFuncionarioPorId(dadosRetirada.idFuncionario());
+
         return this.enviaEmail(
-                this.recuperaEmailDeFuncionarioPorId(dadosRetirada.idFuncionario()),
+                emailFuncionario,
                 "Retirando bicicleta da rede",
                         "Id da tranca: " + dadosRetirada.idTranca() +
                         "Id da bicicleta: " + dadosRetirada.idBicicleta() +
@@ -128,11 +135,13 @@ public class BicicletaService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(URL_EXTERNO + "/enviarEmail"))
                     .POST(HttpRequest.BodyPublishers.ofString(jsonEntrada))
+                    .header("Content-Type", "application/json")
                     .build();
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("JSON SAIDA DE EMAIL: ");
             System.out.println(response.body());
+            System.out.println("STATUS CODE: " + response.statusCode());
             if(response.statusCode() == 200) {
                 return true;
             } else if(response.statusCode() == 404) {
@@ -143,7 +152,7 @@ public class BicicletaService {
                 return false;
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException();
         }
     }
 
@@ -151,13 +160,17 @@ public class BicicletaService {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI(URL_ALUGUEL + "/funcionario/" + String.valueOf(idFuncionario)))
+                    .uri(new URI(URL_ALUGUEL + "/funcionario/" + idFuncionario))
+                    .header("Content-Type", "application/json")
                     .GET()
                     .build();
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("BODY DA RESPOSTA: " + response.body());
+            System.out.println(response.body());
+            System.out.println("STATUS CODE: " + response.statusCode());
             if(response.statusCode() == 422) {
+                System.out.println("lancando illegal argument exception...");
                 throw new IllegalArgumentException();
             } else if(response.statusCode() == 404) {
                 throw new NoSuchElementException();
@@ -167,7 +180,7 @@ public class BicicletaService {
             }
             return null;
         } catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException();
         }
     }
 }

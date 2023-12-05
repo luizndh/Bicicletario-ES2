@@ -6,6 +6,7 @@ import com.equipamento.model.Bicicleta;
 import com.equipamento.servico.BicicletaService;
 import com.equipamento.servico.IntegracaoService;
 
+import net.bytebuddy.pool.TypePool;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -74,6 +75,6 @@ public class RetirarBicicletaDaRedeTest {
         
 
         //Act + Assert
-        assertThrows(NoSuchElementException.class, () -> bicicletaService.retirarDaRede(dadosRetirada));
+        assertThrows(IllegalArgumentException.class, () -> bicicletaService.retirarDaRede(dadosRetirada));
     }
 }

@@ -71,6 +71,6 @@ public class RetirarTrancaDaRedeTest {
         
 
         //Act + Assert
-        assertThrows(NoSuchElementException.class, () -> trancaService.retirarDaRede(dadosRetirada));
+        assertThrows(IllegalArgumentException.class, () -> trancaService.retirarDaRede(dadosRetirada));
     }
 }

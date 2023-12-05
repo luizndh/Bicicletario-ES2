@@ -96,8 +96,10 @@ public class TrancaService {
         t.setStatus(StatusTranca.LIVRE);
         t.adicionaRegistroNoHistoricoDeInclusao(dadosInclusao);
 
+        String emailFuncionario = this.recuperaEmailDeFuncionarioPorId(dadosInclusao.idFuncionario());
+
         return this.enviaEmail(
-                this.recuperaEmailDeFuncionarioPorId(dadosInclusao.idFuncionario()),
+                emailFuncionario,
                 "Integrando tranca na rede",
                 "Id da tranca: " + dadosInclusao.idTranca() +
                         "Id do totem: " + dadosInclusao.idTotem() +
@@ -116,8 +118,10 @@ public class TrancaService {
 
         t.adicionaRegistroNoHistoricoDeRetirada(dadosRetirada);
 
+        String emailFuncionario = this.recuperaEmailDeFuncionarioPorId(dadosRetirada.idFuncionario());
+
         return this.enviaEmail(
-                this.recuperaEmailDeFuncionarioPorId(dadosRetirada.idFuncionario()),
+                emailFuncionario,
                 "Retirando tranca da rede",
                 "Id da tranca: " + dadosRetirada.idTranca() +
                         "Id do totem: " + dadosRetirada.idTotem() +
@@ -142,6 +146,7 @@ public class TrancaService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(URL_EXTERNO + "/enviarEmail"))
                     .POST(HttpRequest.BodyPublishers.ofString(jsonEntrada))
+                    .header("Content-Type", "application/json")
                     .build();
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -155,7 +160,7 @@ public class TrancaService {
                 return false;
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException();
         }
     }
 
@@ -180,7 +185,7 @@ public class TrancaService {
             }
             return null;
         } catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException();
         }
     }
 }
