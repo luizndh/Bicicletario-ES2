@@ -62,7 +62,7 @@ public class CobrancaService {
             cartaoCiclista = ciclistaResponse.cartaoDeCredito();
             //CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2029", "123");
         }
-        catch (Exception e) {
+        catch (NoSuchElementException e) {
             e.printStackTrace();
         }
 
