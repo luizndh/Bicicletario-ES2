@@ -36,24 +36,28 @@ public class CobrancaService {
             if (!dadosCobranca.getStatus().equals(Cobranca.StatusCobranca.PENDENTE.toString()))
                 throw new IllegalArgumentException("Pagamento nao esta pendente!");
             if (dadosCobranca.getValor() < 0)
-                throw new IllegalArgumentException("Valor da cobranca nao pode ser negativo");
+                throw new IllegalArgumentException("Valor da cobranca deve ser maior que 0");
             if (dadosCobranca.getCiclista() < 0)
                 throw new IllegalArgumentException("Id do ciclista nao pode ser negativo");
         }
         else if(dadosCobranca.getHoraSolicitacao() == null) {
+            if (dadosCobranca.getValor() < 0)
+                throw new IllegalArgumentException("Valor da cobranca deve ser maior que 0");
+            if(dadosCobranca.getCiclista() < 0)
+                throw new IllegalArgumentException("Id do ciclista nao pode ser negativo");
             dadosCobranca.setHoraSolicitacao(LocalDateTime. now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }
 
-        //String emailCiclista = recuperaEmailDeCiclistaPorId(dadosCobranca.getCiclista());
-        String emailCiclista = "lucas.arruda@edu.unirio.br";
+        String emailCiclista = recuperaEmailDeCiclistaPorId(dadosCobranca.getCiclista());
+        //String emailCiclista = "lucas.arruda@edu.unirio.br";
 
-        //CartaoDeCreditoResponseDTO cartaoCiclista = recuperaCartaoDeCreditoDeCiclistaPorId(dadosCobranca.getCiclista());
-        CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2029", "123");
+        CartaoDeCreditoResponseDTO cartaoCiclista = recuperaCartaoDeCreditoDeCiclistaPorId(dadosCobranca.getCiclista());
+        //CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2029", "123");
 
         try {
             Stripe.apiKey = "sk_test_51ODEoGK2SlPC0gAXe7gRKx3tgwYgdxaYf8xoTkJvrMdUXMSXMPzwmdFEprKG654eo1h8JRuyQtNvqIU8iPW7T7nE00W6te3PX4";
 
-            PaymentIntentCreateParams createParams = PaymentIntentCreateParams.builder().setAmount(dadosCobranca.getValor()).setCurrency("brl").build();
+            PaymentIntentCreateParams createParams = PaymentIntentCreateParams.builder().setAmount(dadosCobranca.getValor()*100).setCurrency("brl").build();
             PaymentIntent paymentIntent = PaymentIntent.create(createParams);
 
             PaymentIntent confirmedPaymentIntent = paymentIntent.confirm(PaymentIntentConfirmParams.builder().setPaymentMethod("pm_card_visa").build());
@@ -93,6 +97,7 @@ public class CobrancaService {
         for (Cobranca c : cobrancas) {
             if (c.getStatus().equals(Cobranca.StatusCobranca.PENDENTE.toString())) {
                 flag = true;
+                if(c.getId() < 0) throw new IllegalArgumentException("Id da cobranca deve ser positivo");
                 System.out.println("Processando cobranca com id " + c.getId());
                 processadas.add(realizaCobranca(c));
             }
