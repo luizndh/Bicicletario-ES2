@@ -1,8 +1,15 @@
 package com.aluguel.service;
 
+import com.aluguel.Integracoes;
 import com.aluguel.dto.AluguelDTO;
+import com.aluguel.dto.BicicletaDTO;
+import com.aluguel.dto.CobrancaDTO;
+import com.aluguel.dto.NovaCobrancaDTO;
 import com.aluguel.dto.NovoAluguelDTO;
+import com.aluguel.dto.NovoCiclistaDTO;
+import com.aluguel.dto.TrancaDTO;
 import com.aluguel.model.Aluguel;
+import com.aluguel.model.Ciclista;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,11 +24,16 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AluguelServiceTest {
+
+    @Mock
+    private Integracoes integracoes;
 
     @Mock
     private CiclistaService ciclistaService;
@@ -31,6 +43,9 @@ class AluguelServiceTest {
 
     @Mock
     private AluguelService aluguelServiceMock;
+
+    @Mock
+    private Aluguel aluguel;
 
     @Mock
     private List<Aluguel> alugueis;
@@ -70,8 +85,13 @@ class AluguelServiceTest {
 
         NovoAluguelDTO dadosCadastroAluguel = new NovoAluguelDTO(ciclista, trancaInicio);
 
-        // Stub the behavior of ciclistaService
+        when(ciclistaService.recuperaCiclistaPorId(anyInt())).thenReturn(new Ciclista(new NovoCiclistaDTO()));
         when(ciclistaService.verificaSeCiclistaPodeAlugar(anyInt())).thenReturn(true);
+        when(integracoes.recuperaTrancaPorId(anyInt())).thenReturn(new TrancaDTO(0, 0, 0, trancaInicio, trancaInicio, ciclista, trancaInicio));
+        when(integracoes.recuperaBicicletaPorId(anyInt())).thenReturn(new BicicletaDTO("0", "marca", "modelo", "ano", "numero", "status"));
+        when(integracoes.realizaCobranca(any(NovaCobrancaDTO.class))).thenReturn(new CobrancaDTO("status", "horaSolicitacao", "horaFinalizacao", "valor", "ciclista"));
+        when(integracoes.destrancaTranca(anyInt(), anyInt())).thenReturn(true);
+        when(integracoes.enviaEmail(anyString(), anyString(), anyString())).thenReturn(true);
 
         // Act
         Aluguel actualAluguel = aluguelService.registraAluguel(dadosCadastroAluguel);
@@ -87,7 +107,7 @@ class AluguelServiceTest {
 
         when(aluguelServiceMock.recuperaAluguelPorIdBicicleta(idBicicleta)).then(invocation -> {
             Aluguel aluguel = new Aluguel(new NovoAluguelDTO("1", "2"));
-            aluguel.atualizaAluguel(new AluguelDTO(0, "10:00", 2, "11:00", 10, 3, 4));
+            aluguel.atualizaAluguel(new AluguelDTO("0", "10:00", "2", "11:00", "10", "3", "4", "EM_ANDAMENTO"));
             return aluguel;
         });
 

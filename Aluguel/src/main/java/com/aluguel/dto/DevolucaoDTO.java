@@ -1,3 +1,3 @@
 package com.aluguel.dto;
 
-public record DevolucaoDTO(int bicicleta, String horaInicio, int trancaFim, String horaFim, int cobranca, int ciclista) {}
+public record DevolucaoDTO(String bicicleta, String horaInicio, String trancaFim, String horaFim, String cobranca, String ciclista) {}

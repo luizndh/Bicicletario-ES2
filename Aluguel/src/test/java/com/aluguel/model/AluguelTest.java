@@ -17,7 +17,7 @@ public class AluguelTest {
     @BeforeEach
     public void setUp() {
         aluguel = new Aluguel(new NovoAluguelDTO("1", "2"));
-        aluguel.atualizaAluguel(new AluguelDTO(1, "10:00", 2, "11:00", 10, 3, 4));
+        aluguel.atualizaAluguel(new AluguelDTO("1", "10:00", "2", "11:00", "10", "3", "4", "EM_ANDAMENTO"));
 
         alugueis = new ArrayList<>();
         alugueis.add(aluguel);
@@ -60,7 +60,7 @@ public class AluguelTest {
 
     @Test
     void testAtualizaAluguel() {
-        AluguelDTO dadosAlteracaoAluguel = new AluguelDTO(1, "10:00", 2, "12:00", 20, 3, 4);
+        AluguelDTO dadosAlteracaoAluguel = new AluguelDTO("1", "10:00", "2", "12:00", "20", "3", "4", "EM_ANDAMENTO");
         aluguel.atualizaAluguel(dadosAlteracaoAluguel);
         assertEquals("12:00", aluguel.getHoraFim());
         assertEquals(20, aluguel.getCobranca());

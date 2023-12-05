@@ -1,7 +1,11 @@
 package com.aluguel.service;
 
+import com.aluguel.Integracoes;
 import com.aluguel.dto.CartaoDeCreditoDTO;
 import com.aluguel.model.CartaoDeCredito;
+import com.aluguel.model.Ciclista;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +14,13 @@ import static com.aluguel.model.CartaoDeCredito.cartoesDeCreditos;
 
 @Service
 public class CartaoDeCreditoService {
+
+    @Autowired
+    Integracoes integracoes;
+
+    @Autowired
+    CiclistaService ciclistaService;
+
     public CartaoDeCredito recuperaCartaoDeCreditoPorId(int idCiclista) {
         for (CartaoDeCredito cartaoDeCredito : cartoesDeCreditos) {
             if (cartaoDeCredito.getId() == idCiclista) {
@@ -22,19 +33,19 @@ public class CartaoDeCreditoService {
     public List<CartaoDeCredito> recuperaCartoesDeCreditos() { return cartoesDeCreditos; }
 
     public CartaoDeCredito alteraCartaoDeCredito(int idCiclista, CartaoDeCreditoDTO dadosAlteracaoCartaoDeCredito) {
+        Ciclista ciclista = ciclistaService.recuperaCiclistaPorId(idCiclista);
         CartaoDeCredito cartaoDeCredito = recuperaCartaoDeCreditoPorId(idCiclista);
-        
-        // TODO: validar cartão junto a administradora CC
-        ///validaCartaoDeCredito
 
-        // TODO: enviar email para o ciclista informando que os dados de seu cartão de crédito foram alterados
-            ///enviarEmail(ciclista.getEmail(), "Dados de Cartão de Crédito alterados",
-            //        "Olá " + ciclista.getNome() + ",\n\n" +
-            //        "Os dados de seu cartão de crédito foram alterados com sucesso!\n\n" +
-            //        "Atenciosamente,\n" +
-            //        "Equipe Aluguel de Bicicletas");
-        
+        integracoes.validaCartaoDeCredito(dadosAlteracaoCartaoDeCredito);
+
         cartaoDeCredito.atualizaCartaoDeCredito(dadosAlteracaoCartaoDeCredito);
+
+        integracoes.enviaEmail(ciclista.getEmail(), "Dados de Cartão de Crédito alterados",
+               "Olá " + ciclista.getNome() + ",\n\n" +
+               "Os dados de seu cartão de crédito foram alterados com sucesso!\n\n" +
+               "Atenciosamente,\n" +
+               "Equipe Aluguel de Bicicletas");
+        
         return cartaoDeCredito;
     }
 }

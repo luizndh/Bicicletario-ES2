@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.aluguel.dto.FuncionarioDTO;
 import com.aluguel.dto.NovoFuncionarioDTO;
 import com.aluguel.model.Funcionario;
 import com.aluguel.service.FuncionarioService;
@@ -38,7 +39,7 @@ public class FuncionarioControllerTest {
     public void testRecuperaFuncionarioPorMatricula() throws Exception {
         // Arrange
         String matriculaFuncionario = "1";
-        when(funcionarioService.recuperaFuncionarioPorMatricula(matriculaFuncionario)).thenReturn(new Funcionario(new NovoFuncionarioDTO("123", "123", "lulusantos@hotmail.com", "Lulu Santos", 68, "Gerente", "123.456.789-00")));
+        when(funcionarioService.recuperaFuncionarioPorMatricula(matriculaFuncionario)).thenReturn(new Funcionario(new NovoFuncionarioDTO("123", "123", "lulusantos@hotmail.com", "Lulu Santos", "68", "Gerente", "123.456.789-00")));
         
         String json = "{\"matricula\":\"1\",\"senha\":\"123\",\"confirmacaoSenha\":\"123\",\"email\":\"lulusantos@hotmail.com\",\"nome\":\"Lulu Santos\",\"idade\":68,\"funcao\":\"Gerente\",\"cpf\":\"123.456.789-00\"}";
 
@@ -54,7 +55,7 @@ public class FuncionarioControllerTest {
     public void testRecuperaFuncionarios() throws Exception {
         // Arrange
         List<Funcionario> funcionarios = new ArrayList<>();
-        funcionarios.add(new Funcionario(new NovoFuncionarioDTO("123", "123", "lulusantos@hotmail.com", "Lulu Santos", 68, "Gerente", "123.456.789-00")));
+        funcionarios.add(new Funcionario(new NovoFuncionarioDTO("123", "123", "lulusantos@hotmail.com", "Lulu Santos", "68", "Gerente", "123.456.789-00")));
         when(funcionarioService.recuperaFuncionarios()).thenReturn(funcionarios);
 
         String json = "[{\"matricula\":\"1\",\"senha\":\"123\",\"confirmacaoSenha\":\"123\",\"email\":\"lulusantos@hotmail.com\",\"nome\":\"Lulu Santos\",\"idade\":68,\"funcao\":\"Gerente\",\"cpf\":\"123.456.789-00\"}]";
@@ -70,7 +71,7 @@ public class FuncionarioControllerTest {
     @Test
     public void testCadastraFuncionario() throws Exception {
         // Arrange
-        NovoFuncionarioDTO novoFuncionarioDTO = new NovoFuncionarioDTO("123", "123", "lulusantos@hotmail.com", "Lulu Santos", 68, "Gerente", "123.456.789-00");
+        NovoFuncionarioDTO novoFuncionarioDTO = new NovoFuncionarioDTO("123", "123", "lulusantos@hotmail.com", "Lulu Santos", "68", "Gerente", "123.456.789-00");
         Funcionario funcionario = new Funcionario(novoFuncionarioDTO);
         when(funcionarioService.cadastraFuncionario(novoFuncionarioDTO)).thenReturn(funcionario);
 
@@ -91,9 +92,9 @@ public class FuncionarioControllerTest {
     public void testAlteraFuncionario() throws Exception {
         // Arrange
         String matriculaFuncionario = "1";
-        NovoFuncionarioDTO novoFuncionarioDTO = new NovoFuncionarioDTO("123", "123", "lulusantos@hotmail.com", "Lulu Santos", 68, "Gerente", "123.456.789-00");
-        Funcionario funcionario = new Funcionario(novoFuncionarioDTO);
-        when(funcionarioService.alteraFuncionario(matriculaFuncionario, novoFuncionarioDTO)).thenReturn(funcionario);
+        FuncionarioDTO funcionarioDTO = new FuncionarioDTO("1", "123", "123", "lulusantos@hotmail.com", "Lulu Santos", "68", "Gerente", "123.456.789-00");
+        Funcionario funcionario = new Funcionario(new NovoFuncionarioDTO("123", "123", "lulusantos@hotmail.com", "Lulu Santos", "68", "Gerente", "123.456.789-00"));
+        when(funcionarioService.alteraFuncionario(matriculaFuncionario, funcionarioDTO)).thenReturn(funcionario);
 
         String json = "{\"matricula\":\"1\",\"senha\":\"123\",\"confirmacaoSenha\":\"123\",\"email\":\"lulusantos@hotmail.com\",\"nome\":\"Lulu Santos\",\"idade\":68,\"funcao\":\"Gerente\",\"cpf\":\"123.456.789-00\"}";
 

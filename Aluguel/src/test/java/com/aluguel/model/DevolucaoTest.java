@@ -9,7 +9,7 @@ public class DevolucaoTest {
 
     @Test
     void testDevolucao() {
-        DevolucaoDTO dadosCadastroDevolucao = new DevolucaoDTO(1, "10:00", 2, "11:00", 10, 1);
+        DevolucaoDTO dadosCadastroDevolucao = new DevolucaoDTO("1", "10:00", "2", "11:00", "10", "1");
 
         Devolucao devolucao = new Devolucao(dadosCadastroDevolucao);
 

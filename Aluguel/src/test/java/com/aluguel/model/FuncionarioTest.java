@@ -1,5 +1,6 @@
 package com.aluguel.model;
 
+import com.aluguel.dto.FuncionarioDTO;
 import com.aluguel.dto.NovoFuncionarioDTO;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,7 +14,7 @@ public class FuncionarioTest {
 
     @BeforeEach
     void setUp() {
-        NovoFuncionarioDTO dadosCadastroFuncionario = new NovoFuncionarioDTO("senhaTeste123", "senhaTeste123", "raphito@arroz.com", "raphito", 30, "Gerente", "777.777.777-77");
+        NovoFuncionarioDTO dadosCadastroFuncionario = new NovoFuncionarioDTO("senhaTeste123", "senhaTeste123", "raphito@arroz.com", "raphito", "30", "Gerente", "777.777.777-77");
         funcionario = new Funcionario(dadosCadastroFuncionario);
     }
 
@@ -24,7 +25,7 @@ public class FuncionarioTest {
 
     @Test
     void testAtualizaFuncionario() {
-        NovoFuncionarioDTO dadosAlteracaoFuncionario = new NovoFuncionarioDTO("testeSenha321", "testeSenha321", "raphito@feijao.com", "otihpar", 3, "garçom", "000.000.000-00");
+        FuncionarioDTO dadosAlteracaoFuncionario = new FuncionarioDTO("1", "testeSenha321", "testeSenha321", "raphito@feijao.com", "otihpar", "3", "garçom", "000.000.000-00");
 
         funcionario.atualizaFuncionario(dadosAlteracaoFuncionario);
 

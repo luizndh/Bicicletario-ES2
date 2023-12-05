@@ -16,12 +16,12 @@ public class Devolucao {
     public static final List<Devolucao> devolucoes = new ArrayList<>();
 
     public Devolucao(DevolucaoDTO dadosCadastroDevolucao) {
-        this.bicicleta = dadosCadastroDevolucao.bicicleta();
+        this.bicicleta = Integer.parseInt(dadosCadastroDevolucao.bicicleta());
         this.horaInicio = dadosCadastroDevolucao.horaInicio();
-        this.trancaFim = dadosCadastroDevolucao.trancaFim();
+        this.trancaFim = Integer.parseInt(dadosCadastroDevolucao.trancaFim());
         this.horaFim = dadosCadastroDevolucao.horaFim();
-        this.cobranca = dadosCadastroDevolucao.cobranca();
-        this.ciclista = dadosCadastroDevolucao.ciclista();
+        this.cobranca = Integer.parseInt(dadosCadastroDevolucao.cobranca());
+        this.ciclista = Integer.parseInt(dadosCadastroDevolucao.ciclista());
     }
 
     public int getBicicleta() {

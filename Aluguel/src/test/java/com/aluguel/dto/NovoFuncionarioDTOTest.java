@@ -13,7 +13,7 @@ public class NovoFuncionarioDTOTest {
         String confirmacaoSenha = "password";
         String email = "test@example.com";
         String nome = "John Doe";
-        int idade = 30;
+        String idade = "30";
         String funcao = "Manager";
         String cpf = "123456789";
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aluguel.dto.BicicletaDTO;
+import com.aluguel.dto.CartaoDeCreditoDTO;
 import com.aluguel.dto.CiclistaDTO;
 import com.aluguel.dto.NovoCiclistaDTO;
 import com.aluguel.model.Ciclista;
@@ -42,8 +43,8 @@ public class CiclistaController {
 
     @PostMapping(value="", consumes="application/json")
     @ApiOperation(value="Cadastra um novo ciclista no sistema")
-    public ResponseEntity<Ciclista> cadastraCiclista(@RequestBody NovoCiclistaDTO dadosCadastroCiclista) {
-        return ResponseEntity.ok().body(this.service.cadastraCiclista(dadosCadastroCiclista));
+    public ResponseEntity<Ciclista> cadastraCiclista(@RequestBody NovoCiclistaDTO dadosCadastroCiclista, @RequestBody CartaoDeCreditoDTO cartaoDeCredito) {
+        return ResponseEntity.ok().body(this.service.cadastraCiclista(dadosCadastroCiclista, cartaoDeCredito));
     }
 
     @GetMapping("/{idCiclista}/permiteAluguel")

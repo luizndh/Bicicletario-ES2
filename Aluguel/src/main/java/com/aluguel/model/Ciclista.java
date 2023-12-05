@@ -13,10 +13,11 @@ public class Ciclista {
     private String nome;
     private String nascimento;
     private String cpf;
-    private Passaporte passaporte;
     private String nacionalidade;
     private String email;
     private String urlFotoDocumento;
+    private String senha;
+    private CartaoDeCredito cartaoDeCredito;
     
     public static final List<Ciclista> ciclistas = new ArrayList<>();
 
@@ -26,20 +27,21 @@ public class Ciclista {
         this.nome = dadosCadastroCiclista.nome();
         this.nascimento = dadosCadastroCiclista.nascimento();
         this.cpf = dadosCadastroCiclista.cpf();
-        this.passaporte = dadosCadastroCiclista.passaporte();
         this.nacionalidade = dadosCadastroCiclista.nacionalidade();
         this.email = dadosCadastroCiclista.email();
-        this.urlFotoDocumento = dadosCadastroCiclista.urlFotoDocumento();
+        this.senha = dadosCadastroCiclista.senha();
+        this.cartaoDeCredito = new CartaoDeCredito(dadosCadastroCiclista.cartaoDeCredito());
     }
 
     public void atualizaCiclista(CiclistaDTO dadosAlteracaoCiclista) {
         this.nome = dadosAlteracaoCiclista.nome();
         this.nascimento = dadosAlteracaoCiclista.nascimento();
         this.cpf = dadosAlteracaoCiclista.cpf();
-        this.passaporte = dadosAlteracaoCiclista.passaporte();
         this.nacionalidade = dadosAlteracaoCiclista.nacionalidade();
         this.email = dadosAlteracaoCiclista.email();
         this.urlFotoDocumento = dadosAlteracaoCiclista.urlFotoDocumento();
+        this.senha = dadosAlteracaoCiclista.senha();
+        this.cartaoDeCredito = new CartaoDeCredito(dadosAlteracaoCiclista.cartaoDeCredito());
     }
 
     public enum StatusCiclista {
@@ -76,8 +78,8 @@ public class Ciclista {
         return cpf;
     }
 
-    public Passaporte getPassaporte() {
-        return passaporte;
+    public CartaoDeCredito getCartaoDeCredito() {
+        return cartaoDeCredito;
     }
 
     public String getNacionalidade() {
@@ -92,4 +94,7 @@ public class Ciclista {
         return urlFotoDocumento;
     }
     
+    public String getSenha() {
+        return senha;
+    }
 }

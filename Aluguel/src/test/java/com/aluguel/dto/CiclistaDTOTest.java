@@ -1,6 +1,5 @@
 package com.aluguel.dto;
 
-import com.aluguel.model.Passaporte;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,13 +14,14 @@ public class CiclistaDTOTest {
         String nome = "Luis Fumado";
         String nascimento = "01/01/2000";
         String cpf = "123.456.789-00";
-        Passaporte passaporte = new Passaporte("2345678","12/2025", "BR");
         String nacionalidade = "Brasileiro";
         String email = "luisfumado@teste.com";
-        String urlFotoDocumento = "https://teste.com/foto.jpg";
+        String urlFotoDocumento = "https://www.teste.com.br";
+        String senha = "12345678";
+        CartaoDeCreditoDTO cartaoDeCredito = new CartaoDeCreditoDTO("fulano", "1234567890123456", "01/01/2025", "123");
 
         // Act
-        CiclistaDTO ciclistaDTO = new CiclistaDTO(id, status, nome, nascimento, cpf, passaporte, nacionalidade, email, urlFotoDocumento);
+        CiclistaDTO ciclistaDTO = new CiclistaDTO(id, status, nome, nascimento, cpf, nacionalidade, email, senha, urlFotoDocumento,cartaoDeCredito);
 
         // Assert
         assertNotNull(ciclistaDTO);
@@ -29,9 +29,9 @@ public class CiclistaDTOTest {
         assertEquals(nome, ciclistaDTO.nome());
         assertEquals(nascimento, ciclistaDTO.nascimento());
         assertEquals(cpf, ciclistaDTO.cpf());
-        assertEquals(passaporte, ciclistaDTO.passaporte());
         assertEquals(nacionalidade, ciclistaDTO.nacionalidade());
         assertEquals(email, ciclistaDTO.email());
         assertEquals(urlFotoDocumento, ciclistaDTO.urlFotoDocumento());
+        assertEquals(senha, ciclistaDTO.senha());
     }
 }
