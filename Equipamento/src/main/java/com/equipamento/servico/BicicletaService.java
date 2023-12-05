@@ -14,20 +14,24 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static com.equipamento.model.Bicicleta.bicicletas;
+import static com.equipamento.util.Constantes.URL_ALUGUEL;
+import static com.equipamento.util.Constantes.URL_EXTERNO;
 
 @Service
 public class BicicletaService {
 
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     public Bicicleta recuperaBicicletaPorId(int idBicicleta) {
         if(idBicicleta < 0) {
-            throw new IllegalArgumentException("Id da bicicleta invalido");
+            throw new IllegalArgumentException();
         }
         for (Bicicleta b : bicicletas) {
             if (b.getId() == idBicicleta) {
                 return b;
             }
         }
-        throw new NoSuchElementException("A bicicleta com id " + idBicicleta + " nao existe");
+        throw new NoSuchElementException();
     }
 
     public List<Bicicleta> recuperaBicicletas() {
@@ -36,6 +40,7 @@ public class BicicletaService {
 
     public Bicicleta cadastraBicicleta(BicicletaDTO dadosCadastroBicicleta) {
         Bicicleta b = new Bicicleta(dadosCadastroBicicleta);
+        b.setStatus(StatusBicicleta.NOVA);
         bicicletas.add(b);
         return b;
     }
@@ -57,46 +62,62 @@ public class BicicletaService {
         return b;
     }
 
-    public void integrarNaRede(InclusaoBicicletaDTO dadosInclusao) {
+    public boolean integrarNaRede(InclusaoBicicletaDTO dadosInclusao) {
         Bicicleta b = recuperaBicicletaPorId(dadosInclusao.idBicicleta());
         if(b.getStatus() == StatusBicicleta.EM_USO) {
-            //TODO: Redirecionar para UC4 passo 3
-            // Fazer chamada para devolver bicicleta do aluguel.
-            return;
+            DevolucaoBicicletaDTO devolucaoDTO = new DevolucaoBicicletaDTO(dadosInclusao.idTranca(), dadosInclusao.idBicicleta());
+            this.chamaDevolucaoBicicleta(devolucaoDTO);
+            return false;
         }
         b.setStatus(StatusBicicleta.DISPONIVEL);
         b.adicionaRegistroNoHistoricoDeInclusao(dadosInclusao);
 
-        this.enviaEmail(
+        return this.enviaEmail(
                 this.recuperaEmailDeFuncionarioPorId(dadosInclusao.idFuncionario()),
                 "Integrando bicicleta na rede",
                 "Id da tranca: " + dadosInclusao.idBicicleta() +
-                        "Id do totem: " + dadosInclusao.idTotem() +
+                        "Id da tranca: " + dadosInclusao.idTranca() +
                         "Id do funcionário: " + dadosInclusao.idFuncionario());
     }
 
-    public void retirarDaRede(RetiradaBicicletaDTO dadosRetirada) {
+    private void chamaDevolucaoBicicleta(DevolucaoBicicletaDTO devolucaoBicicletaDTO) {
+        try {
+            String jsonEntrada = mapper.writeValueAsString(devolucaoBicicletaDTO);
+
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI(URL_ALUGUEL + "/devolucao"))
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonEntrada))
+                    .build();
+
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean retirarDaRede(RetiradaBicicletaDTO dadosRetirada) {
         Bicicleta b = recuperaBicicletaPorId(dadosRetirada.idBicicleta());
         if(StatusBicicleta.valueOf(dadosRetirada.statusAcaoReparador()) == StatusBicicleta.EM_REPARO) {
             b.setStatus(StatusBicicleta.EM_REPARO);
         } else if(StatusBicicleta.valueOf(dadosRetirada.statusAcaoReparador()) == StatusBicicleta.APOSENTADA) {
             b.setStatus(StatusBicicleta.APOSENTADA);
         } else {
-            throw new IllegalArgumentException("Valor inválido para status de tranca");
+            throw new IllegalArgumentException();
         }
         b.adicionaRegistroNoHistoricoDeRetirada(dadosRetirada);
 
-        this.enviaEmail(
+        return this.enviaEmail(
                 this.recuperaEmailDeFuncionarioPorId(dadosRetirada.idFuncionario()),
-                "Integrando tranca na rede",
+                "Retirando bicicleta da rede",
                         "Id da tranca: " + dadosRetirada.idTranca() +
                         "Id da bicicleta: " + dadosRetirada.idBicicleta() +
                         "Id do funcionário: " + dadosRetirada.idFuncionario() +
                         "Novo status da bicicleta: " + dadosRetirada.statusAcaoReparador());
     }
 
-    private void enviaEmail(String email, String assunto, String mensagem) {
-        ObjectMapper mapper = new ObjectMapper();
+    private boolean enviaEmail(String email, String assunto, String mensagem) {
         EmailDTO novoEmail = new EmailDTO(email, assunto, mensagem);
 
         try {
@@ -104,25 +125,22 @@ public class BicicletaService {
 
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/enviarEmail"))
+                    .uri(new URI(URL_EXTERNO + "/enviarEmail"))
                     .POST(HttpRequest.BodyPublishers.ofString(jsonEntrada))
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            EmailResponseDTO emailResponse = mapper.readValue(response.body(), EmailResponseDTO.class);
+            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.statusCode() == 200;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     private String recuperaEmailDeFuncionarioPorId(int idFuncionario) {
-        ObjectMapper mapper = new ObjectMapper();
-
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8082/funcionario/" + idFuncionario))
+                    .uri(new URI(URL_ALUGUEL + "/funcionario/" + idFuncionario))
                     .GET()
                     .build();
 

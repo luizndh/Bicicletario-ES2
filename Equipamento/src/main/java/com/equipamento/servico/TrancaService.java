@@ -1,6 +1,8 @@
 package com.equipamento.servico;
 
 import static com.equipamento.model.Tranca.trancas;
+import static com.equipamento.util.Constantes.URL_ALUGUEL;
+import static com.equipamento.util.Constantes.URL_EXTERNO;
 
 import com.equipamento.dto.*;
 import com.equipamento.model.Bicicleta;
@@ -25,37 +27,32 @@ public class TrancaService {
 
     public Tranca recuperaTrancaPorId(int idTranca) {
         if(idTranca < 0) {
-            throw new IllegalArgumentException("Id da tranca inválido");
+            throw new IllegalArgumentException();
         }
         for (Tranca t : trancas) {
             if (t.getId() == idTranca) {
                 return t;
             }
         }
-        throw new NoSuchElementException("A tranca com id " + idTranca + " não existe");
+        throw new NoSuchElementException();
     }
 
     public List<Tranca> recuperaTrancas() {
         return trancas;
     }
 
-    //TODO: validar os dados
     public Tranca cadastraTranca(TrancaDTO dadosCadastroTranca) {
         Tranca t = new Tranca(dadosCadastroTranca);
-
         trancas.add(t);
-        //ok
         return t;
     }
 
-    //TODO: validar os dados
     public Tranca alteraTranca(int idTranca, TrancaDTO dadosAlteracaoTranca) {
         Tranca t = recuperaTrancaPorId(idTranca);
         t.atualizaTranca(dadosAlteracaoTranca);
         return t;
     }
 
-    //TODO: validar os dados
     public void excluiTranca(int idTranca) {
         Tranca t = recuperaTrancaPorId(idTranca);
         trancas.remove(t);
@@ -63,7 +60,13 @@ public class TrancaService {
 
     public Tranca alteraStatusTranca(int idTranca, String acao) {
         Tranca t = recuperaTrancaPorId(idTranca);
-        t.setStatus(StatusTranca.valueOf(acao));
+        if(acao.equals("TRANCAR")) {
+            t.setStatus(StatusTranca.OCUPADA);
+        } else if(acao.equals("DESTRANCAR")) {
+            t.setStatus(StatusTranca.LIVRE);
+        } else {
+            throw new IllegalArgumentException();
+        }
         return t;
     }
 
@@ -87,15 +90,13 @@ public class TrancaService {
         return t;
     }
 
-    public void integrarNaRede(InclusaoTrancaDTO dadosInclusao) {
-        //TODO: Em caso de repado, verificar se o funcionário é o mesmo que retirou a tranca? depois fazer o que?
+    public boolean integrarNaRede(InclusaoTrancaDTO dadosInclusao) {
         Tranca t = recuperaTrancaPorId(dadosInclusao.idTranca());
 
         t.setStatus(StatusTranca.LIVRE);
         t.adicionaRegistroNoHistoricoDeInclusao(dadosInclusao);
 
-        //TODO: enviar email para o funcionario informando dados de inclusao - INTEGRACAO
-        this.enviaEmail(
+        return this.enviaEmail(
                 this.recuperaEmailDeFuncionarioPorId(dadosInclusao.idFuncionario()),
                 "Integrando tranca na rede",
                 "Id da tranca: " + dadosInclusao.idTranca() +
@@ -103,22 +104,21 @@ public class TrancaService {
                         "Id do funcionário: " + dadosInclusao.idFuncionario());
     }
 
-    public void retirarDaRede(RetiradaTrancaDTO dadosRetirada) {
+    public boolean retirarDaRede(RetiradaTrancaDTO dadosRetirada) {
         Tranca t = recuperaTrancaPorId(dadosRetirada.idTranca());
         if(StatusTranca.valueOf(dadosRetirada.statusAcaoReparador()) == StatusTranca.EM_REPARO) {
             t.setStatus(StatusTranca.EM_REPARO);
         } else if(StatusTranca.valueOf(dadosRetirada.statusAcaoReparador()) == StatusTranca.APOSENTADA) {
             t.setStatus(StatusTranca.APOSENTADA);
         } else {
-            throw new IllegalArgumentException("Valor inválido para status de tranca");
+            throw new IllegalArgumentException();
         }
 
         t.adicionaRegistroNoHistoricoDeRetirada(dadosRetirada);
 
-        //TODO: enviar email para o funcionario informando dados de inclusao - INTEGRACAO
-        this.enviaEmail(
+        return this.enviaEmail(
                 this.recuperaEmailDeFuncionarioPorId(dadosRetirada.idFuncionario()),
-                "Integrando tranca na rede",
+                "Retirando tranca da rede",
                 "Id da tranca: " + dadosRetirada.idTranca() +
                         "Id do totem: " + dadosRetirada.idTotem() +
                         "Id do funcionário: " + dadosRetirada.idFuncionario() +
@@ -131,7 +131,7 @@ public class TrancaService {
         return bicicletaService.recuperaBicicletaPorId(t.getBicicleta());
     }
 
-    private void enviaEmail(String email, String assunto, String mensagem) {
+    private boolean enviaEmail(String email, String assunto, String mensagem) {
         ObjectMapper mapper = new ObjectMapper();
         EmailDTO novoEmail = new EmailDTO(email, assunto, mensagem);
 
@@ -140,13 +140,12 @@ public class TrancaService {
 
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/enviarEmail"))
+                    .uri(new URI(URL_EXTERNO + "/enviarEmail"))
                     .POST(HttpRequest.BodyPublishers.ofString(jsonEntrada))
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            EmailResponseDTO emailResponse = mapper.readValue(response.body(), EmailResponseDTO.class);
+            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            return response.statusCode() == 200;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -158,7 +157,7 @@ public class TrancaService {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8082/funcionario/" + idFuncionario))
+                    .uri(new URI(URL_ALUGUEL + "/funcionario/" + idFuncionario))
                     .GET()
                     .build();
 

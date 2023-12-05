@@ -257,7 +257,7 @@ public class BicicletaControllerTest {
                 {
                     "idBicicleta": 1,
                     "idFuncionario": 1,
-                    "idTotem": 1
+                    "idTranca": 1
                 }
                 """;
 

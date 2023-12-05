@@ -77,4 +77,5 @@ public class TotemService {
         totem.setLocalizacao(dadosAlteracao.localizacao());
         totem.setDescricao(dadosAlteracao.descricao());
     }
+
 }

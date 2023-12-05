@@ -86,6 +86,7 @@ public class Bicicleta {
         return modelo;
     }
 
+
     public String getAno() {
         return ano;
     }
@@ -93,6 +94,7 @@ public class Bicicleta {
     public int getNumero() {
         return numero;
     }
+
 
     public void adicionaRegistroNoHistoricoDeInclusao(InclusaoBicicletaDTO dadosInclusao) {
         this.historicoInclusao.add(dadosInclusao);
