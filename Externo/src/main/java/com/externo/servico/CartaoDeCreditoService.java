@@ -14,6 +14,9 @@ public class CartaoDeCreditoService {
 
     //valida o cartao de credito, retornando true se for valido e false se for invalido
     public Map<String, String> validaCartaoDeCredito(CartaoDeCreditoDTO dadosCadastroCartao){
+        if(dadosCadastroCartao.nomeTitular().isEmpty() || dadosCadastroCartao.nomeTitular() == null){
+            throw new IllegalArgumentException("O nome " + dadosCadastroCartao.nomeTitular() + " esta vazio ou nulo");
+        }
         if (dadosCadastroCartao.numero().length() != 16) {
             throw new IllegalArgumentException("O tamanho do numero " + dadosCadastroCartao.numero() + " nao eh 16");
         }
@@ -22,9 +25,6 @@ public class CartaoDeCreditoService {
         }
         if(!dadosCadastroCartao.nomeTitular().matches("[a-zA-ZÀ-ÿ '-]+")){
             throw new IllegalArgumentException("O nome " + dadosCadastroCartao.nomeTitular() + " nao eh valido");
-        }
-        if(dadosCadastroCartao.nomeTitular().equals("") || dadosCadastroCartao.nomeTitular() == null){
-            throw new IllegalArgumentException("O nome " + dadosCadastroCartao.nomeTitular() + " esta vazio ou nulo");
         }
         if(!validaData(dadosCadastroCartao.validade(), "MM/yyyy")){
             throw new IllegalArgumentException("Formato incorreto da data " + dadosCadastroCartao.validade());

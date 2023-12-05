@@ -309,7 +309,7 @@ public class TrancaControllerTest {
     void testIntegraNaRede() throws Exception {
         // Arrange
         InclusaoTrancaDTO inclusaoDTO = new InclusaoTrancaDTO(1, 1, 1);
-        doNothing().when(trancaService).integrarNaRede(inclusaoDTO);
+        when(trancaService.integrarNaRede(inclusaoDTO)).thenReturn(true);
         String json = """
                 {
                     "idTranca": 1,
@@ -333,7 +333,7 @@ public class TrancaControllerTest {
     void testRetiraDaRede() throws Exception {
         // Arrange
         RetiradaTrancaDTO retiradaDTO = new RetiradaTrancaDTO(1, 1, 1, "NOVA");
-        doNothing().when(trancaService).retirarDaRede(retiradaDTO);
+        when(trancaService.retirarDaRede(retiradaDTO)).thenReturn(true);
         String json = """
                 {
                     "idTranca": 1,

@@ -8,14 +8,14 @@ public class InclusaoBicicletaDTOTest {
 
     @Test
     void testConstructor() {
-        int idTotem = 1;
+        int idTranca = 1;
         int idBicicleta = 1;
         int idFuncionario = 1;
 
 
-        InclusaoBicicletaDTO dadosInclusao = new InclusaoBicicletaDTO(idTotem, idBicicleta, idFuncionario);
+        InclusaoBicicletaDTO dadosInclusao = new InclusaoBicicletaDTO(idTranca, idBicicleta, idFuncionario);
 
-        assertEquals(idTotem, dadosInclusao.idTotem());
+        assertEquals(idTranca, dadosInclusao.idTranca());
         assertEquals(idBicicleta, dadosInclusao.idBicicleta());
         assertEquals(idFuncionario, dadosInclusao.idFuncionario());
 

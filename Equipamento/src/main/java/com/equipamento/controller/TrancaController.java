@@ -84,8 +84,7 @@ public class TrancaController {
 
     @PostMapping(value = "retirarDaRede", consumes = "application/json")
     @ApiOperation(value="Retirar uma tranca para aposendatoria ou reparo")
-    @SuppressWarnings("rawtypes")
-    public ResponseEntity retirarDaRede(@RequestBody RetiradaTrancaDTO dadosRetirada) {
+    public ResponseEntity<Void> retirarDaRede(@RequestBody RetiradaTrancaDTO dadosRetirada) {
         this.service.retirarDaRede(dadosRetirada);
         return ResponseEntity.ok().build();
     }

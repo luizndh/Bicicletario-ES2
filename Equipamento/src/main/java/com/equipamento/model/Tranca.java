@@ -11,6 +11,7 @@ public class Tranca {
     private int bicicleta;
     private int numero;
     private String localizacao;
+    private int totem;
 
     private String anoDeFabricacao;
     private String modelo;
@@ -20,19 +21,19 @@ public class Tranca {
 
     public static List<Tranca> trancas = new ArrayList<>();
 
-
-
     public enum StatusTranca {
         LIVRE,
         OCUPADA,
         NOVA,
         APOSENTADA,
-        EM_REPARO
+        EM_REPARO,
+        REPARO_SOLICITADO
     }
 
     public Tranca(TrancaDTO dadosTranca) throws IllegalArgumentException {
         this.id = trancas.size() + 1;
         this.bicicleta = 0;
+        this.totem = 0;
         this.numero = dadosTranca.numero();
         this.localizacao = dadosTranca.localizacao();
         this.anoDeFabricacao = dadosTranca.anoDeFabricacao();
@@ -48,6 +49,10 @@ public class Tranca {
 
     public void setLocalizacao(String localizacao) {
         this.localizacao = localizacao;
+    }
+
+    public void setTotem(int totem) {
+        this.totem = totem;
     }
 
     public void setAnoDeFabricacao(String anoDeFabricacao) {
