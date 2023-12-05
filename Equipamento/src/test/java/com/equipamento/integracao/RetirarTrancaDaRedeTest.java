@@ -14,6 +14,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
+import java.util.NoSuchElementException;
 
 import static com.equipamento.util.Constantes.URL_ALUGUEL;
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,7 @@ public class RetirarTrancaDaRedeTest {
     @Test
     void testRetiraTrancaDaRedeEmReparo() {
         //Arrange
-        RetiradaTrancaDTO dadosRetirada = new RetiradaTrancaDTO(1, 6, 1, "EM_REPARO");
+        RetiradaTrancaDTO dadosRetirada = new RetiradaTrancaDTO(1, 6, 12345, "EM_REPARO");
         Tranca t = trancaService.recuperaTrancaPorId(6);
 
         //Act
@@ -52,7 +53,7 @@ public class RetirarTrancaDaRedeTest {
     @Test
     void testRetiraTrancaDaRedeAposentada() {
         //Arrange
-        RetiradaTrancaDTO dadosRetirada = new RetiradaTrancaDTO(1, 2, 1, "APOSENTADA");
+        RetiradaTrancaDTO dadosRetirada = new RetiradaTrancaDTO(1, 2, 12345, "APOSENTADA");
         Tranca t = trancaService.recuperaTrancaPorId(2);
 
         //Act
@@ -67,13 +68,9 @@ public class RetirarTrancaDaRedeTest {
     void testRetiraTrancaDeRedeFuncionarioNaoExiste() {
         //Arrange
         RetiradaTrancaDTO dadosRetirada = new RetiradaTrancaDTO(1, 2, 100, "APOSENTADA");
-        Tranca t = trancaService.recuperaTrancaPorId(2);
+        
 
-        //Act
-        boolean emailEnviado = trancaService.retirarDaRede(dadosRetirada);
-
-        //Assert
-        assertEquals(Tranca.StatusTranca.APOSENTADA, t.getStatus());
-        assertFalse(emailEnviado);
+        //Act + Assert
+        assertThrows(NoSuchElementException.class, () -> trancaService.retirarDaRede(dadosRetirada));
     }
 }

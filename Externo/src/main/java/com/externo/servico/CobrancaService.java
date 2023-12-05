@@ -51,47 +51,58 @@ public class CobrancaService {
         }
 
         System.out.println("Recuperando dados do ciclista");
-        CiclistaResponseDTO ciclistaResponse = recuperaCiclistaPorId(dadosCobranca.getCiclista());
-        String emailCiclista = ciclistaResponse.email();
-        //String emailCiclista = "lucas.arruda@edu.unirio.br";
-
-        CartaoDeCreditoResponseDTO cartaoCiclista = ciclistaResponse.cartaoDeCredito();
-        //CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2029", "123");
-
+        CiclistaResponseDTO ciclistaResponse = null;
+        String emailCiclista = null;
+        CartaoDeCreditoResponseDTO cartaoCiclista = null;
         try {
-            Stripe.apiKey = "sk_test_51ODEoGK2SlPC0gAXe7gRKx3tgwYgdxaYf8xoTkJvrMdUXMSXMPzwmdFEprKG654eo1h8JRuyQtNvqIU8iPW7T7nE00W6te3PX4";
+            ciclistaResponse = recuperaCiclistaPorId(dadosCobranca.getCiclista());
+            emailCiclista = ciclistaResponse.email();
+            //String emailCiclista = "lucas.arruda@edu.unirio.br";
 
-            PaymentIntentCreateParams createParams = PaymentIntentCreateParams.builder().setAmount(dadosCobranca.getValor()*100).setCurrency("brl").build();
-            PaymentIntent paymentIntent = PaymentIntent.create(createParams);
-
-            PaymentIntent confirmedPaymentIntent = paymentIntent.confirm(PaymentIntentConfirmParams.builder().setPaymentMethod("pm_card_visa").build());
-
-            if (confirmedPaymentIntent.getStatus().equals("succeeded")) {
-                System.out.println("Cobranca realizada com sucesso");
-                //envia email notificando ciclista que a cobranca atrasada foi paga
-                service.enviarEmail(new EmailDTO(emailCiclista, "Cobranca paga", "Sua cobranca em atraso com o valor " + dadosCobranca.getValor() + " foi paga com sucesso!"));
-
-                //altera o status da cobranca na fila para paga
-                for (Cobranca c : cobrancas) {
-                    if (c.getId() == dadosCobranca.getId()) {
-                        c.setStatus(Cobranca.StatusCobranca.PAGA.toString());
-                        c.setHoraFinalizacao(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                        System.out.println("Cobranca com id " + c.getId() + " alterada para paga");
-                    }
-                }
-                dadosCobranca.setStatus(Cobranca.StatusCobranca.PAGA.toString());
-                dadosCobranca.setHoraFinalizacao(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                return dadosCobranca;
-            }
-
-        } catch (Exception e) {
+            cartaoCiclista = ciclistaResponse.cartaoDeCredito();
+            //CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2029", "123");
+        }
+        catch (Exception e) {
             e.printStackTrace();
-
-            service.enviarEmail(new EmailDTO(emailCiclista, "Erro na cobranca em atraso", "Houve um erro no processamento do pagamento da sua cobranca em atraso com o valor " + dadosCobranca.getValor()));
-            throw new IllegalArgumentException("Erro no processamento do pagamento");
         }
 
-        service.enviarEmail(new EmailDTO(emailCiclista, "Erro na cobranca em atraso", "Houve um erro no pagamento da sua cobranca em atraso com o valor " + dadosCobranca.getValor()));
+        if(emailCiclista != null) {
+            try {
+                Stripe.apiKey = "sk_test_51ODEoGK2SlPC0gAXe7gRKx3tgwYgdxaYf8xoTkJvrMdUXMSXMPzwmdFEprKG654eo1h8JRuyQtNvqIU8iPW7T7nE00W6te3PX4";
+
+                PaymentIntentCreateParams createParams = PaymentIntentCreateParams.builder().setAmount(dadosCobranca.getValor() * 100).setCurrency("brl").build();
+                PaymentIntent paymentIntent = PaymentIntent.create(createParams);
+
+                PaymentIntent confirmedPaymentIntent = paymentIntent.confirm(PaymentIntentConfirmParams.builder().setPaymentMethod("pm_card_visa").build());
+
+                if (confirmedPaymentIntent.getStatus().equals("succeeded")) {
+                    System.out.println("Cobranca realizada com sucesso");
+                    //envia email notificando ciclista que a cobranca atrasada foi paga
+                    service.enviarEmail(new EmailDTO(emailCiclista, "Cobranca paga", "Sua cobranca em atraso com o valor " + dadosCobranca.getValor() + " foi paga com sucesso!"));
+
+                    //altera o status da cobranca na fila para paga
+                    for (Cobranca c : cobrancas) {
+                        if (c.getId() == dadosCobranca.getId()) {
+                            c.setStatus(Cobranca.StatusCobranca.PAGA.toString());
+                            c.setHoraFinalizacao(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                            System.out.println("Cobranca com id " + c.getId() + " alterada para paga");
+                        }
+                    }
+                    dadosCobranca.setStatus(Cobranca.StatusCobranca.PAGA.toString());
+                    dadosCobranca.setHoraFinalizacao(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                    return dadosCobranca;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                service.enviarEmail(new EmailDTO(emailCiclista, "Erro na cobranca em atraso", "Houve um erro no processamento do pagamento da sua cobranca em atraso com o valor " + dadosCobranca.getValor()));
+                throw new IllegalArgumentException("Erro no processamento do pagamento");
+            }
+        }
+
+        if(emailCiclista != null)
+            service.enviarEmail(new EmailDTO(emailCiclista, "Erro na cobranca em atraso", "Houve um erro no pagamento da sua cobranca em atraso com o valor " + dadosCobranca.getValor()));
         throw new IllegalArgumentException("Erro no processamento do pagamento");
     }
 

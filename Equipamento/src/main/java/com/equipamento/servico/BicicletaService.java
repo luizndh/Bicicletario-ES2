@@ -40,7 +40,6 @@ public class BicicletaService {
 
     public Bicicleta cadastraBicicleta(BicicletaDTO dadosCadastroBicicleta) {
         Bicicleta b = new Bicicleta(dadosCadastroBicicleta);
-        b.setStatus(StatusBicicleta.NOVA);
         bicicletas.add(b);
         return b;
     }
@@ -122,6 +121,8 @@ public class BicicletaService {
 
         try {
             String jsonEntrada = mapper.writeValueAsString(novoEmail);
+            System.out.println("JSON ENTRADA DE EMAIL: " );
+            System.out.println(jsonEntrada);
 
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
@@ -130,7 +131,17 @@ public class BicicletaService {
                     .build();
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.statusCode() == 200;
+            System.out.println("JSON SAIDA DE EMAIL: ");
+            System.out.println(response.body());
+            if(response.statusCode() == 200) {
+                return true;
+            } else if(response.statusCode() == 404) {
+                throw new NoSuchElementException();
+            } else if(response.statusCode() == 422) {
+                throw new IllegalArgumentException();
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -140,14 +151,21 @@ public class BicicletaService {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI(URL_ALUGUEL + "/funcionario/" + idFuncionario))
+                    .uri(new URI(URL_ALUGUEL + "/funcionario/" + String.valueOf(idFuncionario)))
                     .GET()
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            FuncionarioDTO funcionarioResponse = mapper.readValue(response.body(), FuncionarioDTO.class);
-            return funcionarioResponse.email();
+            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("BODY DA RESPOSTA: " + response.body());
+            if(response.statusCode() == 422) {
+                throw new IllegalArgumentException();
+            } else if(response.statusCode() == 404) {
+                throw new NoSuchElementException();
+            } else if(response.statusCode() == 200) {
+                FuncionarioDTO funcionarioResponse = mapper.readValue(response.body(), FuncionarioDTO.class);
+                return funcionarioResponse.email();
+            }
+            return null;
         } catch(Exception e) {
             throw new RuntimeException(e);
         }

@@ -14,6 +14,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
+import java.util.NoSuchElementException;
 
 import static com.equipamento.util.Constantes.URL_ALUGUEL;
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,7 +41,7 @@ public class IntegrarTrancaNaRedeTest {
     @Test
     void testIntegraTrancaNaRedeCorreta() {
         //Arrange
-        InclusaoTrancaDTO dto = new InclusaoTrancaDTO(1, 5, 1);
+        InclusaoTrancaDTO dto = new InclusaoTrancaDTO(1, 5, 12345);
         Tranca t = trancaService.recuperaTrancaPorId(5);
 
         //Act
@@ -55,13 +56,8 @@ public class IntegrarTrancaNaRedeTest {
     void testIntegraNaRedeFuncionarioNaoExiste() {
         //Arrange
         InclusaoTrancaDTO dto = new InclusaoTrancaDTO(1, 5, 100);
-        Tranca t = trancaService.recuperaTrancaPorId(5);
 
-        //Act
-        boolean emailEnviado = trancaService.integrarNaRede(dto);
-
-        //Assert
-        assertEquals(t.getStatus(), Tranca.StatusTranca.LIVRE);
-        assertFalse(emailEnviado);
+        // Act + assert
+        assertThrows(NoSuchElementException.class, () -> trancaService.integrarNaRede(dto));
     }
 }

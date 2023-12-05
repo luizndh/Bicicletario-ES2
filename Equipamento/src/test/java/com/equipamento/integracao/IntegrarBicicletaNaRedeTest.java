@@ -1,6 +1,5 @@
 package com.equipamento.integracao;
 
-import com.equipamento.controller.BicicletaController;
 import com.equipamento.dto.InclusaoBicicletaDTO;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.servico.BicicletaService;
@@ -14,7 +13,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 import static com.equipamento.util.Constantes.URL_ALUGUEL;
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,7 +38,7 @@ public class IntegrarBicicletaNaRedeTest {
     @Test
     void testIntegraNaRedeCorreta() {
         //Arrange
-        InclusaoBicicletaDTO dto = new InclusaoBicicletaDTO(2, 4, 1);
+        InclusaoBicicletaDTO dto = new InclusaoBicicletaDTO(2, 4, 12345);
         Bicicleta b = bicicletaService.recuperaBicicletaPorId(4);
 
         //Act
@@ -55,18 +54,24 @@ public class IntegrarBicicletaNaRedeTest {
         //Arrange
         InclusaoBicicletaDTO dto = new InclusaoBicicletaDTO(2, 4, 10);
 
-        //Act
-        boolean emailEnviado = bicicletaService.integrarNaRede(dto);
+        //Act + Assert
+        assertThrows(NoSuchElementException.class, () -> bicicletaService.integrarNaRede(dto));
+    }
 
-        //Assert
-        assertFalse(emailEnviado);
+    @Test
+    void testIntegraNaRedeIdFuncionarioInvalido() {
+        //Arrange
+        InclusaoBicicletaDTO dto = new InclusaoBicicletaDTO(2, 4, -2);
+
+        //Act + Assert
+        assertThrows(IllegalArgumentException.class, () -> bicicletaService.integrarNaRede(dto));
     }
 
 
     @Test
     void testIntegraNaRedeBicicletaEmUso() {
         //Arrange
-        InclusaoBicicletaDTO dto = new InclusaoBicicletaDTO(2, 5, 1);
+        InclusaoBicicletaDTO dto = new InclusaoBicicletaDTO(2, 5, 12345);
         Bicicleta b = bicicletaService.recuperaBicicletaPorId(5);
 
         //Act

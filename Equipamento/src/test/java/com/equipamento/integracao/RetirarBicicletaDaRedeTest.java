@@ -15,6 +15,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
+import java.util.NoSuchElementException;
 
 import static com.equipamento.util.Constantes.URL_ALUGUEL;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +42,7 @@ public class RetirarBicicletaDaRedeTest {
     @Test
     void testRetiraBicicletaDaRedeEmReparo() {
         //Arrange
-        RetiradaBicicletaDTO dadosRetirada = new RetiradaBicicletaDTO( 3,4 ,1, "EM_REPARO");
+        RetiradaBicicletaDTO dadosRetirada = new RetiradaBicicletaDTO( 3,4 ,12345, "EM_REPARO");
         Bicicleta b = bicicletaService.recuperaBicicletaPorId(4);
 
         //Act
@@ -55,7 +56,7 @@ public class RetirarBicicletaDaRedeTest {
     @Test
     void testRetiraBicicletaDaRedeAposentada() {
         //Arrange
-        RetiradaBicicletaDTO dadosRetirada = new RetiradaBicicletaDTO( 3,4 ,1, "APOSENTADA");
+        RetiradaBicicletaDTO dadosRetirada = new RetiradaBicicletaDTO( 3,4 ,12345, "APOSENTADA");
         Bicicleta b = bicicletaService.recuperaBicicletaPorId(4);
 
         //Act
@@ -70,13 +71,9 @@ public class RetirarBicicletaDaRedeTest {
     void testRetiraBicicletaFuncionarioNaoExiste() {
         //Arrange
         RetiradaBicicletaDTO dadosRetirada = new RetiradaBicicletaDTO( 3,4 ,100, "APOSENTADA");
-        Bicicleta b = bicicletaService.recuperaBicicletaPorId(4);
+        
 
-        //Act
-        boolean emailEnviado = bicicletaService.retirarDaRede(dadosRetirada);
-
-        //Assert
-        assertEquals(b.getStatus(), Bicicleta.StatusBicicleta.APOSENTADA);
-        assertFalse(emailEnviado);
+        //Act + Assert
+        assertThrows(NoSuchElementException.class, () -> bicicletaService.retirarDaRede(dadosRetirada));
     }
 }

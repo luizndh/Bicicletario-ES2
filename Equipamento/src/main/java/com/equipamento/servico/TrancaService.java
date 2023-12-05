@@ -145,7 +145,15 @@ public class TrancaService {
                     .build();
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.statusCode() == 200;
+            if(response.statusCode() == 200) {
+                return true;
+            } else if(response.statusCode() == 404) {
+                throw new NoSuchElementException();
+            } else if(response.statusCode() == 422) {
+                throw new IllegalArgumentException();
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -161,10 +169,16 @@ public class TrancaService {
                     .GET()
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            FuncionarioDTO funcionarioResponse = mapper.readValue(response.body(), FuncionarioDTO.class);
-            return funcionarioResponse.email();
+            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if(response.statusCode() == 422) {
+                throw new IllegalArgumentException();
+            } else if(response.statusCode() == 404) {
+                throw new NoSuchElementException();
+            } else if(response.statusCode() == 200) {
+                FuncionarioDTO funcionarioResponse = mapper.readValue(response.body(), FuncionarioDTO.class);
+                return funcionarioResponse.email();
+            }
+            return null;
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
