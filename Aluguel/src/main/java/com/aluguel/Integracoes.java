@@ -17,6 +17,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class Integracoes {
+
+    final static String URL_EXTERNO = "http://ec2-184-73-11-54.compute-1.amazonaws.com:8081";
+    final static String URL_EQUIPAMENTO = "http://ec2-54-242-20-26.compute-1.amazonaws.com:8080";
     public boolean enviaEmail(String email, String assunto, String mensagem) {
         ObjectMapper mapper = new ObjectMapper();
         EmailDTO novoEmail = new EmailDTO(email, assunto, mensagem);
@@ -26,7 +29,7 @@ public class Integracoes {
 
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/enviarEmail"))
+                    .uri(new URI(URL_EXTERNO + "/enviarEmail"))
                     .POST(HttpRequest.BodyPublishers.ofString(jsonEntrada))
                     .build();
 
@@ -44,7 +47,7 @@ public class Integracoes {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8082/tranca/" + idTranca))
+                    .uri(new URI(URL_EQUIPAMENTO + "/tranca/" + idTranca))
                     .GET()
                     .build();
 
@@ -63,7 +66,7 @@ public class Integracoes {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8082/bicicleta/" + idBicicleta))
+                    .uri(new URI(URL_EQUIPAMENTO + "/bicicleta/" + idBicicleta))
                     .GET()
                     .build();
 
@@ -82,7 +85,7 @@ public class Integracoes {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/cobranca"))
+                    .uri(new URI(URL_EXTERNO + "/cobranca"))
                     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(novaCobranca)))
                     .build();
 
@@ -101,7 +104,7 @@ public class Integracoes {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8082/tranca/" + idTranca + "/trancar"))
+                    .uri(new URI(URL_EQUIPAMENTO + "/tranca/" + idTranca + "/trancar"))
                     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(idBicicleta)))
                     .build();
 
@@ -119,7 +122,7 @@ public class Integracoes {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8082/tranca/" + idTranca + "/destrancar"))
+                    .uri(new URI(URL_EQUIPAMENTO + "/tranca/" + idTranca + "/destrancar"))
                     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(idBicicleta)))
                     .build();
 
@@ -137,7 +140,7 @@ public class Integracoes {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8081/validaCartaoDeCredito"))
+                    .uri(new URI(URL_EXTERNO + "/validaCartaoDeCredito"))
                     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(cartaoDeCredito)))
                     .build();
 
@@ -155,7 +158,7 @@ public class Integracoes {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8082/bicicleta/" + idBicicleta + "/aluguel"))
+                    .uri(new URI(URL_EQUIPAMENTO + "/bicicleta/" + idBicicleta + "/aluguel"))
                     .GET()
                     .build();
 
@@ -174,7 +177,7 @@ public class Integracoes {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("localhost:8082/bicicleta/integrarNaRede"))
+                    .uri(new URI(URL_EQUIPAMENTO + "/bicicleta/integrarNaRede"))
                     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(idBicicleta)))
                     .build();
 

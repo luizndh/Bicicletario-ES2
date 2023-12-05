@@ -34,7 +34,7 @@ public class IntegracaoTest {
     @Autowired
     private MockMvc mvc;
 
-    final String URL = "http://localhost:8082";
+    final String URL = "http://ec2-54-235-47-98.compute-1.amazonaws.com:8082";
 
     final String JSON_ERRO_422 = "{\"codigo\":422,\"mensagem\":\"Argumento invalido\"}";
     final String JSON_ERRO_404 = "{\"codigo\":404,\"mensagem\":\"Entidade nao existe\"}";

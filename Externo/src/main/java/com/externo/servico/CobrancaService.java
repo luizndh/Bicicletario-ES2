@@ -30,7 +30,7 @@ public class CobrancaService {
     @Autowired
     private EmailService service;
 
-    final String URL = "http://localhost:8082";
+    final String URL = "http://ec2-54-235-47-98.compute-1.amazonaws.com:8082";
 
     public Cobranca realizaCobranca(Cobranca dadosCobranca) {
         System.out.println("Realizando cobranca com id: " + dadosCobranca.getId());
