@@ -8,6 +8,7 @@ import com.aluguel.dto.NovoCiclistaDTO;
 import com.aluguel.model.Aluguel;
 import com.aluguel.model.CartaoDeCredito;
 import com.aluguel.model.Ciclista;
+import com.aluguel.model.Passaporte;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,10 +30,10 @@ public class CiclistaService {
         ciclistas.clear();
         cartoesDeCreditos.clear();
 
-        ciclistas.add(new Ciclista(new NovoCiclistaDTO("Fulano Beltrano", "2021-05-02", "78804034009", "Brasileiro", "user@example.com", "ABC123", new CartaoDeCreditoDTO("Fulano Beltrano", "4012001037141112", "2022-12", "132"))));
-        ciclistas.add(new Ciclista(new NovoCiclistaDTO("Fulano Beltrano", "2021-05-02", "43943488039", "Brasileiro", "user2@example.com", "ABC123", new CartaoDeCreditoDTO("Fulano Beltrano", "4012001037141112", "2022-12", "132"))));
-        ciclistas.add(new Ciclista(new NovoCiclistaDTO("Fulano Beltrano", "2021-05-02", "10243164084", "Brasileiro", "user3@example.com", "ABC123", new CartaoDeCreditoDTO("Fulano Beltrano", "4012001037141112", "2022-12", "132"))));
-        ciclistas.add(new Ciclista(new NovoCiclistaDTO("Fulano Beltrano", "2021-05-02", "30880150017", "Brasileiro", "user4@example.com", "ABC123", new CartaoDeCreditoDTO("Fulano Beltrano", "4012001037141112", "2022-12", "132"))));
+        ciclistas.add(new Ciclista(new NovoCiclistaDTO("Fulano Beltrano", "2021-05-02", "78804034009", new Passaporte("", "", "") , "Brasileiro", "user@example.com", "ABC123")));
+        ciclistas.add(new Ciclista(new NovoCiclistaDTO("Fulano Beltrano", "2021-05-02", "43943488039", new Passaporte("", "", "") , "Brasileiro", "user2@example.com", "ABC123")));
+        ciclistas.add(new Ciclista(new NovoCiclistaDTO("Fulano Beltrano", "2021-05-02", "10243164084", new Passaporte("", "", "") , "Brasileiro", "user3@example.com", "ABC123")));
+        ciclistas.add(new Ciclista(new NovoCiclistaDTO("Fulano Beltrano", "2021-05-02", "30880150017", new Passaporte("", "", "") , "Brasileiro", "user4@example.com", "ABC123")));
     }
 
     public Ciclista recuperaCiclistaPorId(int idCiclista) {

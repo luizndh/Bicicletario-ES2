@@ -13,11 +13,11 @@ public class Ciclista {
     private String nome;
     private String nascimento;
     private String cpf;
+    private Passaporte passaporte;
     private String nacionalidade;
     private String email;
     private String urlFotoDocumento;
     private String senha;
-    private CartaoDeCredito cartaoDeCredito;
     
     public static final List<Ciclista> ciclistas = new ArrayList<>();
 
@@ -30,7 +30,6 @@ public class Ciclista {
         this.nacionalidade = dadosCadastroCiclista.nacionalidade();
         this.email = dadosCadastroCiclista.email();
         this.senha = dadosCadastroCiclista.senha();
-        this.cartaoDeCredito = new CartaoDeCredito(dadosCadastroCiclista.cartaoDeCredito());
     }
 
     public void atualizaCiclista(CiclistaDTO dadosAlteracaoCiclista) {
@@ -41,7 +40,6 @@ public class Ciclista {
         this.email = dadosAlteracaoCiclista.email();
         this.urlFotoDocumento = dadosAlteracaoCiclista.urlFotoDocumento();
         this.senha = dadosAlteracaoCiclista.senha();
-        this.cartaoDeCredito = new CartaoDeCredito(dadosAlteracaoCiclista.cartaoDeCredito());
     }
 
     public enum StatusCiclista {
@@ -78,8 +76,8 @@ public class Ciclista {
         return cpf;
     }
 
-    public CartaoDeCredito getCartaoDeCredito() {
-        return cartaoDeCredito;
+    public Passaporte getPassaporte() {
+        return passaporte;
     }
 
     public String getNacionalidade() {

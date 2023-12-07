@@ -15,9 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.aluguel.Integracoes;
 import com.aluguel.dto.BicicletaDTO;
-import com.aluguel.dto.CartaoDeCreditoDTO;
 import com.aluguel.dto.NovoCiclistaDTO;
 import com.aluguel.model.Ciclista;
+import com.aluguel.model.Passaporte;
 import com.aluguel.service.CiclistaService;
 
 @SpringBootTest
@@ -40,7 +40,7 @@ public class CiclistaControllerTest {
     public void testRecuperaCiclistaPorId() throws Exception{
         // Arrange
         int idCiclista = 1;
-        when(ciclistaService.recuperaCiclistaPorId(idCiclista)).thenReturn(new Ciclista(new NovoCiclistaDTO("Luis Fumado", "01/01/2000", "123.456.789-00", "Brasileiro", "luisfumado@gamil.com", "12345678", new CartaoDeCreditoDTO("fulano", "1234567890123456", "01/01/2025", "123"))));
+        when(ciclistaService.recuperaCiclistaPorId(idCiclista)).thenReturn(new Ciclista(new NovoCiclistaDTO("Luis Fumado", "01/01/2000", "123.456.789-00", new Passaporte("", "", ""), "Brasileiro", "luisfumado@gamil.com", "12345678")));
 
         String json = "{\"id\":1,\"status\":\"AGUARDANDO_CONFIRMACAO\",\"nome\":\"Luis Fumado\",\"nascimento\":\"01/01/2000\",\"cpf\":\"123.456.789-00\",\"passaporte\":{\"numero\":\"1\",\"validade\":\"12/2025\",\"pais\":\"BR\"},\"nacionalidade\":\"Brasileiro\",\"email\":\"luisfumado@gamil.com\",\"urlFotoDocumento\":\"https://teste.com/foto.jpg\",\"senha\":\"12345678\",\"ativo\":false}";
 
@@ -129,7 +129,7 @@ public class CiclistaControllerTest {
     public void testAtivaCiclista() throws Exception {
         // Arrange
         int idCiclista = 1;
-        Ciclista ciclista = new Ciclista(new NovoCiclistaDTO("Luis Fumado", "01/01/2000", "123.456.789-00", "Brasileiro", "luisfumado@gmail.com", "12345678", new CartaoDeCreditoDTO("fulano", "1234567890123456", "01/01/2025", "123")));
+        Ciclista ciclista = new Ciclista(new NovoCiclistaDTO("Luis Fumado", "01/01/2000", "123.456.789-00", new Passaporte("", "", ""), "Brasileiro", "luisfumado@gmail.com", "12345678"));
         
         when(ciclistaService.ativaCiclista(idCiclista)).then(invocation -> {
             ciclista.ativaCiclista();

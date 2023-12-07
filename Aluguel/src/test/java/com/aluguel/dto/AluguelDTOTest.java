@@ -7,7 +7,7 @@ public class AluguelDTOTest {
 
     @Test
     void testAluguelDTO() {
-        AluguelDTO aluguelDTO = new AluguelDTO("1", "10:00", "2", "11:00", "50", "3", "4", "EM_ANDAMENTO");
+        AluguelDTO aluguelDTO = new AluguelDTO("1", "10:00", "2", "11:00", "50", "3", "4");
         
         Assertions.assertEquals("1", aluguelDTO.bicicleta());
         Assertions.assertEquals("10:00", aluguelDTO.horaInicio());

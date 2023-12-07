@@ -1,6 +1,5 @@
 package com.aluguel.model;
 
-import com.aluguel.dto.CartaoDeCreditoDTO;
 import com.aluguel.dto.CiclistaDTO;
 import com.aluguel.dto.NovoCiclistaDTO;
 
@@ -14,13 +13,13 @@ public class CiclistaTest {
 
     @BeforeEach
     void setUp() {
-        NovoCiclistaDTO dadosCadastroCiclista = new NovoCiclistaDTO("Luis Fumado", "01/01/2000", "123.456.789-00", "Brasileiro", "luisfumado@teste.com", "12345678", new CartaoDeCreditoDTO("fulano", "1234567890123456", "01/01/2025", "123"));
+        NovoCiclistaDTO dadosCadastroCiclista = new NovoCiclistaDTO("Luis Fumado", "01/01/2000", "123.456.789-00", new Passaporte("", "", ""), "Brasileiro", "luisfumado@teste.com", "12345678");
         ciclista = new Ciclista(dadosCadastroCiclista);
     }
 
     @Test
     void testAtualizaCiclista() {
-        CiclistaDTO dadosAlteracaoCiclista = new CiclistaDTO(1, "ATIVO","Luisa Fumada", "31/12/2001", "009.876.543-21", "Brasileira", "luisafumada@teste.com", "http://url-da-foto.com", "12345678", new CartaoDeCreditoDTO("fulano", "1234567890123456", "01/01/2025", "123"));
+        CiclistaDTO dadosAlteracaoCiclista = new CiclistaDTO(1, "ATIVO","Luisa Fumada", "31/12/2001", "009.876.543-21", new Passaporte("", "", ""), "Brasileira", "luisafumada@teste.com", "http://url-da-foto.com", "12345678");
 
 
         ciclista.atualizaCiclista(dadosAlteracaoCiclista);

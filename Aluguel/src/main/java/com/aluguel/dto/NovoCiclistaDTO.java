@@ -1,7 +1,9 @@
 package com.aluguel.dto;
 
-public record NovoCiclistaDTO(String nome, String nascimento, String cpf, String nacionalidade, String email, String senha, CartaoDeCreditoDTO cartaoDeCredito) {
+import com.aluguel.model.Passaporte;
+
+public record NovoCiclistaDTO(String nome, String nascimento, String cpf, Passaporte passaporte, String nacionalidade, String email, String senha) {
     public NovoCiclistaDTO() {
-        this("", "", "", "","","", null);
+        this("", "", "", null,"","", "");
     }
 }

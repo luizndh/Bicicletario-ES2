@@ -1,3 +1,5 @@
 package com.aluguel.dto;
 
-public record CiclistaDTO (int idCiclista, String status, String nome, String nascimento, String cpf, String nacionalidade, String email, String urlFotoDocumento, String senha, CartaoDeCreditoDTO cartaoDeCredito) {}
+import com.aluguel.model.Passaporte;
+
+public record CiclistaDTO (int idCiclista, String status, String nome, String nascimento, String cpf, Passaporte passaporte, String nacionalidade, String email, String urlFotoDocumento, String senha) {}

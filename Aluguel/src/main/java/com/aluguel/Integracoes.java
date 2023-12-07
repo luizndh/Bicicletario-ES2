@@ -20,6 +20,7 @@ public class Integracoes {
 
     final static String URL_EXTERNO = "http://ec2-184-73-11-54.compute-1.amazonaws.com:8081";
     final static String URL_EQUIPAMENTO = "http://ec2-54-242-20-26.compute-1.amazonaws.com:8080";
+    
     public boolean enviaEmail(String email, String assunto, String mensagem) {
         ObjectMapper mapper = new ObjectMapper();
         EmailDTO novoEmail = new EmailDTO(email, assunto, mensagem);

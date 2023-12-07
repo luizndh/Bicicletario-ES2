@@ -54,7 +54,7 @@ public class DevolucaoServiceTest {
         when(cartaoDeCreditoService.recuperaCartaoDeCreditoPorId(anyInt())).thenReturn(new CartaoDeCredito(new CartaoDeCreditoDTO("Jofrey", "2345678", "10/22", "123")));
         when(aluguelService.recuperaAluguelPorIdBicicleta(Integer.parseInt(idBicicleta))).then(invocation -> {
             Aluguel aluguel = new Aluguel(new NovoAluguelDTO("1", "2"));
-            aluguel.atualizaAluguel(new AluguelDTO("1", "10:00", "2", "11:00", "10", "3", "4", "EM_ANDAMENTO"));
+            aluguel.atualizaAluguel(new AluguelDTO("1", "10:00", "2", "11:00", "10", "3", "4"));
             return aluguel;
         });
         

@@ -63,7 +63,7 @@ public class DevolucaoService {
             cobranca = integracoes.realizaCobranca(novaCobranca);
         }
 
-        aluguel.atualizaAluguel(new AluguelDTO(String.valueOf(aluguel.getBicicleta()), aluguel.getHoraInicio(), dadosCadastroDevolucao.trancaFim(), dataFinal, String.valueOf(aluguel.getCobranca()), String.valueOf(aluguel.getCiclista()), String.valueOf(aluguel.getTrancaInicio()), "FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE"));
+        aluguel.atualizaAluguel(new AluguelDTO(String.valueOf(aluguel.getBicicleta()), aluguel.getHoraInicio(), dadosCadastroDevolucao.trancaFim(), dataFinal, String.valueOf(aluguel.getCobranca()), String.valueOf(aluguel.getCiclista()), String.valueOf(aluguel.getTrancaInicio())));
         integracoes.trancaTranca(aluguel.getTrancaFim(), aluguel.getBicicleta());
 
         Ciclista ciclista = ciclistaService.recuperaCiclistaPorId(aluguel.getCiclista());

@@ -15,20 +15,12 @@ public class Aluguel {
     private int cobranca;
     private int ciclista;
     private int trancaInicio;
-    private Status status;
-
-    public enum Status {
-        EM_ANDAMENTO,
-        FINALIZADO,
-        FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE
-    }
 
     public static final List<Aluguel> alugueis = new ArrayList<>();
 
     public Aluguel(NovoAluguelDTO dadosCadastroAluguel) {
         this.ciclista = Integer.parseInt(dadosCadastroAluguel.ciclista());
         this.trancaInicio = Integer.parseInt(dadosCadastroAluguel.trancaInicio());
-        this.status = Status.EM_ANDAMENTO;
     }
 
     public void atualizaAluguel(AluguelDTO dadosAlteracaoAluguel) {
@@ -39,7 +31,6 @@ public class Aluguel {
         this.cobranca = Integer.parseInt(dadosAlteracaoAluguel.cobranca());
         this.ciclista = Integer.parseInt(dadosAlteracaoAluguel.ciclista());
         this.trancaInicio = Integer.parseInt(dadosAlteracaoAluguel.trancaInicio());
-        this.status = Status.valueOf(dadosAlteracaoAluguel.status());
     }
 
     public int getBicicleta() {
@@ -68,9 +59,5 @@ public class Aluguel {
 
     public int getTrancaInicio() {
         return trancaInicio;
-    }
-
-    public Status getStatus() {
-        return status;
     }
 }

@@ -107,7 +107,7 @@ class AluguelServiceTest {
 
         when(aluguelServiceMock.recuperaAluguelPorIdBicicleta(idBicicleta)).then(invocation -> {
             Aluguel aluguel = new Aluguel(new NovoAluguelDTO("1", "2"));
-            aluguel.atualizaAluguel(new AluguelDTO("0", "10:00", "2", "11:00", "10", "3", "4", "EM_ANDAMENTO"));
+            aluguel.atualizaAluguel(new AluguelDTO("0", "10:00", "2", "11:00", "10", "3", "4"));
             return aluguel;
         });
 

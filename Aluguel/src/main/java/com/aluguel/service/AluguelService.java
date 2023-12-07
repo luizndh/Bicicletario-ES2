@@ -37,15 +37,15 @@ public class AluguelService {
         String duasHorasAtras = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis() - 7200000));
 
         Aluguel aluguel1 = new Aluguel(new NovoAluguelDTO("3", "2"));
-        aluguel1.atualizaAluguel(new AluguelDTO("3", horaInicio, "-1", "-1", "1", "3", "2", "EM_ANDAMENTO"));
+        aluguel1.atualizaAluguel(new AluguelDTO("3", horaInicio, "-1", "-1", "1", "3", "2"));
         alugueis.add(aluguel1);
 
         Aluguel aluguel2 = new Aluguel(new NovoAluguelDTO("4", "4"));
-        aluguel2.atualizaAluguel(new AluguelDTO("5", duasHorasAtras, "-1", "-1", "2", "4", "4", "EM_ANDAMENTO"));
+        aluguel2.atualizaAluguel(new AluguelDTO("5", duasHorasAtras, "-1", "-1", "2", "4", "4"));
         alugueis.add(aluguel2);
 
         Aluguel aluguel3 = new Aluguel(new NovoAluguelDTO("3", "1"));
-        aluguel3.atualizaAluguel(new AluguelDTO("1", duasHorasAtras, "2", horaInicio, "3", "3", "1", "FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE"));
+        aluguel3.atualizaAluguel(new AluguelDTO("1", duasHorasAtras, "2", horaInicio, "3", "3", "1"));
         alugueis.add(aluguel3);
     }
 
@@ -67,7 +67,7 @@ public class AluguelService {
         
         String horaInicio = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         Aluguel aluguel = new Aluguel(dadosCadastroAluguel);
-        aluguel.atualizaAluguel(new AluguelDTO(String.valueOf(bicicleta.id()), horaInicio, "-1", "-1", "10", String.valueOf(ciclista.getId()), String.valueOf(trancaInicio.id()), "EM_ANDAMENTO"));
+        aluguel.atualizaAluguel(new AluguelDTO(String.valueOf(bicicleta.id()), horaInicio, "-1", "-1", "10", String.valueOf(ciclista.getId()), String.valueOf(trancaInicio.id())));
         alugueis.add(aluguel);
 
         integracoes.destrancaTranca(trancaInicio.id(), Integer.parseInt(bicicleta.id()));

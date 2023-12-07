@@ -3,6 +3,8 @@ package com.aluguel.dto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.aluguel.model.Passaporte;
+
 public class NovoCiclistaDTOTest {
 
     @Test
@@ -11,15 +13,10 @@ public class NovoCiclistaDTOTest {
                 "John Doe",
                 "1990-01-01",
                 "123456789",
+                new Passaporte("aiai", "uiui", "receba"),
                 "USA",
                 "johndoe@example.com",
-                "12345678",
-                new CartaoDeCreditoDTO(
-                        "John Doe",
-                        "1234567890123456",
-                        "01/01/2025",
-                        "123"
-                )
+                "12345678"
         );
 
         Assertions.assertEquals("John Doe", novoCiclistaDTO.nome());
