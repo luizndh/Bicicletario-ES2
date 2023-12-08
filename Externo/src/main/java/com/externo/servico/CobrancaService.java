@@ -30,7 +30,8 @@ public class CobrancaService {
     @Autowired
     private EmailService service;
 
-    final String URL = "http://ec2-54-235-47-98.compute-1.amazonaws.com:8082";
+    //final String URL = "http://ec2-54-235-47-98.compute-1.amazonaws.com:8082";
+    final String URL = "http://localhost:8082";
 
     public Cobranca realizaCobranca(Cobranca dadosCobranca) {
         System.out.println("Realizando cobranca com id: " + dadosCobranca.getId());
@@ -59,7 +60,7 @@ public class CobrancaService {
             emailCiclista = ciclistaResponse.email();
             //String emailCiclista = "lucas.arruda@edu.unirio.br";
 
-            cartaoCiclista = ciclistaResponse.cartaoDeCredito();
+            cartaoCiclista = recuperaCartaoDeCreditoDeCiclistaPorId(dadosCobranca.getCiclista());
             //CartaoDeCreditoResponseDTO cartaoCiclista = new CartaoDeCreditoResponseDTO(1, "joao", "4242424242424242", "12/2029", "123");
         }
         catch (NoSuchElementException e) {
