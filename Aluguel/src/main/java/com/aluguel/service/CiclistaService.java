@@ -4,6 +4,7 @@ import com.aluguel.Integracoes;
 import com.aluguel.dto.BicicletaDTO;
 import com.aluguel.dto.CartaoDeCreditoDTO;
 import com.aluguel.dto.CiclistaDTO;
+import com.aluguel.dto.CiclistaRetornoDTO;
 import com.aluguel.dto.NovoCiclistaDTO;
 import com.aluguel.model.Aluguel;
 import com.aluguel.model.CartaoDeCredito;
@@ -43,6 +44,11 @@ public class CiclistaService {
             }
         }
         throw new NoSuchElementException("O ciclista com id " + idCiclista + " não existe");
+    }
+
+    public CiclistaRetornoDTO recuperaCiclistaRetornoPorId(int idCiclista) {
+        Ciclista ciclista = recuperaCiclistaPorId(idCiclista);
+        return new CiclistaRetornoDTO(ciclista.getId(), ciclista.getNome(), ciclista.getNascimento(), ciclista.getCpf(), ciclista.getPassaporte(), ciclista.getNacionalidade(), ciclista.getEmail(), ciclista.getUrlFotoDocumento());
     }
 
     public List<Ciclista> recuperaCiclistas() { return ciclistas; }

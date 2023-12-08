@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aluguel.dto.BicicletaDTO;
 import com.aluguel.dto.CartaoDeCreditoDTO;
 import com.aluguel.dto.CiclistaDTO;
+import com.aluguel.dto.CiclistaRetornoDTO;
 import com.aluguel.dto.NovoCiclistaDTO;
 import com.aluguel.model.Ciclista;
 import com.aluguel.service.CiclistaService;
@@ -30,9 +31,9 @@ public class CiclistaController {
 
     @GetMapping("/{idCiclista}")
     @ApiOperation(value="Retorna um ciclista com o id passado")
-    public ResponseEntity<Ciclista> recuperaCiclistaPorId(@PathVariable int idCiclista) {
-        Ciclista ciclista = this.service.recuperaCiclistaPorId(idCiclista);
-        return ResponseEntity.ok().body(ciclista);
+    public ResponseEntity<CiclistaRetornoDTO> recuperaCiclistaPorId(@PathVariable int idCiclista) {
+        CiclistaRetornoDTO ciclistaRetorno = this.service.recuperaCiclistaRetornoPorId(idCiclista);
+        return ResponseEntity.ok().body(ciclistaRetorno);
     }
 
     @GetMapping("/existeEmail/{email}")
