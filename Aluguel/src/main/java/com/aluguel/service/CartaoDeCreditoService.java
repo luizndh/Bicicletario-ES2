@@ -21,6 +21,15 @@ public class CartaoDeCreditoService {
     @Autowired
     CiclistaService ciclistaService;
 
+    public void restauraDados() {
+        cartoesDeCreditos.clear();
+
+        cartoesDeCreditos.add(new CartaoDeCredito(new CartaoDeCreditoDTO("Fulano Beltrano", "4012001037141112", "12/2022", "132")));
+        cartoesDeCreditos.add(new CartaoDeCredito(new CartaoDeCreditoDTO("Fulano Beltrano", "4012001037141112", "12/2022", "132")));
+        cartoesDeCreditos.add(new CartaoDeCredito(new CartaoDeCreditoDTO("Fulano Beltrano", "4012001037141112", "12/2022", "132")));
+        cartoesDeCreditos.add(new CartaoDeCredito(new CartaoDeCreditoDTO("Fulano Beltrano", "4012001037141112", "12/2022", "132")));
+    }
+
     public CartaoDeCredito recuperaCartaoDeCreditoPorId(int idCiclista) {
         for (CartaoDeCredito cartaoDeCredito : cartoesDeCreditos) {
             if (cartaoDeCredito.getId() == idCiclista) {

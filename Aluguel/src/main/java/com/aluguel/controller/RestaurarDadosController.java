@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aluguel.service.AluguelService;
+import com.aluguel.service.CartaoDeCreditoService;
 import com.aluguel.service.CiclistaService;
 import com.aluguel.service.FuncionarioService;
 
@@ -25,6 +26,9 @@ public class RestaurarDadosController {
     private CiclistaService ciclistaService;
 
     @Autowired
+    private CartaoDeCreditoService cartaoDeCreditoService;
+
+    @Autowired
     private FuncionarioService funcionarioService;
 
     @GetMapping(value = "")
@@ -33,6 +37,7 @@ public class RestaurarDadosController {
         this.ciclistaService.restauraDados();
         this.funcionarioService.restauraDados();
         this.aluguelService.restauraDados();
+        this.cartaoDeCreditoService.restauraDados();
         return ResponseEntity.ok().body("Dados restaurados com sucesso!");
     }
 }
