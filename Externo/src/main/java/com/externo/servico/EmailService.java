@@ -1,17 +1,18 @@
 package com.externo.servico;
 
-import com.externo.dto.EmailDTO;
-import com.externo.model.Email;
+import java.util.NoSuchElementException;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import javax.mail.internet.InternetAddress;
-import java.util.NoSuchElementException;
+import com.externo.dto.EmailDTO;
+import com.externo.model.Email;
 
 @Service
 public class EmailService {
@@ -24,7 +25,7 @@ public class EmailService {
         try {
             InternetAddress emailAddr = new InternetAddress(dadosEmail.email());
             emailAddr.validate();
-        } catch (Exception e) {
+        } catch (AddressException e) {
             throw new NoSuchElementException("Email nao existe");
         }
 
@@ -45,5 +46,3 @@ public class EmailService {
         mailSender.send(message);
     }
 }
-
-

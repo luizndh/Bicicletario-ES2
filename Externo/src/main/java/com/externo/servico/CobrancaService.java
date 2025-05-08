@@ -1,28 +1,29 @@
 package com.externo.servico;
 
-import com.externo.dto.*;
-import com.externo.model.Cobranca;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stripe.model.Card;
-import com.stripe.model.Customer;
-import com.stripe.model.PaymentIntent;
-import com.stripe.model.Token;
-import com.stripe.param.PaymentIntentConfirmParams;
-import com.stripe.param.PaymentIntentCreateParams;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.stripe.Stripe;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.externo.dto.CartaoDeCreditoResponseDTO;
+import com.externo.dto.CiclistaResponseDTO;
+import com.externo.dto.CobrancaDTO;
+import com.externo.dto.EmailDTO;
+import com.externo.model.Cobranca;
 import static com.externo.model.Cobranca.cobrancas;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stripe.Stripe;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentConfirmParams;
+import com.stripe.param.PaymentIntentCreateParams;
 
 @Service
 public class CobrancaService {
@@ -34,7 +35,6 @@ public class CobrancaService {
     final String URL = "http://localhost:8082";
 
     public Cobranca realizaCobranca(Cobranca dadosCobranca) {
-        System.out.println("Realizando cobranca com id: " + dadosCobranca.getId());
         if(dadosCobranca.getStatus() != null) {
             if (!dadosCobranca.getStatus().equals(Cobranca.StatusCobranca.PENDENTE.toString()))
                 throw new IllegalArgumentException("Pagamento nao esta pendente!");
@@ -51,7 +51,6 @@ public class CobrancaService {
             dadosCobranca.setHoraSolicitacao(LocalDateTime. now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }
 
-        System.out.println("Recuperando dados do ciclista");
         CiclistaResponseDTO ciclistaResponse = null;
         String emailCiclista = null;
         CartaoDeCreditoResponseDTO cartaoCiclista = null;
@@ -77,7 +76,6 @@ public class CobrancaService {
                 PaymentIntent confirmedPaymentIntent = paymentIntent.confirm(PaymentIntentConfirmParams.builder().setPaymentMethod("pm_card_visa").build());
 
                 if (confirmedPaymentIntent.getStatus().equals("succeeded")) {
-                    System.out.println("Cobranca realizada com sucesso");
                     //envia email notificando ciclista que a cobranca atrasada foi paga
                     service.enviarEmail(new EmailDTO(emailCiclista, "Cobranca paga", "Sua cobranca em atraso com o valor " + dadosCobranca.getValor() + " foi paga com sucesso!"));
 
@@ -86,7 +84,6 @@ public class CobrancaService {
                         if (c.getId() == dadosCobranca.getId()) {
                             c.setStatus(Cobranca.StatusCobranca.PAGA.toString());
                             c.setHoraFinalizacao(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                            System.out.println("Cobranca com id " + c.getId() + " alterada para paga");
                         }
                     }
                     dadosCobranca.setStatus(Cobranca.StatusCobranca.PAGA.toString());
@@ -114,7 +111,6 @@ public class CobrancaService {
             if (c.getStatus().equals(Cobranca.StatusCobranca.PENDENTE.toString())) {
                 flag = true;
                 if(c.getId() < 0) throw new IllegalArgumentException("Id da cobranca deve ser positivo");
-                System.out.println("Processando cobranca com id " + c.getId());
                 processadas.add(realizaCobranca(c));
             }
         }
@@ -135,11 +131,9 @@ public class CobrancaService {
     }
 
     public Cobranca obterCobranca(int idCobranca) {
-        System.out.println("Obtendo cobranca com id " + idCobranca);
         if (!cobrancas.isEmpty()) {
             for (Cobranca c : cobrancas) {
                 if (c.getId() == idCobranca) {
-                    System.out.println("Valor cobranca encontrada: " + c.getValor());
                     return c;
                 }
             }
@@ -163,8 +157,6 @@ public class CobrancaService {
             if(response.statusCode() == 422) throw new IllegalArgumentException("Argumento invalido");
 
             CiclistaResponseDTO ciclistaResponse = mapper.readValue(response.body(), CiclistaResponseDTO.class);
-            System.out.println("Email recuperado: " + ciclistaResponse.email());
-            System.out.println("Ciclista recuperado: " + ciclistaResponse.toString());
             return ciclistaResponse;
         } catch (Exception e) {
             //e.printStackTrace();
@@ -188,7 +180,6 @@ public class CobrancaService {
             if(response.statusCode() == 422) throw new IllegalArgumentException("Argumento invalido");
 
             CartaoDeCreditoResponseDTO cartaoResponse = mapper.readValue(response.body(), CartaoDeCreditoResponseDTO.class);
-            System.out.println("Cartao recuperado: " + cartaoResponse.toString());
             return cartaoResponse;
         } catch (Exception e) {
             throw new RuntimeException(e);

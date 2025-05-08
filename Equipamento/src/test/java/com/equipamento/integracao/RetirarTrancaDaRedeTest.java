@@ -1,23 +1,23 @@
 package com.equipamento.integracao;
 
-import com.equipamento.controller.TrancaController;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.equipamento.dto.RetiradaTrancaDTO;
 import com.equipamento.model.Tranca;
 import com.equipamento.servico.IntegracaoService;
 import com.equipamento.servico.TrancaService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.URISyntaxException;
-import java.net.http.HttpResponse;
-import java.util.NoSuchElementException;
-
 import static com.equipamento.util.Constantes.URL_ALUGUEL;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class RetirarTrancaDaRedeTest {
     private TrancaService trancaService = new TrancaService();
@@ -68,7 +68,7 @@ public class RetirarTrancaDaRedeTest {
     void testRetiraTrancaDeRedeFuncionarioNaoExiste() {
         //Arrange
         RetiradaTrancaDTO dadosRetirada = new RetiradaTrancaDTO(1, 2, 100, "APOSENTADA");
-        
+
 
         //Act + Assert
         assertThrows(IllegalArgumentException.class, () -> trancaService.retirarDaRede(dadosRetirada));

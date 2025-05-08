@@ -1,25 +1,20 @@
 package com.externo.controller;
 
-import com.externo.dto.CartaoDeCreditoDTO;
-import com.externo.servico.CartaoDeCreditoService;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import com.externo.dto.CartaoDeCreditoDTO;
+import com.externo.servico.CartaoDeCreditoService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -30,18 +25,11 @@ public class CartaoDeCreditoControllerTest {
     @MockBean
     CartaoDeCreditoService cartaoDeCreditoService;
 
-    CartaoDeCreditoDTO cartao;
-
     final String JSON_ERRO_422 = "{\"codigo\":422,\"mensagem\":\"Argumento invalido\"}";
-    final String JSON_ERRO_404 = "{\"codigo\":404,\"mensagem\":\"Entidade nao existe\"}";
 
-    @BeforeEach
-    void setUp() {
-        cartao = new CartaoDeCreditoDTO("Marcos da Silva", "9182736451230192", "02/2028","987");
-    }
 
     @Test
-    void testvalidaCartaoDeCreditoCorreto() throws Exception {
+    void testValidaCartaoDeCreditoCorreto() throws Exception {
         // Arrange
         CartaoDeCreditoDTO cartaoDTO = new CartaoDeCreditoDTO("Marcos da Silva", "9182736451230192", "02/2028","987");
         String jsonEntrada = """
@@ -52,7 +40,6 @@ public class CartaoDeCreditoControllerTest {
         "cvv": "987"
     }
     """;
-        String json = "{\"nomeTitular\":\"Marcos da Silva\",\"numero\":\"9182736451230192\",\"validade\":\"02/2028\",\"cvv\":\"987\"}";
 
         when(cartaoDeCreditoService.validaCartaoDeCredito(cartaoDTO)).thenReturn(Map.of("codigo", "200", "mensagem", "Cartao Valido"));
 
@@ -62,11 +49,11 @@ public class CartaoDeCreditoControllerTest {
 
         // Assert
         assertEquals(200, response.getStatus());
-        //assertEquals(json, response.getContentAsString());
+
     }
 
     @Test
-    void testvalidaCartaoDeCreditoIncorreto() throws Exception {
+    void testValidaCartaoDeCreditoIncorreto() throws Exception {
         // Arrange
         CartaoDeCreditoDTO cartaoDTO = new CartaoDeCreditoDTO("Marcos da Silva", "9182736451230192000", "02/2028","987");
         String jsonEntrada = """

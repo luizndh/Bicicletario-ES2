@@ -1,28 +1,25 @@
 package com.externo.servico;
 
-import com.externo.dto.CartaoDeCreditoDTO;
-import com.externo.model.Cobranca;
-import com.stripe.exception.StripeException;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
+import com.externo.dto.CartaoDeCreditoDTO;
 import com.externo.dto.CobrancaDTO;
-import com.externo.servico.CobrancaService;
-
-import static org.junit.jupiter.api.Assertions.*;
+import com.externo.model.Cobranca;
+import com.stripe.exception.StripeException;
 
 @ExtendWith(MockitoExtension.class)
 public class CobrancaServiceTest {
+
     @InjectMocks
     private CobrancaService cobrancaService;
 

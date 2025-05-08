@@ -1,25 +1,23 @@
 package com.equipamento.integracao;
 
-import com.equipamento.controller.BicicletaController;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.equipamento.dto.RetiradaBicicletaDTO;
 import com.equipamento.model.Bicicleta;
 import com.equipamento.servico.BicicletaService;
 import com.equipamento.servico.IntegracaoService;
-
-import net.bytebuddy.pool.TypePool;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.URISyntaxException;
-import java.net.http.HttpResponse;
-import java.util.NoSuchElementException;
-
 import static com.equipamento.util.Constantes.URL_ALUGUEL;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class RetirarBicicletaDaRedeTest {
     private BicicletaService bicicletaService = new BicicletaService();
@@ -72,7 +70,7 @@ public class RetirarBicicletaDaRedeTest {
     void testRetiraBicicletaFuncionarioNaoExiste() {
         //Arrange
         RetiradaBicicletaDTO dadosRetirada = new RetiradaBicicletaDTO( 3,4 ,100, "APOSENTADA");
-        
+
 
         //Act + Assert
         assertThrows(IllegalArgumentException.class, () -> bicicletaService.retirarDaRede(dadosRetirada));

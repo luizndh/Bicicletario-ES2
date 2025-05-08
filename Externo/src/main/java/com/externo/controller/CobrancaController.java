@@ -1,16 +1,23 @@
 package com.externo.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.externo.dto.CobrancaDTO;
 import com.externo.model.Cobranca;
 import com.externo.servico.CobrancaService;
 import com.stripe.exception.StripeException;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -23,10 +30,8 @@ public class CobrancaController {
     @PostMapping(value = "/cobranca", consumes = "application/json")
     @ApiOperation(value="Realiza a cobranca")
     public ResponseEntity<Cobranca> realizaCobranca(@RequestBody CobrancaDTO dadosCobranca) throws StripeException {
-        System.out.println(dadosCobranca);
         //TODO em andamento
         Cobranca dados = new Cobranca(dadosCobranca);
-        System.out.println(dados.getValor());
 
         Cobranca resultado = this.service.realizaCobranca(dados);
 

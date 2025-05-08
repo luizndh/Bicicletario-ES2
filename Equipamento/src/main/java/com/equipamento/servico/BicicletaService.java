@@ -1,11 +1,5 @@
 package com.equipamento.servico;
 
-import com.equipamento.dto.*;
-import com.equipamento.model.Bicicleta;
-import com.equipamento.model.Bicicleta.StatusBicicleta;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Service;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -13,9 +7,20 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.stereotype.Service;
+
+import com.equipamento.dto.BicicletaDTO;
+import com.equipamento.dto.DevolucaoBicicletaDTO;
+import com.equipamento.dto.EmailDTO;
+import com.equipamento.dto.FuncionarioDTO;
+import com.equipamento.dto.InclusaoBicicletaDTO;
+import com.equipamento.dto.RetiradaBicicletaDTO;
+import com.equipamento.model.Bicicleta;
+import com.equipamento.model.Bicicleta.StatusBicicleta;
 import static com.equipamento.model.Bicicleta.bicicletas;
 import static com.equipamento.util.Constantes.URL_ALUGUEL;
 import static com.equipamento.util.Constantes.URL_EXTERNO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class BicicletaService {
@@ -62,7 +67,7 @@ public class BicicletaService {
     }
 
     public boolean integrarNaRede(InclusaoBicicletaDTO dadosInclusao) {
-        System.out.println("integrando bicicleta na rede...");
+
         Bicicleta b = recuperaBicicletaPorId(dadosInclusao.idBicicleta());
         if(b.getStatus() == StatusBicicleta.EM_USO) {
             DevolucaoBicicletaDTO devolucaoDTO = new DevolucaoBicicletaDTO(dadosInclusao.idTranca(), dadosInclusao.idBicicleta());
@@ -72,9 +77,7 @@ public class BicicletaService {
         b.setStatus(StatusBicicleta.DISPONIVEL);
         b.adicionaRegistroNoHistoricoDeInclusao(dadosInclusao);
 
-        System.out.println("RECUPERANDO EMAIL DO FUNCIONARIO...");
         String emailFuncionario = this.recuperaEmailDeFuncionarioPorId(dadosInclusao.idFuncionario());
-        System.out.println("EMAIL DO FUNCIONARIO: " + emailFuncionario);
 
         return this.enviaEmail(
                 emailFuncionario,
@@ -128,8 +131,6 @@ public class BicicletaService {
 
         try {
             String jsonEntrada = mapper.writeValueAsString(novoEmail);
-            System.out.println("JSON ENTRADA DE EMAIL: " );
-            System.out.println(jsonEntrada);
 
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
@@ -139,9 +140,6 @@ public class BicicletaService {
                     .build();
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("JSON SAIDA DE EMAIL: ");
-            System.out.println(response.body());
-            System.out.println("STATUS CODE: " + response.statusCode());
             if(response.statusCode() == 200) {
                 return true;
             } else if(response.statusCode() == 404) {
@@ -166,11 +164,7 @@ public class BicicletaService {
                     .build();
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("BODY DA RESPOSTA: " + response.body());
-            System.out.println(response.body());
-            System.out.println("STATUS CODE: " + response.statusCode());
             if(response.statusCode() == 422) {
-                System.out.println("lancando illegal argument exception...");
                 throw new IllegalArgumentException();
             } else if(response.statusCode() == 404) {
                 throw new NoSuchElementException();
