@@ -69,7 +69,7 @@ public class CobrancaService {
 
         if(emailCiclista != null) {
             try {
-                Stripe.apiKey = "sk_test_51ODEoGK2SlPC0gAXe7gRKx3tgwYgdxaYf8xoTkJvrMdUXMSXMPzwmdFEprKG654eo1h8JRuyQtNvqIU8iPW7T7nE00W6te3PX4";
+                Stripe.apiKey = "KEY_STRIPE";
 
                 PaymentIntentCreateParams createParams = PaymentIntentCreateParams.builder().setAmount(dadosCobranca.getValor() * 100).setCurrency("brl").build();
                 PaymentIntent paymentIntent = PaymentIntent.create(createParams);
